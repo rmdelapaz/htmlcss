@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to use semantic HTML elements like header, nav, main, article, section, aside, and footer to give your pages meaningful structure.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 9: Semantic HTML - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 9: Semantic HTML</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🏗️ Lesson 9: Semantic HTML</h1>
+                <p class="lead">You've learned how to put content on a page — headings, paragraphs, links, images, lists, tables, and forms. Now it's time to give your page <em>meaning</em>. Semantic HTML tells the browser, screen readers, and search engines what each part of your page <strong>is</strong>, not just what it looks like.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain the difference between semantic and non-semantic elements</li>
+                        <li>Use <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code> for page-level structure</li>
+                        <li>Use <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, and <code>&lt;aside&gt;</code> for content organization</li>
+                        <li>Choose <code>&lt;figure&gt;</code> and <code>&lt;figcaption&gt;</code> for illustrated content</li>
+                        <li>Understand when to use <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> as generic containers</li>
+                        <li>Restructure your website project with semantic elements</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll refactor your homepage with semantic elements.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#what-is-semantic" class="toc-link">What Is Semantic HTML?</a></li>
+                        <li><a href="#page-structure" class="toc-link">Page-Level Structure</a></li>
+                        <li><a href="#content-elements" class="toc-link">Content Organization Elements</a></li>
+                        <li><a href="#figure-figcaption" class="toc-link">Figures and Captions</a></li>
+                        <li><a href="#div-span" class="toc-link">The Generic Containers: div and span</a></li>
+                        <li><a href="#choosing-elements" class="toc-link">Choosing the Right Element</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="what-is-semantic" class="lesson-section">
+                <h2>What Is Semantic HTML?</h2>
+
+                <p>The word "semantic" means "relating to meaning." A <strong>semantic element</strong> clearly describes its purpose to both the browser and the developer. A <strong>non-semantic element</strong> tells you nothing about what's inside it.</p>
+
+                <pre><code class="language-html">&lt;!-- Non-semantic — what is this? A header? A sidebar? A footer? --&gt;
+&lt;div&gt;
+    &lt;div&gt;My Website&lt;/div&gt;
+    &lt;div&gt;
+        &lt;div&gt;Welcome!&lt;/div&gt;
+        &lt;div&gt;This is my page.&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Semantic — instantly clear what each part is --&gt;
+&lt;header&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+&lt;/header&gt;
+&lt;main&gt;
+    &lt;h2&gt;Welcome!&lt;/h2&gt;
+    &lt;p&gt;This is my page.&lt;/p&gt;
+&lt;/main&gt;</code></pre>
+
+                <p>Both versions look identical in the browser. But the semantic version communicates <em>what each part is</em> — and that matters for three important reasons:</p>
+
+                <ul>
+                    <li><strong>Accessibility:</strong> Screen readers use semantic elements as landmarks. A visually impaired user can jump directly to <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, or <code>&lt;footer&gt;</code> instead of listening to the entire page from top to bottom.</li>
+                    <li><strong>SEO:</strong> Search engines give more weight to content inside <code>&lt;main&gt;</code> and <code>&lt;article&gt;</code> than content in a generic <code>&lt;div&gt;</code>. They can also distinguish navigation from actual content.</li>
+                    <li><strong>Maintainability:</strong> When you (or another developer) read the code six months later, <code>&lt;header&gt;</code> is instantly understandable. <code>&lt;div class="top-bar-wrapper"&gt;</code> requires detective work.</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph TD
+                    A["HTML Elements"] --> B["Semantic<br/>Describes meaning<br/>header, nav, main,<br/>article, section, aside, footer"]
+                    A --> C["Non-Semantic<br/>No inherent meaning<br/>div, span"]
+                    B --> D["✅ Accessibility<br/>✅ SEO<br/>✅ Readability"]
+                    C --> E["Use only when no<br/>semantic element fits"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style D fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="page-structure" class="lesson-section">
+                <h2>Page-Level Structure</h2>
+
+                <p>Most web pages share a common layout: a header at the top, navigation links, a main content area, and a footer at the bottom. HTML5 has dedicated elements for each of these:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["&lt;header&gt;<br/>Site title, logo, intro"] --> B["&lt;nav&gt;<br/>Navigation links"]
+                    B --> C["&lt;main&gt;<br/>Primary page content"]
+                    C --> D["&lt;footer&gt;<br/>Copyright, links, contact"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                </div>
+
+                <h3><code>&lt;header&gt;</code></h3>
+
+                <p>Represents introductory content, typically at the top of a page or section. A page header usually contains the site name, logo, and primary navigation:</p>
+
+                <pre><code class="language-html">&lt;header&gt;
+    &lt;h1&gt;My Personal Website&lt;/h1&gt;
+    &lt;p&gt;A place for my projects and writing.&lt;/p&gt;
+&lt;/header&gt;</code></pre>
+
+                <p>You can have multiple <code>&lt;header&gt;</code> elements — one for the page, and one inside an <code>&lt;article&gt;</code> or <code>&lt;section&gt;</code>. It doesn't have to be at the top of the page; it just marks introductory content for its parent.</p>
+
+                <h3><code>&lt;nav&gt;</code></h3>
+
+                <p>Contains a set of navigation links — the main menu, breadcrumbs, or table of contents:</p>
+
+                <pre><code class="language-html">&lt;nav&gt;
+    &lt;a href="index.html"&gt;Home&lt;/a&gt;
+    &lt;a href="about.html"&gt;About&lt;/a&gt;
+    &lt;a href="recipe.html"&gt;Recipes&lt;/a&gt;
+    &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+
+                <p>Not every group of links is a <code>&lt;nav&gt;</code>. Use it for <strong>major navigation blocks</strong> — the site menu, sidebar navigation, or pagination. A few links in a paragraph don't need a <code>&lt;nav&gt;</code>.</p>
+
+                <h3><code>&lt;main&gt;</code></h3>
+
+                <p>Contains the <strong>dominant content</strong> of the page — the content that's unique to this page and not repeated on other pages (like the sidebar or footer). There should be only <strong>one <code>&lt;main&gt;</code></strong> per page:</p>
+
+                <pre><code class="language-html">&lt;main&gt;
+    &lt;h2&gt;Welcome to My Site&lt;/h2&gt;
+    &lt;p&gt;This is the main content of my homepage...&lt;/p&gt;
+&lt;/main&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 Skip Links and <code>&lt;main&gt;</code></h4>
+                    <p>You know those "Skip to main content" links at the top of accessible websites? They jump the user directly to the <code>&lt;main&gt;</code> element, bypassing the header and navigation. This is one of the most impactful accessibility features you can add.</p>
+                </div>
+
+                <h3><code>&lt;footer&gt;</code></h3>
+
+                <p>Contains closing information — copyright notices, related links, contact details, or social media icons:</p>
+
+                <pre><code class="language-html">&lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2026 Alex Johnson. All rights reserved.&lt;/p&gt;
+    &lt;nav&gt;
+        &lt;a href="privacy.html"&gt;Privacy Policy&lt;/a&gt;
+        &lt;a href="terms.html"&gt;Terms of Use&lt;/a&gt;
+    &lt;/nav&gt;
+&lt;/footer&gt;</code></pre>
+
+                <p>Like <code>&lt;header&gt;</code>, a <code>&lt;footer&gt;</code> can appear inside an <code>&lt;article&gt;</code> or <code>&lt;section&gt;</code> too — not just at the bottom of the page.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="content-elements" class="lesson-section">
+                <h2>Content Organization Elements</h2>
+
+                <p>Inside your <code>&lt;main&gt;</code> content area, three semantic elements help organize the content itself:</p>
+
+                <h3><code>&lt;article&gt;</code></h3>
+
+                <p>Represents a <strong>self-contained, independently distributable</strong> piece of content. The test: could this content make sense on its own if you pulled it out of the page? If yes, it's an article.</p>
+
+                <pre><code class="language-html">&lt;article&gt;
+    &lt;h2&gt;How I Learned to Code&lt;/h2&gt;
+    &lt;p&gt;Published on March 15, 2026&lt;/p&gt;
+    &lt;p&gt;It all started when I discovered HTML...&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+
+                <p>Common uses: blog posts, news articles, product cards, forum posts, user comments, social media posts.</p>
+
+                <h3><code>&lt;section&gt;</code></h3>
+
+                <p>Represents a <strong>thematic grouping</strong> of content, typically with its own heading. Unlike <code>&lt;article&gt;</code>, a section usually doesn't make sense on its own — it's part of a larger whole:</p>
+
+                <pre><code class="language-html">&lt;section&gt;
+    &lt;h2&gt;My Skills&lt;/h2&gt;
+    &lt;p&gt;I'm learning HTML, CSS, and JavaScript.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section&gt;
+    &lt;h2&gt;My Projects&lt;/h2&gt;
+    &lt;p&gt;Here are some things I've built...&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+
+                <p>Think of <code>&lt;section&gt;</code> as a chapter in a book. Each chapter has a title and groups related content, but a single chapter doesn't stand alone as a complete work.</p>
+
+                <h3><code>&lt;aside&gt;</code></h3>
+
+                <p>Contains content that is <strong>tangentially related</strong> to the surrounding content — something that enhances the main content but could be removed without losing the core message:</p>
+
+                <pre><code class="language-html">&lt;aside&gt;
+    &lt;h3&gt;Fun Fact&lt;/h3&gt;
+    &lt;p&gt;The first website ever created is still online.
+       It was published in 1991 at CERN.&lt;/p&gt;
+&lt;/aside&gt;</code></pre>
+
+                <p>Common uses: sidebars, pull quotes, related links, "did you know" boxes, advertising, glossary definitions.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["&lt;main&gt;"] --> B["&lt;article&gt;<br/>Self-contained content<br/>(blog post, product card)"]
+                    A --> C["&lt;section&gt;<br/>Thematic grouping<br/>(chapter, tab panel)"]
+                    A --> D["&lt;aside&gt;<br/>Tangentially related<br/>(sidebar, fun fact)"]
+                    B --> E["Can contain<br/>sections inside"]
+                    C --> F["Can contain<br/>articles inside"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Article vs. Section — The Quick Test</h4>
+                    <p><strong>Article:</strong> "Would this make sense in an RSS feed or shared independently?" → Use <code>&lt;article&gt;</code>.</p>
+                    <p><strong>Section:</strong> "Is this a thematic group within a larger page?" → Use <code>&lt;section&gt;</code>.</p>
+                    <p>They can nest inside each other: an <code>&lt;article&gt;</code> can contain <code>&lt;section&gt;</code>s (like chapters of a blog post), and a <code>&lt;section&gt;</code> can contain <code>&lt;article&gt;</code>s (like a "Latest Posts" section with multiple post cards).</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="figure-figcaption" class="lesson-section">
+                <h2>Figures and Captions</h2>
+
+                <p>The <code>&lt;figure&gt;</code> element wraps self-contained content that is referenced from the main flow — typically an image, diagram, chart, or code example — along with an optional caption:</p>
+
+                <pre><code class="language-html">&lt;figure&gt;
+    &lt;img src="images/sunset.jpg"
+         alt="A golden sunset over the Pacific Ocean"&gt;
+    &lt;figcaption&gt;Sunset at Venice Beach, March 2026.&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+
+                <ul>
+                    <li><code>&lt;figure&gt;</code> — wraps the content and its caption as a single unit</li>
+                    <li><code>&lt;figcaption&gt;</code> — the visible caption (can go before or after the content inside the figure)</li>
+                </ul>
+
+                <p>A <code>&lt;figure&gt;</code> isn't limited to images. You can use it for any referenced content:</p>
+
+                <pre><code class="language-html">&lt;!-- A code example --&gt;
+&lt;figure&gt;
+    &lt;pre&gt;&lt;code&gt;console.log("Hello, World!");&lt;/code&gt;&lt;/pre&gt;
+    &lt;figcaption&gt;The classic first program in JavaScript.&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;!-- A quote --&gt;
+&lt;figure&gt;
+    &lt;blockquote&gt;
+        The best way to predict the future is to invent it.
+    &lt;/blockquote&gt;
+    &lt;figcaption&gt;— Alan Kay&lt;/figcaption&gt;
+&lt;/figure&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 <code>&lt;figure&gt;</code> vs. Plain <code>&lt;img&gt;</code></h4>
+                    <p>Not every image needs a <code>&lt;figure&gt;</code>. Use <code>&lt;figure&gt;</code> when an image (or other content) is referenced from the text as an illustration and benefits from a caption. Decorative images or inline photos that don't need captions can remain as plain <code>&lt;img&gt;</code> elements.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="div-span" class="lesson-section">
+                <h2>The Generic Containers: div and span</h2>
+
+                <p>After learning all these semantic elements, where do <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> fit in?</p>
+
+                <h3><code>&lt;div&gt;</code> — Block-Level Container</h3>
+
+                <p>A <code>&lt;div&gt;</code> is a generic <strong>block-level</strong> container with no semantic meaning. It starts on a new line and takes up the full available width:</p>
+
+                <pre><code class="language-html">&lt;div class="card"&gt;
+    &lt;h3&gt;Featured Post&lt;/h3&gt;
+    &lt;p&gt;Check out our latest article...&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+                <h3><code>&lt;span&gt;</code> — Inline Container</h3>
+
+                <p>A <code>&lt;span&gt;</code> is a generic <strong>inline</strong> container. It flows within text without breaking to a new line:</p>
+
+                <pre><code class="language-html">&lt;p&gt;My favorite color is &lt;span class="highlight"&gt;blue&lt;/span&gt;.&lt;/p&gt;</code></pre>
+
+                <h3>When to Use Them</h3>
+
+                <p>Use <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> <strong>only when no semantic element fits</strong>. They're styling hooks — containers for applying CSS — not content descriptors. If you can use <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code>, or another semantic element, always choose that first.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Semantic vs. Generic Elements</caption>
+                        <thead>
+                            <tr>
+                                <th>Instead of...</th>
+                                <th>Consider...</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&lt;div class="header"&gt;</code></td>
+                                <td><code>&lt;header&gt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;div class="navigation"&gt;</code></td>
+                                <td><code>&lt;nav&gt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;div class="main-content"&gt;</code></td>
+                                <td><code>&lt;main&gt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;div class="sidebar"&gt;</code></td>
+                                <td><code>&lt;aside&gt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;div class="blog-post"&gt;</code></td>
+                                <td><code>&lt;article&gt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;div class="footer"&gt;</code></td>
+                                <td><code>&lt;footer&gt;</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="choosing-elements" class="lesson-section">
+                <h2>Choosing the Right Element</h2>
+
+                <p>With all these elements available, how do you decide which one to use? Here's a flowchart to help:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Is it introductory content?"] -->|Yes| B["&lt;header&gt;"]
+                    A -->|No| C["Is it navigation links?"]
+                    C -->|Yes| D["&lt;nav&gt;"]
+                    C -->|No| E["Is it the main unique content?"]
+                    E -->|Yes| F["&lt;main&gt;"]
+                    E -->|No| G["Is it self-contained?"]
+                    G -->|Yes| H["&lt;article&gt;"]
+                    G -->|No| I["Is it a thematic group?"]
+                    I -->|Yes| J["&lt;section&gt;"]
+                    I -->|No| K["Is it tangentially related?"]
+                    K -->|Yes| L["&lt;aside&gt;"]
+                    K -->|No| M["Is it closing info?"]
+                    M -->|Yes| N["&lt;footer&gt;"]
+                    M -->|No| O["&lt;div&gt; (last resort)"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style F fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style H fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style J fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style L fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style N fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style O fill:#fef2f2,stroke:#ef4444,stroke-width:1px,color:#1e293b
+                </div>
+
+                <p>A complete page skeleton using all these elements together:</p>
+
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Blog&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;My Blog&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;a href="index.html"&gt;Home&lt;/a&gt;
+            &lt;a href="about.html"&gt;About&lt;/a&gt;
+            &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;article&gt;
+            &lt;header&gt;
+                &lt;h2&gt;My First Post&lt;/h2&gt;
+                &lt;p&gt;Published April 10, 2026&lt;/p&gt;
+            &lt;/header&gt;
+
+            &lt;section&gt;
+                &lt;h3&gt;Getting Started&lt;/h3&gt;
+                &lt;p&gt;I decided to learn web development...&lt;/p&gt;
+            &lt;/section&gt;
+
+            &lt;section&gt;
+                &lt;h3&gt;What I've Learned&lt;/h3&gt;
+                &lt;p&gt;So far, I've covered HTML basics...&lt;/p&gt;
+            &lt;/section&gt;
+
+            &lt;footer&gt;
+                &lt;p&gt;Tags: HTML, Beginners, Web Dev&lt;/p&gt;
+            &lt;/footer&gt;
+        &lt;/article&gt;
+
+        &lt;aside&gt;
+            &lt;h2&gt;About the Author&lt;/h2&gt;
+            &lt;p&gt;Alex is a student learning to code.&lt;/p&gt;
+        &lt;/aside&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &lt;p&gt;&amp;copy; 2026 Alex Johnson&lt;/p&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </section>
+
+            <!-- Section 7: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Refactor Your Homepage</h3>
+                    <p><strong>Objective:</strong> Restructure your <code>index.html</code> using semantic elements.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>Open your <code>index.html</code> file in VS Code</li>
+                        <li>Wrap the site title and navigation links in a <code>&lt;header&gt;</code> with a <code>&lt;nav&gt;</code> inside it</li>
+                        <li>Wrap the main page content (everything except header and footer) in a <code>&lt;main&gt;</code></li>
+                        <li>Add an <code>&lt;aside&gt;</code> inside <code>&lt;main&gt;</code> with a "Fun Fact" or "Did You Know" block</li>
+                        <li>Wrap any image that has a caption in a <code>&lt;figure&gt;</code> with <code>&lt;figcaption&gt;</code></li>
+                        <li>Add a <code>&lt;footer&gt;</code> at the bottom with a copyright notice and links to your other pages</li>
+                        <li>Make sure the heading hierarchy still makes sense (<code>&lt;h1&gt;</code> → <code>&lt;h2&gt;</code> → <code>&lt;h3&gt;</code>)</li>
+                        <li>Save and verify the page still looks the same in the browser</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Semantic elements don't change how the page looks by default — they're invisible to the eye. Your page should look exactly the same before and after this refactor. The changes are structural, not visual. You'll see the impact when you inspect the page with DevTools or test it with a screen reader.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My First Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Welcome to My Website&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;a href="index.html"&gt;Home&lt;/a&gt; |
+            &lt;a href="about.html"&gt;About&lt;/a&gt; |
+            &lt;a href="recipe.html"&gt;Recipes&lt;/a&gt; |
+            &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;section&gt;
+            &lt;h2&gt;About This Site&lt;/h2&gt;
+            &lt;p&gt;This is my first properly structured website.
+               I'm learning HTML and CSS from scratch!&lt;/p&gt;
+
+            &lt;figure&gt;
+                &lt;img src="images/sunset.jpg"
+                     alt="A golden sunset over the ocean"
+                     width="600" height="400"&gt;
+                &lt;figcaption&gt;A sunset photo from my collection.&lt;/figcaption&gt;
+            &lt;/figure&gt;
+        &lt;/section&gt;
+
+        &lt;section&gt;
+            &lt;h2&gt;What I'm Learning&lt;/h2&gt;
+            &lt;ul&gt;
+                &lt;li&gt;HTML structure and semantic elements&lt;/li&gt;
+                &lt;li&gt;Links, images, and forms&lt;/li&gt;
+                &lt;li&gt;How to connect pages together&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/section&gt;
+
+        &lt;aside&gt;
+            &lt;h2&gt;Fun Fact&lt;/h2&gt;
+            &lt;p&gt;The first ever website is still live at
+               info.cern.ch. It was published in 1991!&lt;/p&gt;
+        &lt;/aside&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &lt;p&gt;&amp;copy; 2026 Alex Johnson. All rights reserved.&lt;/p&gt;
+        &lt;nav&gt;
+            &lt;a href="about.html"&gt;About&lt;/a&gt; |
+            &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+        &lt;/nav&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> How many <code>&lt;main&gt;</code> elements should a page have?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! There should be only one &lt;main&gt; per page, representing the dominant content unique to that page.">A) Exactly one</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Unlike header and footer, &lt;main&gt; should only appear once per page.">B) One for each section</button>
+                            <button class="quiz-option" data-correct="false" data-hint="main is not optional — it's the primary landmark for accessibility.">C) None — it's optional</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What's the difference between <code>&lt;article&gt;</code> and <code>&lt;section&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="There's no visual difference by default — the distinction is semantic.">A) <code>&lt;article&gt;</code> is bigger</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! An article is self-contained (makes sense independently), while a section is a thematic grouping within a larger piece of content.">B) <code>&lt;article&gt;</code> is self-contained; <code>&lt;section&gt;</code> is a thematic group within a larger whole</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Both can contain any flow content. The difference is about independence, not content restrictions.">C) <code>&lt;article&gt;</code> can only contain text; <code>&lt;section&gt;</code> can contain anything</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> When should you use <code>&lt;div&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Always check if a semantic element fits first. &lt;div&gt; should be a last resort.">A) For every container on the page</button>
+                            <button class="quiz-option" data-correct="false" data-hint="div is not deprecated — it's still useful, just not as a replacement for semantic elements.">B) Never — it's deprecated in HTML5</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Use &lt;div&gt; only as a styling hook when no semantic element (header, nav, main, section, article, aside, footer) fits the purpose.">C) Only when no semantic element fits</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What does the <code>&lt;aside&gt;</code> element represent?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="aside isn't specifically about sidebars — it's about the relationship to the surrounding content.">A) A sidebar that must be on the right side of the page</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! An aside contains content that is tangentially related to the surrounding content — like a sidebar, pull quote, or fun fact box.">B) Content tangentially related to the surrounding content</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Hidden content would use CSS or the hidden attribute, not &lt;aside&gt;.">C) Content that should be hidden from the user</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Semantic elements</strong> describe what content <em>is</em>; non-semantic elements (<code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>) are generic containers with no meaning</li>
+                        <li><code>&lt;header&gt;</code> — introductory content; <code>&lt;nav&gt;</code> — major navigation; <code>&lt;main&gt;</code> — dominant unique content (one per page); <code>&lt;footer&gt;</code> — closing info</li>
+                        <li><code>&lt;article&gt;</code> — self-contained content; <code>&lt;section&gt;</code> — thematic group; <code>&lt;aside&gt;</code> — tangentially related content</li>
+                        <li><code>&lt;figure&gt;</code> and <code>&lt;figcaption&gt;</code> pair content with a visible caption</li>
+                        <li>Use <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code> only when no semantic element fits — they're styling hooks, not content descriptors</li>
+                        <li>Semantic HTML improves accessibility, SEO, and code readability at zero visual cost</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── images/
+│   └── sunset.jpg
+├── index.html         ← refactored with semantic elements
+├── about.html
+├── recipe.html
+└── contact.html</code></pre>
+
+                <h3>🎓 Module 2 Complete!</h3>
+                <p>Congratulations — you've finished <strong>Module 2: HTML Essentials</strong>! You now know how to structure any web page using headings, text, links, images, lists, tables, forms, and semantic elements. That's the entire foundation of HTML.</p>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your pages have great structure but look plain — everything is in the browser's default styling with Times New Roman text and blue links. It's time to change that. In <strong>Module 3: CSS Essentials</strong>, you'll learn how to control colors, fonts, spacing, layout, and responsiveness. Your first CSS lesson will show you how to connect a stylesheet and transform your page's appearance with just a few lines of code.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_08.html" class="prev-lesson">← Previous: Forms &amp; Input</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_10.html" class="next-lesson">Next: Introduction to CSS →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

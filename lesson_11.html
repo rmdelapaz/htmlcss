@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Master CSS colors (hex, RGB, HSL) and typography (font stacks, Google Fonts, sizing, spacing) to make your web pages look polished and professional.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 11: Colors &amp; Typography - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 11: Colors &amp; Typography</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🎨 Lesson 11: Colors &amp; Typography</h1>
+                <p class="lead">You've connected a stylesheet and written your first CSS rules. Now it's time to go deeper into the two things that have the biggest impact on how a page <em>feels</em>: <strong>color</strong> and <strong>type</strong>. The right palette and font choices can make a plain page look professional — or playful, or elegant, or bold.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Use named colors, hex codes, RGB, and HSL to set any color in CSS</li>
+                        <li>Apply color to text, backgrounds, and borders</li>
+                        <li>Build a font stack with fallback fonts</li>
+                        <li>Add Google Fonts to your website</li>
+                        <li>Control font size, weight, style, and line height</li>
+                        <li>Use <code>rem</code> and <code>em</code> units for scalable typography</li>
+                        <li>Create a cohesive color and type system for your project</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll build a color palette and typography system for your website.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#color-formats" class="toc-link">CSS Color Formats</a></li>
+                        <li><a href="#applying-color" class="toc-link">Applying Color to Elements</a></li>
+                        <li><a href="#font-families" class="toc-link">Font Families and Font Stacks</a></li>
+                        <li><a href="#google-fonts" class="toc-link">Adding Google Fonts</a></li>
+                        <li><a href="#font-sizing" class="toc-link">Font Sizing: px, em, and rem</a></li>
+                        <li><a href="#text-properties" class="toc-link">Other Text Properties</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="color-formats" class="lesson-section">
+                <h2>CSS Color Formats</h2>
+
+                <p>CSS gives you several ways to express a color. They all produce the same result — it's just a matter of which notation you prefer and what you need.</p>
+
+                <h3>Named Colors</h3>
+
+                <p>CSS recognizes 147 named colors — simple English words like <code>red</code>, <code>navy</code>, <code>tomato</code>, <code>cornflowerblue</code>, and <code>papayawhip</code>:</p>
+
+                <pre><code class="language-css">h1 {
+    color: navy;
+    background-color: papayawhip;
+}</code></pre>
+
+                <p>Named colors are great for quick prototyping and learning, but they're limited — you can't express every shade. For precise control, you need one of the formats below.</p>
+
+                <h3>Hex Codes</h3>
+
+                <p>The most common color format on the web. A hex code starts with <code>#</code> followed by six characters (0–9 and A–F), representing the red, green, and blue channels:</p>
+
+                <pre><code class="language-css">h1 {
+    color: #1a365d;        /* dark blue */
+    background-color: #f0f4f8;  /* light gray-blue */
+    border-color: #3b82f6;      /* bright blue */
+}</code></pre>
+
+                <p>The format is <code>#RRGGBB</code> — two hex digits per channel. Each channel ranges from <code>00</code> (none) to <code>FF</code> (maximum). Some common patterns:</p>
+
+                <ul>
+                    <li><code>#000000</code> — black (all channels off)</li>
+                    <li><code>#ffffff</code> — white (all channels full)</li>
+                    <li><code>#ff0000</code> — pure red</li>
+                    <li><code>#00ff00</code> — pure green</li>
+                    <li><code>#0000ff</code> — pure blue</li>
+                </ul>
+
+                <p>If both digits in each pair are the same, you can use a <strong>shorthand</strong>: <code>#aabbcc</code> can be written as <code>#abc</code>. So <code>#ff6600</code> becomes <code>#f60</code>.</p>
+
+                <h3>RGB</h3>
+
+                <p>The <code>rgb()</code> function uses decimal numbers (0–255) for red, green, and blue:</p>
+
+                <pre><code class="language-css">h1 {
+    color: rgb(26, 54, 93);           /* same as #1a365d */
+    background-color: rgb(240, 244, 248);  /* same as #f0f4f8 */
+}</code></pre>
+
+                <p>RGB and hex express the same thing in different notation. Use whichever you find more readable.</p>
+
+                <h3>RGBA (with Transparency)</h3>
+
+                <p>Add an <strong>alpha</strong> channel (0 to 1) to make a color semi-transparent:</p>
+
+                <pre><code class="language-css">.overlay {
+    background-color: rgba(0, 0, 0, 0.5);  /* 50% transparent black */
+}
+
+.glass-panel {
+    background-color: rgba(255, 255, 255, 0.8);  /* 80% opaque white */
+}</code></pre>
+
+                <p>An alpha of <code>0</code> is fully transparent; <code>1</code> is fully opaque.</p>
+
+                <h3>HSL (Hue, Saturation, Lightness)</h3>
+
+                <p>HSL is the most human-friendly format. Instead of mixing red/green/blue, you think in terms of:</p>
+
+                <ul>
+                    <li><strong>Hue</strong> — the color itself, as a degree on a color wheel (0°=red, 120°=green, 240°=blue)</li>
+                    <li><strong>Saturation</strong> — how vivid the color is (0%=gray, 100%=full color)</li>
+                    <li><strong>Lightness</strong> — how light or dark (0%=black, 50%=normal, 100%=white)</li>
+                </ul>
+
+                <pre><code class="language-css">h1 {
+    color: hsl(217, 56%, 23%);    /* dark blue */
+}
+
+.accent {
+    color: hsl(217, 91%, 60%);    /* bright blue — same hue, more saturated, lighter */
+}</code></pre>
+
+                <p>HSL shines when building color palettes — you can keep the same hue and just adjust saturation and lightness to create harmonious variations.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Color Formats"] --> B["Named<br/>navy, tomato<br/>Easy but limited"]
+                    A --> C["Hex<br/>#1a365d<br/>Most common"]
+                    A --> D["RGB/RGBA<br/>rgb(26, 54, 93)<br/>Decimal + transparency"]
+                    A --> E["HSL/HSLA<br/>hsl(217, 56%, 23%)<br/>Most intuitive"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style D fill:#fdf4ff,stroke:#a855f7,stroke-width:1px,color:#1e293b
+                    style E fill:#fef2f2,stroke:#ef4444,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Which Format Should I Use?</h4>
+                    <p><strong>Hex</strong> is the industry standard — you'll see it everywhere. <strong>HSL</strong> is best when you're designing a palette and want to create lighter/darker variations of the same color. <strong>RGBA/HSLA</strong> whenever you need transparency. <strong>Named colors</strong> for quick experiments. Pick one format for your project and stay consistent.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="applying-color" class="lesson-section">
+                <h2>Applying Color to Elements</h2>
+
+                <p>CSS has several properties that accept color values. Here are the most common ones:</p>
+
+                <h3><code>color</code> — Text Color</h3>
+
+                <pre><code class="language-css">p {
+    color: #333333;  /* dark gray text */
+}
+
+.error {
+    color: #dc2626;  /* red text for error messages */
+}</code></pre>
+
+                <h3><code>background-color</code> — Background</h3>
+
+                <pre><code class="language-css">body {
+    background-color: #f8fafc;  /* light background for the whole page */
+}
+
+.warning-box {
+    background-color: #fef3c7;  /* soft yellow background */
+    padding: 15px;
+}</code></pre>
+
+                <h3><code>border-color</code> — Borders</h3>
+
+                <pre><code class="language-css">/* You can set border-color separately... */
+.card {
+    border: 2px solid;
+    border-color: #e2e8f0;
+}
+
+/* ...or all at once in the border shorthand */
+.card-accent {
+    border-left: 4px solid #3b82f6;
+}</code></pre>
+
+                <h3>Putting It Together</h3>
+
+                <pre><code class="language-css">/* A styled card using multiple color properties */
+.info-card {
+    color: #1e293b;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 4px solid #3b82f6;
+    padding: 20px;
+}</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 Contrast Matters</h4>
+                    <p>Always make sure your text color has enough contrast against its background. Light gray text on a white background might look sleek, but it's hard to read — especially for people with low vision. The Web Content Accessibility Guidelines (WCAG) recommend a contrast ratio of at least <strong>4.5:1</strong> for normal text. Free tools like <a href="https://webaim.org/resources/contrastchecker/" target="_blank" rel="noopener">WebAIM's Contrast Checker</a> let you test your combinations instantly.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="font-families" class="lesson-section">
+                <h2>Font Families and Font Stacks</h2>
+
+                <p>The <code>font-family</code> property controls which typeface the browser uses for text. But here's the catch: the font has to be available on the user's device. If you specify a font they don't have, the browser falls back to something else.</p>
+
+                <p>That's why we use <strong>font stacks</strong> — a comma-separated list of fonts, in order of preference:</p>
+
+                <pre><code class="language-css">body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}</code></pre>
+
+                <p>The browser tries each font in order: first "Segoe UI" (common on Windows), then Roboto (common on Android), then Arial (nearly universal), and finally any <code>sans-serif</code> font as a last resort.</p>
+
+                <h3>The Five Generic Font Families</h3>
+
+                <p>Every font stack should end with a <strong>generic family</strong> — a keyword that tells the browser "use any font of this type":</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Generic Font Families</caption>
+                        <thead>
+                            <tr>
+                                <th>Generic</th>
+                                <th>Style</th>
+                                <th>Common Examples</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>serif</code></td>
+                                <td>Has small strokes (serifs) at letter ends</td>
+                                <td>Times New Roman, Georgia</td>
+                                <td>Articles, formal content</td>
+                            </tr>
+                            <tr>
+                                <td><code>sans-serif</code></td>
+                                <td>Clean, no serifs</td>
+                                <td>Arial, Helvetica, Segoe UI</td>
+                                <td>UI, headings, modern sites</td>
+                            </tr>
+                            <tr>
+                                <td><code>monospace</code></td>
+                                <td>Every character is the same width</td>
+                                <td>Courier New, Consolas</td>
+                                <td>Code, technical content</td>
+                            </tr>
+                            <tr>
+                                <td><code>cursive</code></td>
+                                <td>Handwriting-like</td>
+                                <td>Comic Sans MS, Brush Script</td>
+                                <td>Decorative, sparingly</td>
+                            </tr>
+                            <tr>
+                                <td><code>fantasy</code></td>
+                                <td>Decorative, stylized</td>
+                                <td>Impact, Papyrus</td>
+                                <td>Decorative, very sparingly</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Common Professional Font Stacks</h3>
+
+                <pre><code class="language-css">/* Clean modern sans-serif */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+/* Elegant serif for articles */
+.article-body {
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+/* Code blocks */
+code, pre {
+    font-family: "Fira Code", Consolas, "Courier New", monospace;
+}</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 System Font Stack</h4>
+                    <p>The stack <code>-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif</code> is called the <strong>system font stack</strong>. It uses each operating system's native UI font — San Francisco on Mac/iOS, Segoe UI on Windows, Roboto on Android. This makes your site feel native on every platform, and the fonts load instantly because they're already on the device.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="google-fonts" class="lesson-section">
+                <h2>Adding Google Fonts</h2>
+
+                <p>System fonts are fast and reliable, but sometimes you want a specific typeface. <a href="https://fonts.google.com/" target="_blank" rel="noopener">Google Fonts</a> is a free library of over 1,500 web fonts that anyone can use.</p>
+
+                <h3>Step 1: Choose a Font</h3>
+
+                <ol>
+                    <li>Go to <a href="https://fonts.google.com/" target="_blank" rel="noopener">fonts.google.com</a></li>
+                    <li>Browse or search for a font (try "Inter", "Poppins", or "Lora")</li>
+                    <li>Click the font name to view it</li>
+                    <li>Click "Get font" → "Get embed code"</li>
+                    <li>Copy the <code>&lt;link&gt;</code> tags provided</li>
+                </ol>
+
+                <h3>Step 2: Add the Link to Your HTML</h3>
+
+                <p>Paste the link tags into your <code>&lt;head&gt;</code>, <strong>before</strong> your own stylesheet:</p>
+
+                <pre><code class="language-html">&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Website&lt;/title&gt;
+
+    &lt;!-- Google Fonts — load BEFORE your CSS --&gt;
+    &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+    &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap"
+          rel="stylesheet"&gt;
+
+    &lt;!-- Your stylesheet --&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+&lt;/head&gt;</code></pre>
+
+                <h3>Step 3: Use It in Your CSS</h3>
+
+                <pre><code class="language-css">body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", sans-serif;
+}</code></pre>
+
+                <p>Notice we still include fallback fonts after "Inter" — if Google Fonts fails to load (slow connection, firewall, etc.), the browser gracefully falls back to system fonts instead of showing a blank.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Google Fonts Workflow"] --> B["1. Choose font at<br/>fonts.google.com"]
+                    B --> C["2. Copy &lt;link&gt; tags<br/>into HTML &lt;head&gt;"]
+                    C --> D["3. Use font-family<br/>in your CSS"]
+                    D --> E["4. Always include<br/>fallback fonts"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style E fill:#fdf4ff,stroke:#a855f7,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Font Performance Tip</h4>
+                    <p>Every Google Font you add is an extra download. Stick to <strong>one or two fonts max</strong> — one for headings, one for body text. Loading five different fonts will slow your page down. Also, only request the <strong>weights you actually use</strong> (like 400 and 700) instead of loading every weight.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="font-sizing" class="lesson-section">
+                <h2>Font Sizing: px, em, and rem</h2>
+
+                <p>The <code>font-size</code> property controls how big text appears. CSS offers several units, but three are essential:</p>
+
+                <h3><code>px</code> — Pixels</h3>
+
+                <p>An absolute unit. 16px means 16 pixels, period.</p>
+
+                <pre><code class="language-css">h1 { font-size: 36px; }
+p  { font-size: 16px; }</code></pre>
+
+                <p>Pixels are predictable and easy to understand — great for learning. But they don't scale when users change their browser's default font size (an accessibility concern).</p>
+
+                <h3><code>rem</code> — Root em (Recommended)</h3>
+
+                <p>A <strong>relative</strong> unit based on the root element's (<code>&lt;html&gt;</code>) font size. By default, browsers set the root font size to 16px, so:</p>
+
+                <ul>
+                    <li><code>1rem</code> = 16px</li>
+                    <li><code>1.5rem</code> = 24px</li>
+                    <li><code>2rem</code> = 32px</li>
+                    <li><code>0.875rem</code> = 14px</li>
+                </ul>
+
+                <pre><code class="language-css">h1 { font-size: 2.25rem; }    /* 36px at default root */
+h2 { font-size: 1.75rem; }    /* 28px */
+p  { font-size: 1rem; }       /* 16px */
+small { font-size: 0.875rem; } /* 14px */</code></pre>
+
+                <p><strong>Why <code>rem</code> is better:</strong> If a user sets their browser's base font size to 20px (for readability), all your <code>rem</code>-based text scales proportionally. With <code>px</code>, it stays stubbornly at 36px.</p>
+
+                <h3><code>em</code> — Relative to Parent</h3>
+
+                <p>Like <code>rem</code>, but relative to the <strong>parent element's</strong> font size, not the root. This can cause compounding:</p>
+
+                <pre><code class="language-css">.parent { font-size: 20px; }
+.child  { font-size: 1.5em; }  /* 30px (1.5 × 20) */
+.grandchild { font-size: 1.5em; } /* 45px (1.5 × 30) — it compounds! */</code></pre>
+
+                <p>Because of compounding, <code>em</code> is best reserved for local adjustments (padding, margins relative to text size) rather than font sizes. <strong>Use <code>rem</code> for font sizes.</strong></p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Font Size Units Comparison</caption>
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>Relative To</th>
+                                <th>Scales with User Settings?</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>px</code></td>
+                                <td>Nothing (absolute)</td>
+                                <td>No</td>
+                                <td>Learning, borders, shadows</td>
+                            </tr>
+                            <tr>
+                                <td><code>rem</code></td>
+                                <td>Root element font size</td>
+                                <td>Yes ✅</td>
+                                <td>Font sizes, spacing</td>
+                            </tr>
+                            <tr>
+                                <td><code>em</code></td>
+                                <td>Parent element font size</td>
+                                <td>Yes (but compounds)</td>
+                                <td>Local padding/margins</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="text-properties" class="lesson-section">
+                <h2>Other Text Properties</h2>
+
+                <p>Beyond font family and size, CSS gives you fine-grained control over how text looks:</p>
+
+                <h3><code>font-weight</code> — Boldness</h3>
+
+                <pre><code class="language-css">p       { font-weight: 400; }    /* normal — same as "normal" */
+strong  { font-weight: 700; }    /* bold — same as "bold" */
+h1      { font-weight: 600; }    /* semi-bold (if the font supports it) */</code></pre>
+
+                <p>Weight values range from 100 (thin) to 900 (black). The most common are 400 (normal) and 700 (bold). Use named values (<code>normal</code>, <code>bold</code>) or numbers — they mean the same thing.</p>
+
+                <h3><code>font-style</code> — Italic</h3>
+
+                <pre><code class="language-css">.caption    { font-style: italic; }
+.correction { font-style: normal; }  /* remove italic from em tags, for example */</code></pre>
+
+                <h3><code>line-height</code> — Vertical Spacing</h3>
+
+                <p>Controls the space between lines of text. This is one of the biggest readability improvements you can make:</p>
+
+                <pre><code class="language-css">body {
+    line-height: 1.6;  /* 1.6 times the font size — great for body text */
+}
+
+h1 {
+    line-height: 1.2;  /* tighter for large headings */
+}</code></pre>
+
+                <p>A unitless number (like <code>1.6</code>) is preferred over a fixed value — it scales with the font size automatically. The default is about <code>1.2</code>, which is cramped for body text. Bump it to <code>1.5</code>–<code>1.8</code> for comfortable reading.</p>
+
+                <h3><code>text-align</code> — Horizontal Alignment</h3>
+
+                <pre><code class="language-css">h1      { text-align: center; }
+p       { text-align: left; }      /* default */
+.price  { text-align: right; }
+.justify { text-align: justify; }  /* stretches to fill the line — use sparingly */</code></pre>
+
+                <h3><code>text-decoration</code> — Underlines and More</h3>
+
+                <pre><code class="language-css">a       { text-decoration: none; }           /* remove default underline */
+a:hover { text-decoration: underline; }      /* add it back on hover */
+del     { text-decoration: line-through; }   /* strikethrough */</code></pre>
+
+                <h3><code>text-transform</code> — Case Changes</h3>
+
+                <pre><code class="language-css">.uppercase { text-transform: uppercase; }    /* ALL CAPS */
+.capitalize { text-transform: capitalize; }  /* First Letter Capitalized */
+.lowercase { text-transform: lowercase; }    /* all lowercase */</code></pre>
+
+                <h3><code>letter-spacing</code> and <code>word-spacing</code></h3>
+
+                <pre><code class="language-css">.spaced-heading {
+    letter-spacing: 2px;   /* space between characters */
+    text-transform: uppercase;  /* often paired with uppercase text */
+}
+
+.wide-text {
+    word-spacing: 4px;     /* space between words */
+}</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 A Professional Typography Recipe</h4>
+                    <p>Here's a quick formula that instantly improves almost any page:</p>
+                    <pre><code class="language-css">body {
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 1rem;           /* 16px base */
+    line-height: 1.6;          /* comfortable reading */
+    color: #1e293b;            /* near-black, not pure black */
+}
+
+h1, h2, h3 {
+    line-height: 1.2;          /* tighter for headings */
+    color: #0f172a;            /* slightly darker than body text */
+}
+
+h1 { font-size: 2.25rem; }    /* 36px */
+h2 { font-size: 1.75rem; }    /* 28px */
+h3 { font-size: 1.375rem; }   /* 22px */</code></pre>
+                    <p>Why <code>#1e293b</code> instead of pure <code>#000000</code>? Pure black on white creates harsh contrast that causes eye strain. A very dark gray is easier to read and looks more sophisticated.</p>
+                </div>
+            </section>
+
+            <!-- Section 7: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Build a Color &amp; Type System</h3>
+                    <p><strong>Objective:</strong> Create a cohesive color palette and typography system in your CSS file.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>Open your <code>css/style.css</code> file</li>
+                        <li>At the top of your file, add CSS custom properties (variables) for your color palette:
+                            <pre><code class="language-css">:root {
+    --color-primary: #1a365d;
+    --color-accent: #3b82f6;
+    --color-text: #1e293b;
+    --color-text-light: #64748b;
+    --color-bg: #f8fafc;
+    --color-bg-alt: #eff6ff;
+    --color-border: #e2e8f0;
+}</code></pre>
+                        </li>
+                        <li>Replace all hard-coded color values in your CSS with these variables:
+                            <pre><code class="language-css">body {
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+h1 {
+    color: var(--color-primary);
+    border-bottom: 3px solid var(--color-accent);
+}
+
+a {
+    color: var(--color-accent);
+}</code></pre>
+                        </li>
+                        <li>Add a Google Font (try "Inter" or "Poppins") and update your <code>font-family</code></li>
+                        <li>Switch all <code>font-size</code> values from <code>px</code> to <code>rem</code></li>
+                        <li>Set <code>line-height: 1.6</code> on the body</li>
+                        <li>Make headings use <code>line-height: 1.2</code></li>
+                        <li>Test by changing just the <code>--color-accent</code> variable — every accent color on the page should update at once</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>CSS custom properties (also called CSS variables) are declared inside a <code>:root</code> selector and used with <code>var(--name)</code>. The <code>:root</code> selector targets the <code>&lt;html&gt;</code> element, making variables available everywhere. This is a sneak preview of a powerful technique — you'll see it used extensively in professional CSS.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-css">/* css/style.css */
+
+/* ===========================
+   Color Palette (CSS Variables)
+   =========================== */
+:root {
+    --color-primary: #1a365d;
+    --color-accent: #3b82f6;
+    --color-accent-hover: #1d4ed8;
+    --color-text: #1e293b;
+    --color-text-light: #64748b;
+    --color-bg: #f8fafc;
+    --color-bg-alt: #eff6ff;
+    --color-border: #e2e8f0;
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-error: #dc2626;
+}
+
+/* ===========================
+   Typography
+   =========================== */
+body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2, h3, h4 {
+    line-height: 1.2;
+    color: var(--color-primary);
+}
+
+h1 {
+    font-size: 2.25rem;
+    border-bottom: 3px solid var(--color-accent);
+    padding-bottom: 0.5rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+    margin-top: 2rem;
+}
+
+h3 {
+    font-size: 1.375rem;
+}
+
+/* ===========================
+   Links
+   =========================== */
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+}
+
+/* ===========================
+   Utility Classes
+   =========================== */
+.text-small {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.highlight {
+    background-color: #fef08a;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* ===========================
+   Semantic Sections
+   =========================== */
+header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1.25rem;
+    margin: -20px -20px 1.25rem -20px;
+}
+
+header a {
+    color: #93c5fd;
+}
+
+footer {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+}
+
+aside {
+    background-color: var(--color-bg-alt);
+    padding: 1rem;
+    border-left: 4px solid var(--color-accent);
+    margin: 1.25rem 0;
+}
+
+/* ===========================
+   Code
+   =========================== */
+code {
+    font-family: "Fira Code", Consolas, "Courier New", monospace;
+    background-color: var(--color-bg-alt);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does the hex code <code>#ff0000</code> represent?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Blue would be #0000ff — blue is the last two digits.">A) Blue</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! #ff0000 means maximum red (ff), no green (00), no blue (00) — pure red.">B) Red</button>
+                            <button class="quiz-option" data-correct="false" data-hint="White is #ffffff — all channels at maximum.">C) White</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Which unit is best for font sizes?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Pixels are absolute and don't scale when users adjust their browser font size settings.">A) px — because it's exact</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! rem is relative to the root font size, so it scales with user preferences for accessibility. It doesn't compound like em does.">B) rem — because it scales with user settings</button>
+                            <button class="quiz-option" data-correct="false" data-hint="em is relative to the parent, which causes compounding when nested. rem (relative to root) avoids this.">C) em — because it's relative</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why do we use a font stack instead of a single font name?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Listing more fonts doesn't make any single font render faster.">A) To make the page load faster</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Not every user has every font installed. A font stack provides graceful fallbacks — if the first font isn't available, the browser tries the next one, and so on.">B) To provide fallback options if the preferred font isn't available</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The browser only uses one font at a time — it picks the first one available from your list.">C) To mix different fonts in the same paragraph</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What's a good <code>line-height</code> for body text?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="1.0 means lines of text touch with no extra space — very hard to read.">A) 1.0</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! A line-height of 1.5–1.8 provides comfortable spacing between lines for body text. The most common recommendation is around 1.6.">B) 1.5–1.8</button>
+                            <button class="quiz-option" data-correct="false" data-hint="3.0 would double-space the text, which is too much for most web content.">C) 3.0</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> In HSL, what does the "H" represent?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Hue is the color itself — a degree on the color wheel from 0° (red) through 120° (green) to 240° (blue) and back to 360° (red again).">A) Hue — the color on the color wheel</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The 'H' stands for Hue. 'Height' isn't a concept in color theory.">B) Height — how tall the text is</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The 'H' stands for Hue. Hex codes are a different color format (#RRGGBB).">C) Hex — the hexadecimal value</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>CSS colors come in <strong>four formats</strong>: named colors, hex (<code>#1a365d</code>), RGB/RGBA (<code>rgb(26, 54, 93)</code>), and HSL/HSLA (<code>hsl(217, 56%, 23%)</code>)</li>
+                        <li>Apply color with <code>color</code> (text), <code>background-color</code> (backgrounds), and <code>border-color</code> (borders)</li>
+                        <li>Use <strong>font stacks</strong> with fallbacks: <code>font-family: "Inter", system-ui, sans-serif;</code></li>
+                        <li><strong>Google Fonts</strong> gives you free access to 1,500+ typefaces — add via <code>&lt;link&gt;</code> in <code>&lt;head&gt;</code></li>
+                        <li>Use <strong><code>rem</code></strong> for font sizes (scales with user settings) and a unitless <strong><code>line-height</code></strong> of 1.5–1.8 for body text</li>
+                        <li>CSS custom properties (<code>--color-accent: #3b82f6;</code>) let you define a palette once and reuse it everywhere</li>
+                        <li>Use near-black text (<code>#1e293b</code>) instead of pure black for better readability</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← now with colors, fonts, and variables
+├── images/
+│   └── sunset.jpg
+├── index.html         ← linked to Google Fonts + CSS
+├── about.html
+├── recipe.html
+└── contact.html</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your pages have beautiful colors and professional typography — but everything is just stacking top to bottom. Text bumps right up against the edges, images ignore their surroundings, and nothing has breathing room. In the next lesson, you'll learn the <strong>CSS Box Model</strong> — the foundation of how every element takes up space on the page. Understanding margin, padding, border, and content will give you precise control over spacing and layout.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_10.html" class="prev-lesson">← Previous: Introduction to CSS</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_12.html" class="next-lesson">Next: The Box Model →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

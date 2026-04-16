@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to create hyperlinks with the anchor tag and display images on your web pages using HTML.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 6: Links &amp; Images - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 6: Links &amp; Images</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🔗 Lesson 6: Links &amp; Images</h1>
+                <p class="lead">Links and images are what make the web a <em>web</em>. Links connect pages to each other (and to the rest of the internet), while images bring your content to life visually. Together, they transform a plain text document into a real website.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Create hyperlinks to other pages and external websites with <code>&lt;a&gt;</code></li>
+                        <li>Understand the difference between absolute and relative URLs</li>
+                        <li>Open links in new tabs with the <code>target</code> attribute</li>
+                        <li>Display images with <code>&lt;img&gt;</code> and write meaningful <code>alt</code> text</li>
+                        <li>Link between pages in your own site</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll add navigation links and images to your website project.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#links-intro" class="toc-link">Creating Links with <code>&lt;a&gt;</code></a></li>
+                        <li><a href="#absolute-vs-relative" class="toc-link">Absolute vs. Relative URLs</a></li>
+                        <li><a href="#link-targets" class="toc-link">Link Targets and Behaviors</a></li>
+                        <li><a href="#images" class="toc-link">Displaying Images with <code>&lt;img&gt;</code></a></li>
+                        <li><a href="#alt-text" class="toc-link">Writing Good Alt Text</a></li>
+                        <li><a href="#images-as-links" class="toc-link">Images as Links</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="links-intro" class="lesson-section">
+                <h2>Creating Links with <code>&lt;a&gt;</code></h2>
+
+                <p>The <code>&lt;a&gt;</code> (anchor) element creates a clickable hyperlink. It's one of the most important elements in all of HTML — without it, every page would be a dead end.</p>
+
+                <pre><code class="language-html">&lt;a href="https://www.example.com"&gt;Visit Example&lt;/a&gt;</code></pre>
+
+                <p>Let's break that down:</p>
+
+                <ul>
+                    <li><code>&lt;a&gt;</code> — the anchor tag (opening)</li>
+                    <li><code>href="..."</code> — the <strong>hypertext reference</strong> attribute, which tells the browser <em>where</em> the link goes</li>
+                    <li><code>Visit Example</code> — the <strong>link text</strong> (what the user sees and clicks)</li>
+                    <li><code>&lt;/a&gt;</code> — the closing tag</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph LR
+                    A["&lt;a"] --> B["href='url'"]
+                    B --> C["Link Text"]
+                    C --> D["&lt;/a&gt;"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>By default, browsers display links as blue underlined text. After you visit a link, it turns purple. You'll learn how to change this with CSS later.</p>
+
+                <h3>Email and Phone Links</h3>
+
+                <p>The <code>href</code> attribute isn't limited to web addresses. You can link to email addresses and phone numbers too:</p>
+
+                <pre><code class="language-html">&lt;!-- Opens the user's email app --&gt;
+&lt;a href="mailto:hello@example.com"&gt;Send me an email&lt;/a&gt;
+
+&lt;!-- Opens the phone dialer on mobile devices --&gt;
+&lt;a href="tel:+15551234567"&gt;Call us&lt;/a&gt;</code></pre>
+
+                <h3>Linking to Sections on the Same Page</h3>
+
+                <p>You can link to any element that has an <code>id</code> attribute by using a <code>#</code> followed by the ID:</p>
+
+                <pre><code class="language-html">&lt;!-- The link --&gt;
+&lt;a href="#contact"&gt;Jump to Contact Section&lt;/a&gt;
+
+&lt;!-- Somewhere else on the same page --&gt;
+&lt;h2 id="contact"&gt;Contact&lt;/h2&gt;</code></pre>
+
+                <p>Clicking this link scrolls the page down to the element with <code>id="contact"</code>. This is how tables of contents work on long pages — including this course!</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="absolute-vs-relative" class="lesson-section">
+                <h2>Absolute vs. Relative URLs</h2>
+
+                <p>There are two ways to write a URL in the <code>href</code> attribute, and understanding the difference is critical:</p>
+
+                <h3>Absolute URLs</h3>
+                <p>An absolute URL includes the full address — protocol, domain, and path. It points to the same place no matter where your page is located:</p>
+
+                <pre><code class="language-html">&lt;a href="https://www.wikipedia.org"&gt;Wikipedia&lt;/a&gt;
+&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTML"&gt;MDN HTML Docs&lt;/a&gt;</code></pre>
+
+                <p>Use absolute URLs when linking to <strong>external websites</strong> — sites that aren't yours.</p>
+
+                <h3>Relative URLs</h3>
+                <p>A relative URL describes the path <em>relative to the current page</em>. It doesn't include a domain name:</p>
+
+                <pre><code class="language-html">&lt;!-- Links to about.html in the same folder --&gt;
+&lt;a href="about.html"&gt;About Me&lt;/a&gt;
+
+&lt;!-- Links to a file inside a subfolder --&gt;
+&lt;a href="pages/contact.html"&gt;Contact&lt;/a&gt;
+
+&lt;!-- Goes up one folder, then into images --&gt;
+&lt;a href="../images/photo.jpg"&gt;View Photo&lt;/a&gt;</code></pre>
+
+                <p>Use relative URLs when linking between pages <strong>within your own site</strong>. They're shorter, easier to manage, and they keep working even if you move your entire site to a different domain.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["my-website/"] --> B["index.html"]
+                    A --> C["about.html"]
+                    A --> D["pages/"]
+                    D --> E["contact.html"]
+                    A --> F["images/"]
+                    F --> G["photo.jpg"]
+                    B -- "href='about.html'" --> C
+                    B -- "href='pages/contact.html'" --> E
+                    E -- "href='../about.html'" --> C
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style D fill:#fdf4ff,stroke:#a855f7,stroke-width:1px,color:#1e293b
+                    style E fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style F fill:#fdf4ff,stroke:#a855f7,stroke-width:1px,color:#1e293b
+                    style G fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 The <code>..</code> Shortcut</h4>
+                    <p>In a file path, <code>..</code> means "go up one directory." If you're in <code>pages/contact.html</code> and want to link to <code>about.html</code> (which is in the parent folder), you'd write <code>href="../about.html"</code>. A single dot (<code>.</code>) means "this current directory."</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="link-targets" class="lesson-section">
+                <h2>Link Targets and Behaviors</h2>
+
+                <p>By default, clicking a link navigates the <em>current</em> tab to the new page. You can change this behavior with the <code>target</code> attribute:</p>
+
+                <pre><code class="language-html">&lt;!-- Opens in a new tab --&gt;
+&lt;a href="https://www.wikipedia.org" target="_blank"&gt;Wikipedia&lt;/a&gt;</code></pre>
+
+                <p>The value <code>_blank</code> tells the browser to open the link in a new tab (or new window, depending on the user's settings).</p>
+
+                <h3>Security with <code>rel="noopener noreferrer"</code></h3>
+
+                <p>When you use <code>target="_blank"</code>, it's good practice to add a <code>rel</code> attribute for security:</p>
+
+                <pre><code class="language-html">&lt;a href="https://www.example.com"
+   target="_blank"
+   rel="noopener noreferrer"&gt;
+    Visit Example
+&lt;/a&gt;</code></pre>
+
+                <ul>
+                    <li><code>noopener</code> prevents the new page from accessing your page's <code>window</code> object (a potential security risk)</li>
+                    <li><code>noreferrer</code> prevents the new page from knowing which page sent the user there</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 When to Open in a New Tab</h4>
+                    <p>A good rule of thumb: open <strong>external links</strong> (to other websites) in a new tab, so the user doesn't lose your site. Keep <strong>internal links</strong> (between your own pages) opening in the same tab — that's what users expect when navigating a site.</p>
+                </div>
+
+                <h3>Descriptive Link Text</h3>
+
+                <p>Write link text that makes sense on its own, without reading the surrounding sentence:</p>
+
+                <pre><code class="language-html">&lt;!-- ❌ Bad — "Click here" says nothing about the destination --&gt;
+&lt;p&gt;To learn more, &lt;a href="about.html"&gt;click here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!-- ✅ Good — link text describes what you'll find --&gt;
+&lt;p&gt;Learn more on our &lt;a href="about.html"&gt;About page&lt;/a&gt;.&lt;/p&gt;</code></pre>
+
+                <p>Screen reader users often navigate by jumping through a list of all links on the page. If every link says "click here," that list is useless. Descriptive link text helps everyone.</p>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="images" class="lesson-section">
+                <h2>Displaying Images with <code>&lt;img&gt;</code></h2>
+
+                <p>The <code>&lt;img&gt;</code> element embeds an image on the page. It's a void element (no closing tag), and it requires two attributes:</p>
+
+                <pre><code class="language-html">&lt;img src="images/sunset.jpg" alt="A golden sunset over the ocean"&gt;</code></pre>
+
+                <ul>
+                    <li><code>src</code> — the <strong>source</strong> (path or URL to the image file)</li>
+                    <li><code>alt</code> — <strong>alternative text</strong> (describes the image for screen readers and for when the image fails to load)</li>
+                </ul>
+
+                <h3>Image Paths</h3>
+
+                <p>Just like links, image sources can be absolute or relative:</p>
+
+                <pre><code class="language-html">&lt;!-- Relative: image in an "images" subfolder --&gt;
+&lt;img src="images/photo.jpg" alt="My photo"&gt;
+
+&lt;!-- Relative: image in the same folder as the HTML file --&gt;
+&lt;img src="logo.png" alt="Site logo"&gt;
+
+&lt;!-- Absolute: image hosted on another site --&gt;
+&lt;img src="https://via.placeholder.com/300x200" alt="Placeholder image"&gt;</code></pre>
+
+                <p>For your own projects, keep images in a dedicated <code>images/</code> folder to stay organized.</p>
+
+                <h3>Setting Image Dimensions</h3>
+
+                <p>You can specify width and height using attributes (in pixels):</p>
+
+                <pre><code class="language-html">&lt;img src="images/sunset.jpg"
+     alt="A golden sunset over the ocean"
+     width="600"
+     height="400"&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 Why Set Width and Height?</h4>
+                    <p>When you include <code>width</code> and <code>height</code> attributes, the browser reserves that space on the page <em>before</em> the image loads. This prevents the annoying "layout shift" where content jumps around as images pop in. You'll refine sizing with CSS later, but the HTML attributes help the browser plan the layout.</p>
+                </div>
+
+                <h3>Common Image Formats</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Format</th>
+                                <th>Extension</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>JPEG</td>
+                                <td><code>.jpg</code> / <code>.jpeg</code></td>
+                                <td>Photographs, complex images with many colors</td>
+                            </tr>
+                            <tr>
+                                <td>PNG</td>
+                                <td><code>.png</code></td>
+                                <td>Graphics with transparency, screenshots, logos</td>
+                            </tr>
+                            <tr>
+                                <td>GIF</td>
+                                <td><code>.gif</code></td>
+                                <td>Simple animations, very small graphics</td>
+                            </tr>
+                            <tr>
+                                <td>SVG</td>
+                                <td><code>.svg</code></td>
+                                <td>Icons, logos, illustrations (scales without losing quality)</td>
+                            </tr>
+                            <tr>
+                                <td>WebP</td>
+                                <td><code>.webp</code></td>
+                                <td>Modern format with smaller file sizes (photos and graphics)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="alt-text" class="lesson-section">
+                <h2>Writing Good Alt Text</h2>
+
+                <p>The <code>alt</code> attribute is <strong>not optional</strong>. It serves three critical purposes:</p>
+
+                <ol>
+                    <li><strong>Accessibility:</strong> Screen readers read the alt text aloud so visually impaired users know what the image shows</li>
+                    <li><strong>Fallback:</strong> If the image fails to load (broken link, slow connection), the alt text appears in its place</li>
+                    <li><strong>SEO:</strong> Search engines can't "see" images — they rely on alt text to understand what's in them</li>
+                </ol>
+
+                <h3>Alt Text Guidelines</h3>
+
+                <pre><code class="language-html">&lt;!-- ❌ Bad: empty or unhelpful --&gt;
+&lt;img src="photo.jpg" alt=""&gt;
+&lt;img src="photo.jpg" alt="image"&gt;
+&lt;img src="photo.jpg" alt="photo.jpg"&gt;
+
+&lt;!-- ❌ Bad: too long or redundant --&gt;
+&lt;img src="photo.jpg" alt="Image of a photo showing a picture of a sunset"&gt;
+
+&lt;!-- ✅ Good: concise and descriptive --&gt;
+&lt;img src="photo.jpg" alt="Golden sunset over the Pacific Ocean"&gt;
+
+&lt;!-- ✅ Good: describes the function for UI images --&gt;
+&lt;img src="search-icon.png" alt="Search"&gt;</code></pre>
+
+                <div class="card card-warning">
+                    <h4>⚠️ When Alt Should Be Empty</h4>
+                    <p>If an image is <strong>purely decorative</strong> and adds no information — like a decorative border or background flourish — use an empty alt attribute: <code>alt=""</code>. This tells screen readers to skip it entirely. But never omit the <code>alt</code> attribute altogether; that causes screen readers to read the filename, which is worse.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="images-as-links" class="lesson-section">
+                <h2>Images as Links</h2>
+
+                <p>You can make an image clickable by wrapping an <code>&lt;img&gt;</code> element inside an <code>&lt;a&gt;</code> tag:</p>
+
+                <pre><code class="language-html">&lt;a href="https://www.example.com"&gt;
+    &lt;img src="images/logo.png" alt="Example Company — visit homepage"&gt;
+&lt;/a&gt;</code></pre>
+
+                <p>This is exactly how logo images work on most websites — click the logo and it takes you to the homepage. When an image is a link, make sure the <code>alt</code> text describes <em>where the link goes</em>, not just what the image looks like.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["&lt;a href='...'&gt;"] --> B["&lt;img src='...' alt='...'&gt;"]
+                    B --> C["&lt;/a&gt;"]
+                    D["User clicks image"] --> E["Browser follows href"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style C fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style E fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                </div>
+            </section>
+
+            <!-- Section 7: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Connect Your Pages and Add an Image</h3>
+                    <p><strong>Objective:</strong> Add navigation links between your pages and display an image.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>Create an <code>images</code> folder inside your <code>my-website</code> folder (if it doesn't exist yet)</li>
+                        <li>Find or download any image and save it in the <code>images</code> folder (you can use <a href="https://unsplash.com" target="_blank" rel="noopener noreferrer">Unsplash</a> for free photos)</li>
+                        <li>Open <code>index.html</code> and add a navigation section at the top of the <code>&lt;body&gt;</code>:
+                            <ul>
+                                <li>A link to <code>about.html</code> with the text "About Me"</li>
+                                <li>A link to an external site (your favorite website) that opens in a new tab</li>
+                            </ul>
+                        </li>
+                        <li>Below the navigation, add an image using <code>&lt;img&gt;</code> with descriptive alt text</li>
+                        <li>Open <code>about.html</code> and add a link back to <code>index.html</code> with the text "Back to Home"</li>
+                        <li>Save both files and test the links with Live Server</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Since <code>index.html</code> and <code>about.html</code> are in the same folder, the relative URL is just the filename: <code>href="about.html"</code>. For images in the <code>images</code> subfolder, use <code>src="images/filename.jpg"</code>.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution — index.html</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My First Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href="about.html"&gt;About Me&lt;/a&gt; |
+    &lt;a href="https://www.wikipedia.org"
+       target="_blank"
+       rel="noopener noreferrer"&gt;Wikipedia&lt;/a&gt;
+
+    &lt;h1&gt;Welcome to My Website&lt;/h1&gt;
+
+    &lt;img src="images/sunset.jpg"
+         alt="A golden sunset over the ocean"
+         width="600" height="400"&gt;
+
+    &lt;p&gt;This is my first properly structured website.
+       I'm learning HTML and CSS from scratch!&lt;/p&gt;
+
+    &lt;h2&gt;What I'm Learning&lt;/h2&gt;
+    &lt;ul&gt;
+        &lt;li&gt;HTML structure and tags&lt;/li&gt;
+        &lt;li&gt;Links and images&lt;/li&gt;
+        &lt;li&gt;How to connect pages together&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution — about.html</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;About Me&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href="index.html"&gt;Back to Home&lt;/a&gt;
+
+    &lt;h1&gt;About Alex Johnson&lt;/h1&gt;
+    &lt;p&gt;I'm a &lt;strong&gt;web development student&lt;/strong&gt;
+       learning to build websites from scratch.&lt;/p&gt;
+
+    &lt;h2&gt;My Interests&lt;/h2&gt;
+    &lt;p&gt;I enjoy drawing, board games, and
+       &lt;em&gt;sourdough baking&lt;/em&gt;.&lt;/p&gt;
+
+    &lt;hr&gt;
+
+    &lt;h2&gt;Contact&lt;/h2&gt;
+    &lt;p&gt;
+        &lt;a href="mailto:alex@example.com"&gt;alex@example.com&lt;/a&gt;
+    &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> Which attribute specifies where a link goes?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The src attribute is used for images, not links.">A) <code>src</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The href (hypertext reference) attribute contains the URL the link points to.">B) <code>href</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="The link attribute isn't a real HTML attribute used this way.">C) <code>link</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> When should you use a relative URL instead of an absolute URL?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="External sites require the full address (absolute URL) so the browser knows which domain to visit.">A) When linking to external websites</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Relative URLs are shorter, easier to manage, and keep working if your site moves to a different domain.">B) When linking between pages within your own site</button>
+                            <button class="quiz-option" data-correct="false" data-hint="You can use either for email, but the format is always mailto: which is absolute.">C) When linking to an email address</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What are the two <strong>required</strong> attributes for <code>&lt;img&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="width and height are recommended but not required.">A) <code>width</code> and <code>height</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! src tells the browser where the image is, and alt provides a text description for accessibility and fallback.">B) <code>src</code> and <code>alt</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="href is for links, not images. And id is optional on any element.">C) <code>href</code> and <code>id</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> How do you open a link in a new tab?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="new-tab isn't a valid attribute. Check the target attribute.">A) <code>new-tab="true"</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! target='_blank' tells the browser to open the link in a new tab. Remember to add rel='noopener noreferrer' for security.">B) <code>target="_blank"</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="open is not a standard HTML attribute for links.">C) <code>open="new"</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The <code>&lt;a&gt;</code> element creates hyperlinks using the <code>href</code> attribute</li>
+                        <li>Use <strong>absolute URLs</strong> (full address) for external sites and <strong>relative URLs</strong> (just the path) for your own pages</li>
+                        <li>Use <code>target="_blank"</code> with <code>rel="noopener noreferrer"</code> to open external links in new tabs safely</li>
+                        <li>Write descriptive link text — avoid "click here"</li>
+                        <li>The <code>&lt;img&gt;</code> element displays images with <code>src</code> (source) and <code>alt</code> (alternative text)</li>
+                        <li>Always include meaningful <code>alt</code> text for accessibility, SEO, and fallback display</li>
+                        <li>Wrap <code>&lt;img&gt;</code> inside <code>&lt;a&gt;</code> to make clickable image links</li>
+                        <li>Keep images organized in a dedicated <code>images/</code> folder</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── images/
+│   └── sunset.jpg     ← your first image
+├── index.html         ← homepage with links and image
+└── about.html         ← profile page with link back to home</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your pages have text, headings, links, and images — but content often needs to be organized into <strong>lists</strong> and <strong>tables</strong>. In the next lesson, you'll learn how to create ordered lists, unordered lists, definition lists, and structured data tables.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_05.html" class="prev-lesson">← Previous: Text &amp; Headings</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_07.html" class="next-lesson">Next: Lists &amp; Tables →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

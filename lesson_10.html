@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn what CSS is, how to connect it to HTML, and write your first styles to transform a plain page into something beautiful.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 10: Introduction to CSS - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 10: Introduction to CSS</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🎨 Lesson 10: Introduction to CSS</h1>
+                <p class="lead">Your HTML pages have solid structure — headings, paragraphs, links, images, forms, and semantic elements. But they look like it's 1995. Every page uses the browser's default styling: Times New Roman text, blue underlined links, and zero personality. <strong>CSS</strong> is how you change all of that.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what CSS is and why it's separate from HTML</li>
+                        <li>Write a CSS rule using the correct syntax (selector, property, value)</li>
+                        <li>Connect a stylesheet to an HTML page using the <code>&lt;link&gt;</code> element</li>
+                        <li>Use element selectors, class selectors, and ID selectors</li>
+                        <li>Understand the three ways to add CSS (inline, internal, external) and why external wins</li>
+                        <li>Style your project homepage with an external stylesheet</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll create your first CSS file and transform your plain HTML page.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#what-is-css" class="toc-link">What Is CSS?</a></li>
+                        <li><a href="#css-syntax" class="toc-link">CSS Syntax: Rules, Selectors, and Declarations</a></li>
+                        <li><a href="#three-ways" class="toc-link">Three Ways to Add CSS</a></li>
+                        <li><a href="#external-stylesheet" class="toc-link">Creating Your First External Stylesheet</a></li>
+                        <li><a href="#selectors" class="toc-link">Basic Selectors</a></li>
+                        <li><a href="#cascade-intro" class="toc-link">The Cascade — A First Look</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="what-is-css" class="lesson-section">
+                <h2>What Is CSS?</h2>
+
+                <p><strong>CSS</strong> stands for <strong>Cascading Style Sheets</strong>. If HTML is the skeleton and content of a web page, CSS is the skin, clothing, and style. CSS controls how HTML elements <em>look</em> — colors, fonts, spacing, layout, animations, and more.</p>
+
+                <p>Here's the key insight: <strong>HTML handles structure and meaning. CSS handles presentation.</strong> They're deliberately separate so you can change how a page looks without touching its content, and vice versa.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["HTML<br/>Structure &amp; Content<br/>headings, paragraphs,<br/>links, images, forms"] -->|styled by| B["CSS<br/>Presentation &amp; Layout<br/>colors, fonts, spacing,<br/>layout, animations"]
+                    B -->|displayed in| C["Browser<br/>The visual page<br/>the user sees"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>Why keep them separate? Imagine a website with 50 pages. If styling were embedded in the HTML, changing the heading color means editing 50 files. With a separate CSS file, you change one line and all 50 pages update instantly.</p>
+
+                <div class="card card-info">
+                    <h4>💡 A Real-World Analogy</h4>
+                    <p>Think of HTML as a house's blueprint — it defines rooms, doors, and windows. CSS is the interior design — it picks the paint colors, furniture, lighting, and layout. You can completely redecorate (change CSS) without knocking down walls (changing HTML).</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="css-syntax" class="lesson-section">
+                <h2>CSS Syntax: Rules, Selectors, and Declarations</h2>
+
+                <p>A <strong>CSS rule</strong> tells the browser: "Find these elements and make them look like this." Every rule has two parts:</p>
+
+                <pre><code class="language-css">selector {
+    property: value;
+    property: value;
+}</code></pre>
+
+                <p>Let's break that down:</p>
+
+                <ul>
+                    <li><strong>Selector</strong> — <em>what</em> to style (which HTML elements to target)</li>
+                    <li><strong>Declaration block</strong> — the curly braces <code>{ }</code> containing one or more declarations</li>
+                    <li><strong>Declaration</strong> — a single styling instruction made up of a <strong>property</strong> and a <strong>value</strong>, separated by a colon and ending with a semicolon</li>
+                </ul>
+
+                <p>Here's a real example:</p>
+
+                <pre><code class="language-css">h1 {
+    color: navy;
+    font-size: 36px;
+}</code></pre>
+
+                <p>This rule says: "Find every <code>&lt;h1&gt;</code> element. Make the text color navy and the font size 36 pixels."</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["CSS Rule"] --> B["Selector<br/>h1"]
+                    A --> C["Declaration Block<br/>{ ... }"]
+                    C --> D["Declaration 1<br/>color: navy;"]
+                    C --> E["Declaration 2<br/>font-size: 36px;"]
+                    D --> F["Property: color<br/>Value: navy"]
+                    E --> G["Property: font-size<br/>Value: 36px"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#1e293b
+                    style E fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style G fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <p>A few syntax rules to remember:</p>
+
+                <ul>
+                    <li>Each declaration ends with a <strong>semicolon</strong> (<code>;</code>). Forgetting it is the #1 CSS beginner mistake.</li>
+                    <li>Properties and values are separated by a <strong>colon</strong> (<code>:</code>).</li>
+                    <li>You can have as many declarations inside a rule as you want.</li>
+                    <li>Whitespace and indentation don't matter to the browser, but they make your code readable.</li>
+                </ul>
+
+                <pre><code class="language-css">/* Multiple rules in one stylesheet */
+h1 {
+    color: navy;
+    font-size: 36px;
+    text-align: center;
+}
+
+p {
+    color: #333333;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+a {
+    color: royalblue;
+    text-decoration: none;
+}</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 CSS Comments</h4>
+                    <p>CSS uses <code>/* comment here */</code> for comments. Unlike HTML comments (<code>&lt;!-- --&gt;</code>), CSS comments use slash-asterisk notation. Use them to organize and explain your styles.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="three-ways" class="lesson-section">
+                <h2>Three Ways to Add CSS</h2>
+
+                <p>There are three ways to attach CSS to an HTML document. We'll look at all three, but spoiler alert — one of them is far better than the others.</p>
+
+                <h3>1. Inline Styles (Avoid)</h3>
+
+                <p>You can add styles directly to a single element using the <code>style</code> attribute:</p>
+
+                <pre><code class="language-html">&lt;h1 style="color: navy; font-size: 36px;"&gt;Hello World&lt;/h1&gt;</code></pre>
+
+                <p><strong>Why it's bad:</strong> The style only applies to that one element. If you have 20 headings, you'd need to copy the style 20 times. It also mixes presentation into your HTML, defeating the whole purpose of separation.</p>
+
+                <h3>2. Internal Stylesheet (Sometimes OK)</h3>
+
+                <p>You can put CSS inside a <code>&lt;style&gt;</code> element in the HTML <code>&lt;head&gt;</code>:</p>
+
+                <pre><code class="language-html">&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+    &lt;style&gt;
+        h1 {
+            color: navy;
+            font-size: 36px;
+        }
+        p {
+            color: #333;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+
+                <p><strong>When it's OK:</strong> Quick experiments, single-page demos, or email templates. <strong>Why it's not ideal:</strong> Styles are stuck inside one HTML file. If your site has multiple pages, you'd duplicate the same styles in every file.</p>
+
+                <h3>3. External Stylesheet (Best Practice ✅)</h3>
+
+                <p>You put your CSS in a separate <code>.css</code> file and link to it from HTML:</p>
+
+                <pre><code class="language-html">&lt;!-- In your HTML head --&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles/style.css"&gt;
+&lt;/head&gt;</code></pre>
+
+                <pre><code class="language-css">/* In styles/style.css */
+h1 {
+    color: navy;
+    font-size: 36px;
+}
+
+p {
+    color: #333;
+}</code></pre>
+
+                <p><strong>Why this wins:</strong></p>
+                <ul>
+                    <li><strong>One file, many pages.</strong> Link the same CSS file from every HTML page. Change once, update everywhere.</li>
+                    <li><strong>Clean separation.</strong> HTML stays focused on content; CSS stays focused on presentation.</li>
+                    <li><strong>Browser caching.</strong> The browser downloads the CSS file once and reuses it across pages — faster load times.</li>
+                    <li><strong>Easier maintenance.</strong> All your styles live in one organized place.</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph TD
+                    A["External CSS File<br/>styles/style.css"] --> B["index.html"]
+                    A --> C["about.html"]
+                    A --> D["recipe.html"]
+                    A --> E["contact.html"]
+                    F["Change one rule in CSS"] --> A
+                    F --> G["All 4 pages update instantly"]
+                    style A fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style B fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e293b
+                    style C fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e293b
+                    style D fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e293b
+                    style E fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e293b
+                    style F fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style G fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Comparison of CSS Methods</caption>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Location</th>
+                                <th>Scope</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Inline</td>
+                                <td><code>style=""</code> attribute</td>
+                                <td>Single element</td>
+                                <td>Avoid if possible</td>
+                            </tr>
+                            <tr>
+                                <td>Internal</td>
+                                <td><code>&lt;style&gt;</code> in <code>&lt;head&gt;</code></td>
+                                <td>Single page</td>
+                                <td>Quick experiments</td>
+                            </tr>
+                            <tr>
+                                <td>External ✅</td>
+                                <td>Separate <code>.css</code> file</td>
+                                <td>Entire site</td>
+                                <td>Real projects</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="external-stylesheet" class="lesson-section">
+                <h2>Creating Your First External Stylesheet</h2>
+
+                <p>Let's do it. You're going to create a CSS file and link it to your homepage. Follow these steps:</p>
+
+                <h3>Step 1: Create the CSS File</h3>
+
+                <ol>
+                    <li>In VS Code, open your project folder (<code>my-website</code>)</li>
+                    <li>Create a new folder called <code>css</code> (right-click the project folder → New Folder)</li>
+                    <li>Inside the <code>css</code> folder, create a new file called <code>style.css</code></li>
+                </ol>
+
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← new!
+├── images/
+│   └── sunset.jpg
+├── index.html
+├── about.html
+├── recipe.html
+└── contact.html</code></pre>
+
+                <h3>Step 2: Link the Stylesheet</h3>
+
+                <p>Open <code>index.html</code> and add a <code>&lt;link&gt;</code> element inside the <code>&lt;head&gt;</code>, after the <code>&lt;title&gt;</code>:</p>
+
+                <pre><code class="language-html">&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My First Website&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+&lt;/head&gt;</code></pre>
+
+                <p>The <code>&lt;link&gt;</code> element needs two attributes:</p>
+                <ul>
+                    <li><code>rel="stylesheet"</code> — tells the browser this is a CSS file</li>
+                    <li><code>href="css/style.css"</code> — the path to your CSS file (relative to the HTML file)</li>
+                </ul>
+
+                <h3>Step 3: Write Some Styles</h3>
+
+                <p>Open <code>css/style.css</code> and add your first rules:</p>
+
+                <pre><code class="language-css">/* ===========================
+   My First Stylesheet
+   =========================== */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    background-color: #fafafa;
+}
+
+h1 {
+    color: #1a365d;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #2d3748;
+}
+
+a {
+    color: #3b82f6;
+}
+
+a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}</code></pre>
+
+                <h3>Step 4: See the Magic</h3>
+
+                <p>Save both files and open <code>index.html</code> in your browser (or let Live Server refresh it). Your page should look dramatically different — clean font, softer background, styled headings, and colored links.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Nothing Changed?</h4>
+                    <p>If your page still looks unstyled, check these common issues:</p>
+                    <ul>
+                        <li>Is the <code>&lt;link&gt;</code> element inside <code>&lt;head&gt;</code>, not <code>&lt;body&gt;</code>?</li>
+                        <li>Does the <code>href</code> path match your actual file location? (<code>css/style.css</code> means there's a <code>css</code> folder with <code>style.css</code> inside it)</li>
+                        <li>Did you spell <code>stylesheet</code> correctly in <code>rel="stylesheet"</code>?</li>
+                        <li>Try opening the CSS file directly in the browser — if you see the text, the file exists at that path</li>
+                        <li>Check DevTools (F12) → Console for error messages</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="selectors" class="lesson-section">
+                <h2>Basic Selectors</h2>
+
+                <p>So far we've been selecting elements by their tag name (<code>h1</code>, <code>p</code>, <code>a</code>). These are called <strong>element selectors</strong>. But what if you want to style only <em>some</em> paragraphs differently? That's where class and ID selectors come in.</p>
+
+                <h3>Element Selector</h3>
+
+                <p>Targets every instance of an HTML element:</p>
+
+                <pre><code class="language-css">/* Every paragraph on the page */
+p {
+    font-size: 18px;
+}
+
+/* Every unordered list */
+ul {
+    list-style-type: square;
+}</code></pre>
+
+                <h3>Class Selector (most useful)</h3>
+
+                <p>Targets elements with a specific <code>class</code> attribute. Class selectors start with a <strong>dot</strong> (<code>.</code>):</p>
+
+                <pre><code class="language-html">&lt;!-- HTML: add a class to specific elements --&gt;
+&lt;p class="intro"&gt;Welcome to my website!&lt;/p&gt;
+&lt;p&gt;This is a regular paragraph.&lt;/p&gt;
+&lt;p class="intro"&gt;Another intro paragraph.&lt;/p&gt;</code></pre>
+
+                <pre><code class="language-css">/* CSS: style only elements with class="intro" */
+.intro {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1a365d;
+}</code></pre>
+
+                <p>Key facts about classes:</p>
+                <ul>
+                    <li>A class can be used on <strong>multiple elements</strong> — that's the whole point</li>
+                    <li>An element can have <strong>multiple classes</strong>: <code>class="intro highlight"</code> (space-separated)</li>
+                    <li>Class names should be descriptive: <code>.error-message</code> is better than <code>.red-text</code></li>
+                    <li>Class names are case-sensitive: <code>.intro</code> and <code>.Intro</code> are different</li>
+                </ul>
+
+                <h3>ID Selector</h3>
+
+                <p>Targets the one element with a specific <code>id</code> attribute. ID selectors start with a <strong>hash</strong> (<code>#</code>):</p>
+
+                <pre><code class="language-html">&lt;!-- HTML: id must be unique on the page --&gt;
+&lt;header id="site-header"&gt;
+    &lt;h1&gt;My Website&lt;/h1&gt;
+&lt;/header&gt;</code></pre>
+
+                <pre><code class="language-css">/* CSS: style the one element with id="site-header" */
+#site-header {
+    background-color: #1a365d;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}</code></pre>
+
+                <p>Key facts about IDs:</p>
+                <ul>
+                    <li>An ID must be <strong>unique</strong> — only one element per page can have a given ID</li>
+                    <li>IDs have higher specificity than classes (we'll explore this in a later lesson)</li>
+                    <li>In practice, <strong>classes are preferred over IDs</strong> for styling because they're reusable and more flexible</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph TD
+                    A["CSS Selectors"] --> B["Element Selector<br/>p { ... }<br/>Targets ALL &lt;p&gt; elements"]
+                    A --> C["Class Selector<br/>.intro { ... }<br/>Targets class='intro'"]
+                    A --> D["ID Selector<br/>#site-header { ... }<br/>Targets id='site-header'"]
+                    B --> E["Broad — styles everything<br/>of that type"]
+                    C --> F["Flexible — reusable on<br/>multiple elements ✅"]
+                    D --> G["Specific — one unique<br/>element only"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style G fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Class vs. ID — The Quick Rule</h4>
+                    <p><strong>Use classes for styling.</strong> They're reusable and flexible. Use IDs for JavaScript hooks or anchor links (<code>href="#section-name"</code>), not for CSS. If you find yourself writing an ID selector in CSS, ask: "Could this be a class instead?" The answer is almost always yes.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="cascade-intro" class="lesson-section">
+                <h2>The Cascade — A First Look</h2>
+
+                <p>The "C" in CSS stands for <strong>Cascading</strong>. The cascade is the algorithm the browser uses to decide which styles win when multiple rules target the same element. It's one of the most important concepts in CSS, and we'll cover it in depth later — but here's a quick preview of how it works.</p>
+
+                <p>Imagine these three rules all apply to the same <code>&lt;h1&gt;</code>:</p>
+
+                <pre><code class="language-css">/* Rule 1: element selector */
+h1 {
+    color: navy;
+}
+
+/* Rule 2: class selector */
+.page-title {
+    color: green;
+}
+
+/* Rule 3: ID selector */
+#main-heading {
+    color: red;
+}</code></pre>
+
+                <pre><code class="language-html">&lt;h1 class="page-title" id="main-heading"&gt;Hello!&lt;/h1&gt;</code></pre>
+
+                <p>What color is the heading? <strong>Red.</strong> The cascade resolves conflicts using (among other things) <strong>specificity</strong> — a scoring system for selectors:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Specificity Hierarchy (Simplified)</caption>
+                        <thead>
+                            <tr>
+                                <th>Selector Type</th>
+                                <th>Example</th>
+                                <th>Specificity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Element</td>
+                                <td><code>h1</code></td>
+                                <td>Low</td>
+                            </tr>
+                            <tr>
+                                <td>Class</td>
+                                <td><code>.page-title</code></td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>ID</td>
+                                <td><code>#main-heading</code></td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>Inline style</td>
+                                <td><code>style="..."</code></td>
+                                <td>Highest</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>When two rules have the <strong>same specificity</strong>, the one that appears <strong>later</strong> in the CSS file wins:</p>
+
+                <pre><code class="language-css">p {
+    color: blue;
+}
+
+/* This rule wins because it comes later */
+p {
+    color: green;
+}</code></pre>
+
+                <p>Don't worry about memorizing the full specificity system now. The important takeaway is: <strong>more specific selectors override less specific ones, and when specificity is equal, the last rule wins.</strong> We'll dig deeper into this in upcoming lessons.</p>
+            </section>
+
+            <!-- Section 7: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Style Your Homepage</h3>
+                    <p><strong>Objective:</strong> Create an external stylesheet and apply it to your <code>index.html</code>.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>Create a <code>css</code> folder in your project if you don't have one</li>
+                        <li>Create <code>css/style.css</code> inside it</li>
+                        <li>Add a <code>&lt;link rel="stylesheet" href="css/style.css"&gt;</code> to your <code>index.html</code> <code>&lt;head&gt;</code></li>
+                        <li>In <code>style.css</code>, write rules to:
+                            <ul>
+                                <li>Change the body font to <code>Arial, sans-serif</code></li>
+                                <li>Set the body background to a light color (try <code>#fafafa</code> or <code>#f0f4f8</code>)</li>
+                                <li>Style <code>h1</code> with a dark color and a colored bottom border</li>
+                                <li>Style links (<code>a</code>) with a custom color and remove the underline</li>
+                                <li>Add a hover effect to links: <code>a:hover { text-decoration: underline; }</code></li>
+                            </ul>
+                        </li>
+                        <li>Add a class called <code>.highlight</code> in your CSS that sets a yellow background (<code>background-color: #fef08a;</code>) and a little padding (<code>padding: 2px 6px;</code>)</li>
+                        <li>In your HTML, wrap one word or phrase in a <code>&lt;span class="highlight"&gt;</code> to test it</li>
+                        <li>Link the same stylesheet to your other HTML pages (<code>about.html</code>, etc.)</li>
+                        <li>Save everything and verify all pages share the same styling</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Start with the <code>body</code> rule — setting the font and background there affects everything on the page. Then style specific elements. Remember: the <code>&lt;link&gt;</code> element goes in <code>&lt;head&gt;</code>, not <code>&lt;body&gt;</code>. If styles aren't appearing, check your file path — if your CSS file is in a <code>css</code> folder, the href should be <code>css/style.css</code>.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-css">/* css/style.css */
+
+/* ===========================
+   Global Styles
+   =========================== */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f4f8;
+}
+
+/* ===========================
+   Headings
+   =========================== */
+h1 {
+    color: #1a365d;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 10px;
+}
+
+h2 {
+    color: #2d3748;
+    margin-top: 30px;
+}
+
+/* ===========================
+   Links
+   =========================== */
+a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* ===========================
+   Utility Classes
+   =========================== */
+.highlight {
+    background-color: #fef08a;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* ===========================
+   Semantic Section Styling
+   =========================== */
+header {
+    background-color: #1a365d;
+    color: white;
+    padding: 20px;
+    margin: -20px -20px 20px -20px;
+}
+
+header a {
+    color: #93c5fd;
+}
+
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    color: #666;
+    font-size: 14px;
+}
+
+aside {
+    background-color: #eff6ff;
+    padding: 15px;
+    border-left: 4px solid #3b82f6;
+    margin: 20px 0;
+}</code></pre>
+
+                        <pre><code class="language-html">&lt;!-- Add this line to the &lt;head&gt; of every HTML page --&gt;
+&lt;link rel="stylesheet" href="css/style.css"&gt;
+
+&lt;!-- Example of using the highlight class --&gt;
+&lt;p&gt;I'm learning &lt;span class="highlight"&gt;HTML and CSS&lt;/span&gt; from scratch!&lt;/p&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does CSS stand for?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Close, but the first word is 'Cascading,' not 'Creative.'">A) Creative Style Sheets</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! CSS stands for Cascading Style Sheets. The 'cascading' part refers to how browsers resolve conflicts when multiple styles apply to the same element.">B) Cascading Style Sheets</button>
+                            <button class="quiz-option" data-correct="false" data-hint="It's a styling language, not a scripting one. CSS describes how elements look; JavaScript handles behavior.">C) Computer Style Scripts</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Which is the best way to add CSS to a multi-page website?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Inline styles apply to a single element and must be duplicated everywhere — they don't scale.">A) Inline styles on each element</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Internal stylesheets work for one page but have to be duplicated in every HTML file.">B) An internal &lt;style&gt; block in each page</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! An external .css file linked from every page gives you one source of truth. Change it once, update everywhere. The browser also caches it for faster loads.">C) An external .css file linked with &lt;link&gt;</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What does a CSS class selector start with?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The hash (#) is for ID selectors, not classes.">A) # (hash)</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Class selectors start with a dot: .intro, .highlight, .error-message. The dot tells CSS to look for a class attribute on HTML elements.">B) . (dot)</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The @ sign is used for special CSS rules like @media and @import, not selectors.">C) @ (at sign)</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> If two CSS rules with the same specificity target the same element, which one wins?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="In CSS, order matters — later rules override earlier ones when specificity is equal.">A) The first one in the file</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! When specificity is equal, the rule that appears later in the CSS wins. This is the 'cascade' in Cascading Style Sheets.">B) The last one in the file</button>
+                            <button class="quiz-option" data-correct="false" data-hint="CSS is deterministic — the cascade algorithm always produces a consistent winner.">C) It's random</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> What's the most common beginner CSS mistake?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Forgetting the semicolon at the end of a declaration is the classic CSS bug. Without it, the browser can't tell where one declaration ends and the next begins, causing unexpected styling failures.">A) Forgetting the semicolon after a declaration</button>
+                            <button class="quiz-option" data-correct="false" data-hint="While using too many colors isn't ideal design, it's not a syntax error.">B) Using too many colors</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Comments are helpful but optional — they don't cause problems if missing.">C) Not writing enough comments</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>CSS</strong> (Cascading Style Sheets) controls how HTML elements look — colors, fonts, spacing, layout, and more</li>
+                        <li>A <strong>CSS rule</strong> has a selector (what to style) and a declaration block (how to style it): <code>selector { property: value; }</code></li>
+                        <li>Use <strong>external stylesheets</strong> (<code>&lt;link rel="stylesheet" href="..."&gt;</code>) for real projects — one file styles your entire site</li>
+                        <li><strong>Element selectors</strong> (<code>h1</code>) target all instances; <strong>class selectors</strong> (<code>.intro</code>) target specific elements; <strong>ID selectors</strong> (<code>#header</code>) target one unique element</li>
+                        <li><strong>Prefer classes over IDs</strong> for CSS — classes are reusable and flexible</li>
+                        <li>The <strong>cascade</strong> resolves conflicts: more specific selectors win, and when specificity is equal, the last rule wins</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← new!
+├── images/
+│   └── sunset.jpg
+├── index.html         ← now linked to CSS
+├── about.html         ← linked to same CSS
+├── recipe.html        ← linked to same CSS
+└── contact.html       ← linked to same CSS</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your page has a custom font, colors, and a clean background — a huge upgrade from the browser defaults. But CSS can do so much more. In the next lesson, you'll dive deep into <strong>colors and typography</strong> — hex codes, RGB, HSL, Google Fonts, font stacks, and how to make your text look polished and professional.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_09.html" class="prev-lesson">← Previous: Semantic HTML</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_11.html" class="next-lesson">Next: Colors &amp; Typography →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

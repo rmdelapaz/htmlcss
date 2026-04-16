@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn what HTML and CSS are, how browsers work, and what you'll build in this course.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 1: Welcome to the Web - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 1: Welcome to the Web</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🌐 Lesson 1: Welcome to the Web</h1>
+                <p class="lead">Before you write a single line of code, let's understand what the web actually is — and what you're about to build.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what HTML and CSS are and what each one does</li>
+                        <li>Describe how a web browser turns code into a visible page</li>
+                        <li>Identify the difference between front-end and back-end</li>
+                        <li>Describe what you'll build by the end of this course</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 30 minutes</p>
+                    <p><strong>Hands-on:</strong> No coding yet — this lesson is all about building your mental model.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#what-is-the-web" class="toc-link">What Is the Web?</a></li>
+                        <li><a href="#html-and-css" class="toc-link">HTML and CSS — The Two Languages</a></li>
+                        <li><a href="#how-browsers-work" class="toc-link">How Browsers Turn Code into Pages</a></li>
+                        <li><a href="#frontend-vs-backend" class="toc-link">Front-End vs. Back-End</a></li>
+                        <li><a href="#what-youll-build" class="toc-link">What You'll Build in This Course</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="what-is-the-web" class="lesson-section">
+                <h2>What Is the Web?</h2>
+                <p>Every time you visit a website — whether it's a news article, a social media feed, or an online store — your browser is doing something remarkably simple behind the scenes: it's <strong>downloading text files</strong> from another computer and <strong>drawing what they describe</strong> on your screen.</p>
+
+                <p>That's it. That's the web. Text files on computers, connected by the internet.</p>
+
+                <p>The computer that stores those files is called a <strong>server</strong> (because it <em>serves</em> files to anyone who asks). Your computer — the one running the browser — is the <strong>client</strong> (because it <em>requests</em> those files).</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["🖥️ Your Computer<br/>(Client)"] -->|"Request: 'Give me this page'"| B["🌐 Internet"]
+                    B -->|"Request forwarded"| C["🗄️ Web Server"]
+                    C -->|"Response: HTML, CSS, images"| B
+                    B -->|"Files delivered"| A
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#eff6ff,stroke:#6366f1,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>When you type a web address (like <code>www.example.com</code>) into your browser and hit Enter, here's what happens:</p>
+                <ol>
+                    <li>Your browser sends a <strong>request</strong> over the internet to the server at that address</li>
+                    <li>The server finds the requested files and sends them back as a <strong>response</strong></li>
+                    <li>Your browser reads those files and <strong>renders</strong> (draws) the page on your screen</li>
+                </ol>
+
+                <p>The files your browser receives are primarily written in two languages: <strong>HTML</strong> and <strong>CSS</strong>. Those are the two languages you're about to learn.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="html-and-css" class="lesson-section">
+                <h2>HTML and CSS — The Two Languages</h2>
+
+                <p>Think of building a web page like building a house:</p>
+
+                <div class="card card-info">
+                    <h4>🏗️ The House Analogy</h4>
+                    <ul>
+                        <li><strong>HTML</strong> is the <strong>structure</strong> — the walls, floors, rooms, doors, and windows. It defines <em>what's on the page</em> and how it's organized.</li>
+                        <li><strong>CSS</strong> is the <strong>decoration</strong> — the paint colors, wallpaper, furniture arrangement, and lighting. It defines <em>how the page looks</em>.</li>
+                    </ul>
+                </div>
+
+                <h3>HTML (HyperText Markup Language)</h3>
+                <p>HTML is a <strong>markup language</strong>, not a programming language. That's an important distinction. It doesn't do calculations or make decisions — it simply <strong>labels</strong> content so the browser knows what each piece is.</p>
+
+                <p>For example, HTML lets you say:</p>
+                <ul>
+                    <li>"This text is a <strong>heading</strong>"</li>
+                    <li>"This text is a <strong>paragraph</strong>"</li>
+                    <li>"This is an <strong>image</strong>"</li>
+                    <li>"This is a <strong>link</strong> to another page"</li>
+                </ul>
+
+                <p>HTML uses <strong>tags</strong> — special keywords wrapped in angle brackets — to label content. Here's a sneak peek:</p>
+
+                <pre><code class="language-html">&lt;h1&gt;This is a heading&lt;/h1&gt;
+&lt;p&gt;This is a paragraph of text.&lt;/p&gt;
+&lt;img src="photo.jpg" alt="A photo"&gt;</code></pre>
+
+                <p>Don't worry about memorizing this yet. You'll write plenty of HTML starting in the next lesson.</p>
+
+                <h3>CSS (Cascading Style Sheets)</h3>
+                <p>CSS controls <strong>how things look</strong>. Without CSS, every web page would look like a plain text document with blue underlined links — like the internet circa 1995.</p>
+
+                <p>CSS lets you say things like:</p>
+                <ul>
+                    <li>"Make all headings <strong>dark blue</strong> and <strong>bold</strong>"</li>
+                    <li>"Give this section a <strong>light gray background</strong>"</li>
+                    <li>"Put these three items <strong>side by side</strong>"</li>
+                    <li>"On small screens, <strong>stack everything vertically</strong>"</li>
+                </ul>
+
+                <p>Here's what CSS looks like:</p>
+
+                <pre><code class="language-css">h1 {
+    color: darkblue;
+    font-size: 2rem;
+}
+
+p {
+    line-height: 1.6;
+    max-width: 700px;
+}</code></pre>
+
+                <p>Again — don't memorize this. We'll cover CSS in depth starting in Module 3.</p>
+
+                <div class="card card-success">
+                    <h4>✅ Key Insight</h4>
+                    <p>HTML and CSS are <strong>always used together</strong>. HTML creates the content; CSS makes it look good. You need both to build a proper web page.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="how-browsers-work" class="lesson-section">
+                <h2>How Browsers Turn Code into Pages</h2>
+
+                <p>Your web browser (Chrome, Firefox, Edge, Safari) is essentially a very sophisticated <strong>file reader</strong>. When it receives HTML and CSS files from a server, it goes through a process to turn that code into the visual page you see.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["📄 HTML File"] --> B["Browser reads HTML"]
+                    B --> C["Builds page structure<br/>(DOM)"]
+                    D["🎨 CSS File"] --> E["Browser reads CSS"]
+                    E --> F["Applies styles to structure"]
+                    C --> G["Combines structure + styles"]
+                    F --> G
+                    G --> H["🖥️ Renders visible page"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style D fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style H fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>Here's the simplified version:</p>
+                <ol>
+                    <li>The browser <strong>reads the HTML</strong> and builds a structured representation of the page (this is called the <strong>DOM</strong> — Document Object Model — but you don't need to worry about that term yet)</li>
+                    <li>It <strong>reads the CSS</strong> and figures out how each element should look</li>
+                    <li>It <strong>combines</strong> the structure with the styles and <strong>paints</strong> the result on your screen</li>
+                </ol>
+
+                <p>This all happens in milliseconds. Every time you visit a page, this process runs from scratch.</p>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Different Browsers, Same Languages</h4>
+                    <p>Chrome, Firefox, Edge, and Safari all understand HTML and CSS, but they each have their own rendering engine. This means pages can occasionally look <em>slightly</em> different across browsers. We'll cover how to handle that in Lesson 20 (Testing &amp; Validation).</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="frontend-vs-backend" class="lesson-section">
+                <h2>Front-End vs. Back-End</h2>
+
+                <p>You'll sometimes hear people talk about "front-end" and "back-end" development. Here's the simple breakdown:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Front-End</th>
+                                <th>Back-End</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>What happens <strong>in the browser</strong></td>
+                                <td>What happens <strong>on the server</strong></td>
+                            </tr>
+                            <tr>
+                                <td>HTML, CSS, JavaScript</td>
+                                <td>Python, PHP, Ruby, databases</td>
+                            </tr>
+                            <tr>
+                                <td>What the user <strong>sees and interacts with</strong></td>
+                                <td>Data processing, storage, logic</td>
+                            </tr>
+                            <tr>
+                                <td>Also called "client-side"</td>
+                                <td>Also called "server-side"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p><strong>This course is 100% front-end.</strong> You'll learn HTML and CSS — the core languages that every web page is built with. No server required. No databases. No complicated setup.</p>
+
+                <p>In fact, the website you build in this course will be made entirely of <strong>static files</strong> — HTML pages and CSS stylesheets that don't need any server-side processing. That's what makes it possible to host them for free on Netlify in the final lesson.</p>
+
+                <div class="card card-success">
+                    <h4>✅ Good News</h4>
+                    <p>Static websites are fast, secure, free to host, and perfect for portfolios, blogs, landing pages, documentation sites, and small business sites. You can build a lot with just HTML and CSS.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="what-youll-build" class="lesson-section">
+                <h2>What You'll Build in This Course</h2>
+
+                <p>By the end of this course, you will have built a <strong>complete, multi-page website</strong> and published it live on the internet. Here's the journey:</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Module 1<br/>Getting Started"] --> B["Module 2<br/>HTML Essentials"]
+                    B --> C["Module 3<br/>CSS Essentials"]
+                    C --> D["Module 4<br/>Build Your Site"]
+                    D --> E["Module 5<br/>Go Live! 🚀"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style E fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <ul>
+                    <li><strong>Module 1 (Lessons 1–4):</strong> Understand the web, try the messy way first, then set up proper tools and write your first real HTML page</li>
+                    <li><strong>Module 2 (Lessons 5–9):</strong> Learn every major HTML element — headings, paragraphs, links, images, lists, tables, forms, and semantic structure</li>
+                    <li><strong>Module 3 (Lessons 10–15):</strong> Learn CSS — colors, typography, spacing, Flexbox layout, Grid layout, and responsive design</li>
+                    <li><strong>Module 4 (Lessons 16–19):</strong> Plan, build, and polish a complete multi-page website using everything you've learned</li>
+                    <li><strong>Module 5 (Lessons 20–21):</strong> Test your site, fix issues, and publish it live on Netlify — for free</li>
+                </ul>
+
+                <p>You'll walk away from this course with a <strong>live URL</strong> you can share with anyone. That's the goal. Let's get there.</p>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The web is built on <strong>text files</strong> sent from servers to browsers</li>
+                        <li><strong>HTML</strong> defines the structure and content of a page</li>
+                        <li><strong>CSS</strong> defines how that content looks</li>
+                        <li>Browsers read HTML and CSS and render them into the pages you see</li>
+                        <li>This course covers <strong>front-end</strong> development — everything that happens in the browser</li>
+                        <li>You'll build a <strong>real website</strong> and publish it live on the internet</li>
+                    </ul>
+                </div>
+
+                <h3>🚀 What's Next?</h3>
+                <p>In the next lesson, you'll get your hands dirty immediately. You're going to open Notepad (yes, plain old Notepad), type some HTML, and see it render in a browser. It'll be rough, it'll be ugly, and it'll be <em>wonderful</em> — because you'll realize just how simple the web really is at its core.</p>
+
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 Ready to Start!</h3>
+                    <p>You now understand what the web is and what you're about to build. Let's go make something.</p>
+                </div>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <span></span>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_02.html" class="next-lesson">Next: HTML the Quick &amp; Dirty Way →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

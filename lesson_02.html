@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Write your first HTML in Notepad, open it in a browser, and discover why proper tools matter.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 2: HTML the Quick &amp; Dirty Way - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 2: HTML the Quick &amp; Dirty Way</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📝 Lesson 2: HTML the Quick &amp; Dirty Way</h1>
+                <p class="lead">Open Notepad. Type some HTML. Save it. Open it in a browser. Congratulations — you just made a web page. Now let's talk about why you should never do it this way again.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Create a basic HTML file using nothing but a plain text editor</li>
+                        <li>Save a file with the <code>.html</code> extension and open it in a browser</li>
+                        <li>Identify the problems with using a plain text editor for web development</li>
+                        <li>Explain why a code editor like VS Code is worth installing</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 30 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll create your very first HTML file!</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#the-experiment" class="toc-link">The Experiment</a></li>
+                        <li><a href="#step-by-step" class="toc-link">Step by Step: Your First HTML File</a></li>
+                        <li><a href="#it-works" class="toc-link">It Works! (Sort Of)</a></li>
+                        <li><a href="#try-more" class="toc-link">Try Adding More</a></li>
+                        <li><a href="#why-this-breaks" class="toc-link">Why This Approach Breaks Down</a></li>
+                        <li><a href="#the-point" class="toc-link">The Point of This Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="the-experiment" class="lesson-section">
+                <h2>The Experiment</h2>
+
+                <p>Before we install any fancy tools, let's prove something important: <strong>HTML is just text.</strong></p>
+
+                <p>You don't need special software to write HTML. You don't need a license, a compiler, or a development environment. All you need is:</p>
+
+                <ol>
+                    <li>A text editor (literally any text editor)</li>
+                    <li>A web browser</li>
+                </ol>
+
+                <p>That's it. Let's prove it right now.</p>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Windows Users</h4>
+                    <p>This lesson uses <strong>Notepad</strong> (the plain text editor that comes with Windows). If you're on a Mac, you can use <strong>TextEdit</strong> — but make sure to go to <em>Format → Make Plain Text</em> first. On Linux, use any text editor like <strong>gedit</strong> or <strong>nano</strong>.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="step-by-step" class="lesson-section">
+                <h2>Step by Step: Your First HTML File</h2>
+
+                <h3>Step 1: Open Notepad</h3>
+                <p>On Windows, press <kbd>Win</kbd> + <kbd>S</kbd>, type <strong>Notepad</strong>, and open it. You should see a blank white window with a blinking cursor. Nothing fancy. That's the point.</p>
+
+                <h3>Step 2: Type This HTML</h3>
+                <p>Type the following into Notepad exactly as shown:</p>
+
+                <pre><code class="language-html">&lt;h1&gt;Hello, World!&lt;/h1&gt;
+&lt;p&gt;I just made a web page. In Notepad. Seriously.&lt;/p&gt;
+&lt;p&gt;This is my &lt;strong&gt;first&lt;/strong&gt; HTML file!&lt;/p&gt;</code></pre>
+
+                <p>That's three lines. That's all you need.</p>
+
+                <h3>Step 3: Save the File</h3>
+                <p>This is the tricky part. You need to save this as an <strong>HTML file</strong>, not a regular text file.</p>
+
+                <ol>
+                    <li>Go to <strong>File → Save As</strong></li>
+                    <li>Navigate to your <strong>Desktop</strong> (so you can find it easily)</li>
+                    <li>In the <strong>"File name"</strong> field, type: <code>my-page.html</code></li>
+                    <li>In the <strong>"Save as type"</strong> dropdown, change it to <strong>"All Files (*.*)"</strong></li>
+                    <li>Click <strong>Save</strong></li>
+                </ol>
+
+                <div class="card card-danger">
+                    <h4>❌ Common Mistake</h4>
+                    <p>If you forget to change "Save as type" to "All Files", Notepad will secretly save your file as <code>my-page.html.txt</code> — and your browser won't know it's HTML. Make sure the file on your Desktop is called <code>my-page.html</code>, not <code>my-page.html.txt</code>.</p>
+                    <p><strong>Tip:</strong> In File Explorer, go to <em>View → Show → File name extensions</em> so you can always see the real file extension.</p>
+                </div>
+
+                <h3>Step 4: Open It in Your Browser</h3>
+                <p>Go to your Desktop and <strong>double-click</strong> the file <code>my-page.html</code>. Your default web browser should open and display your page.</p>
+
+                <p>You should see:</p>
+                <ul>
+                    <li>A big bold heading that says <strong>"Hello, World!"</strong></li>
+                    <li>Two paragraphs of text beneath it</li>
+                    <li>The word "first" in bold</li>
+                </ul>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="it-works" class="lesson-section">
+                <h2>It Works! (Sort Of)</h2>
+
+                <p>Take a moment to appreciate what just happened. You typed three lines of text into the simplest editor on your computer, saved it with a <code>.html</code> extension, and your browser rendered it as a web page.</p>
+
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>🎉 You Just Made a Web Page!</h3>
+                    <p>No server. No hosting. No special software. Just a text file and a browser.</p>
+                </div>
+
+                <p>Look at the browser's address bar. You'll see something like:</p>
+
+                <pre><code>file:///C:/Users/YourName/Desktop/my-page.html</code></pre>
+
+                <p>That <code>file:///</code> prefix means the browser is reading a local file from your computer — not downloading it from a server on the internet. It's your file, on your Desktop, rendered in your browser. Simple.</p>
+
+                <p>Now look at the page itself. It's <em>ugly</em>, right? The text is small, the font is plain, there's no color, no layout, no personality. It looks like a document from 1996. That's because we only used HTML — we haven't added any CSS yet. That comes later.</p>
+
+                <p>But it <em>works</em>. And that's the important thing to internalize: <strong>at its core, a web page is just a text file that a browser knows how to read.</strong></p>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="try-more" class="lesson-section">
+                <h2>Try Adding More</h2>
+
+                <p>Let's experiment a bit. Go back to Notepad (your file should still be open) and add some more content:</p>
+
+                <pre><code class="language-html">&lt;h1&gt;Hello, World!&lt;/h1&gt;
+&lt;p&gt;I just made a web page. In Notepad. Seriously.&lt;/p&gt;
+&lt;p&gt;This is my &lt;strong&gt;first&lt;/strong&gt; HTML file!&lt;/p&gt;
+
+&lt;h2&gt;Things I Like&lt;/h2&gt;
+&lt;ul&gt;
+    &lt;li&gt;Pizza&lt;/li&gt;
+    &lt;li&gt;Video games&lt;/li&gt;
+    &lt;li&gt;Making web pages in Notepad, apparently&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2&gt;About Me&lt;/h2&gt;
+&lt;p&gt;I am learning HTML and CSS. I started about five minutes ago.&lt;/p&gt;
+&lt;p&gt;Visit &lt;a href="https://www.google.com"&gt;Google&lt;/a&gt; if you get bored.&lt;/p&gt;</code></pre>
+
+                <p>Save the file (<kbd>Ctrl</kbd> + <kbd>S</kbd>), then go back to your browser and <strong>refresh the page</strong> (<kbd>Ctrl</kbd> + <kbd>R</kbd> or <kbd>F5</kbd>).</p>
+
+                <p>You should now see:</p>
+                <ul>
+                    <li>A subheading ("Things I Like")</li>
+                    <li>A bulleted list</li>
+                    <li>Another subheading and paragraph</li>
+                    <li>A clickable link to Google</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Experiment Freely!</h4>
+                    <p>Change the text. Add more paragraphs. Break things on purpose and see what happens. You can't hurt anything — it's just a file on your Desktop. This is the best way to learn: mess around and observe.</p>
+                </div>
+
+                <p>Notice the workflow here:</p>
+                <ol>
+                    <li>Edit the file in Notepad</li>
+                    <li>Save</li>
+                    <li>Switch to browser</li>
+                    <li>Refresh</li>
+                    <li>Repeat</li>
+                </ol>
+
+                <p>This edit-save-refresh cycle is how web development has worked since the beginning. The tools get better, but the loop stays the same.</p>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="why-this-breaks" class="lesson-section">
+                <h2>Why This Approach Breaks Down</h2>
+
+                <p>So if HTML is just text and Notepad can write text... why would you ever need anything else?</p>
+
+                <p>Great question. Let's talk about what goes wrong as soon as you try to build anything real:</p>
+
+                <h3>🔍 No Syntax Highlighting</h3>
+                <p>In Notepad, everything is the same color — black text on white background. Tags, content, attributes, values — it all looks the same. When your file is 10 lines long, this is fine. When it's 200 lines long, it becomes a nightmare. You can't tell your HTML tags from your actual content at a glance.</p>
+
+                <p>A proper code editor <strong>colors different parts of your code differently</strong> — tags in one color, attributes in another, text content in another. This is called <strong>syntax highlighting</strong>, and it makes errors visible instantly.</p>
+
+                <h3>⌨️ No Auto-Complete</h3>
+                <p>In Notepad, you have to type every single character yourself. Every opening tag, every closing tag, every attribute name and value, every angle bracket. Typos are inevitable, and a single missing <code>&gt;</code> can break your entire page.</p>
+
+                <p>Code editors offer <strong>auto-complete</strong>: start typing a tag name, and the editor suggests the rest. It can automatically add closing tags, fill in required attributes, and even generate entire HTML structures with a few keystrokes.</p>
+
+                <h3>📁 No File Management</h3>
+                <p>Right now your file is sitting on your Desktop. What happens when you need:</p>
+                <ul>
+                    <li>Multiple HTML pages</li>
+                    <li>A CSS file</li>
+                    <li>An images folder</li>
+                    <li>A clear project structure</li>
+                </ul>
+
+                <p>Your Desktop becomes a mess. A code editor gives you a <strong>sidebar with your entire project folder</strong>, making it easy to navigate between files, create new ones, and keep everything organized.</p>
+
+                <h3>🐛 No Error Detection</h3>
+                <p>Notepad won't tell you if you forgot a closing tag, misspelled an attribute, or nested your elements incorrectly. You'll only find out when you load the page in a browser and something looks wrong — and then you have to hunt for the mistake in a wall of monochrome text.</p>
+
+                <p>Code editors can <strong>underline errors in real time</strong>, before you even save the file.</p>
+
+                <h3>👀 No Live Preview</h3>
+                <p>With Notepad, you have to manually save, switch to your browser, and refresh every single time you make a change. That adds up fast.</p>
+
+                <p>Code editors can show you a <strong>live preview</strong> that updates automatically as you type.</p>
+
+                <div class="card card-info">
+                    <h4>💡 The Bottom Line</h4>
+                    <p>Notepad <em>can</em> write HTML, the same way a butter knife <em>can</em> drive a screw. It technically works, but you'll strip the head, cut your hand, and hate the experience. The right tool makes all the difference.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="the-point" class="lesson-section">
+                <h2>The Point of This Exercise</h2>
+
+                <p>So why did we do this if Notepad isn't the right tool? Two reasons:</p>
+
+                <div class="card card-success">
+                    <h4>1. Demystification</h4>
+                    <p>HTML is not magic. It's not compiled code, it's not encrypted, it's not binary. It's <strong>plain text</strong> that follows a specific format. Any text editor on any computer can create it. That's empowering — you'll never feel locked into a specific tool or platform.</p>
+                </div>
+
+                <div class="card card-success">
+                    <h4>2. Motivation</h4>
+                    <p>When we install VS Code in the next lesson, you'll immediately feel the difference. Syntax highlighting, auto-complete, error detection, file management — every feature will solve a problem you just <em>experienced firsthand</em>. You won't be installing a tool on faith; you'll be installing it because you know what life is like without it.</p>
+                </div>
+
+                <p>Keep your <code>my-page.html</code> file on your Desktop for now. In the next lesson, you'll open it in VS Code and see the difference immediately.</p>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>HTML is plain text.</strong> You can write it in any text editor, including Notepad.</li>
+                        <li>Saving a file with a <code>.html</code> extension tells your browser to render it as a web page.</li>
+                        <li>The basic workflow is: <strong>edit → save → refresh browser</strong>.</li>
+                        <li>Notepad works but lacks syntax highlighting, auto-complete, error detection, and file management.</li>
+                        <li>A proper code editor solves all of these problems — and you're about to install one.</li>
+                    </ul>
+                </div>
+
+                <h3>🧹 Cleanup</h3>
+                <p>Don't delete <code>my-page.html</code> from your Desktop yet! We'll use it in the next lesson to compare the Notepad experience with VS Code.</p>
+
+                <h3>🚀 What's Next?</h3>
+                <p>In the next lesson, you'll install <strong>Visual Studio Code</strong> — a free, powerful code editor used by millions of developers. You'll open your Notepad-made HTML file in it and immediately see why proper tooling matters. Then we'll set up a real project folder and start doing things the right way.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_01.html" class="prev-lesson">← Previous: Welcome to the Web</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_03.html" class="next-lesson">Next: Setting Up Your Tools →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

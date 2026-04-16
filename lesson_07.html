@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to create ordered lists, unordered lists, definition lists, and data tables in HTML.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 7: Lists &amp; Tables - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 7: Lists &amp; Tables</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📋 Lesson 7: Lists &amp; Tables</h1>
+                <p class="lead">Not everything belongs in a paragraph. When you're presenting a collection of items or comparing structured data, lists and tables are the right tools. They make content scannable, organized, and accessible.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Create unordered lists with <code>&lt;ul&gt;</code> and ordered lists with <code>&lt;ol&gt;</code></li>
+                        <li>Nest lists inside other lists for multi-level outlines</li>
+                        <li>Build definition lists with <code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, and <code>&lt;dd&gt;</code></li>
+                        <li>Structure data tables with <code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, and related elements</li>
+                        <li>Understand when to use a table versus when to use CSS layout</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 50 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll build a recipes page with ingredient lists and a nutrition table.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#unordered-lists" class="toc-link">Unordered Lists</a></li>
+                        <li><a href="#ordered-lists" class="toc-link">Ordered Lists</a></li>
+                        <li><a href="#nested-lists" class="toc-link">Nested Lists</a></li>
+                        <li><a href="#definition-lists" class="toc-link">Definition Lists</a></li>
+                        <li><a href="#tables" class="toc-link">Tables: The Basics</a></li>
+                        <li><a href="#table-structure" class="toc-link">Proper Table Structure</a></li>
+                        <li><a href="#tables-vs-layout" class="toc-link">Tables vs. Layout</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="unordered-lists" class="lesson-section">
+                <h2>Unordered Lists</h2>
+
+                <p>An <strong>unordered list</strong> is a collection of items where the order doesn't matter — like a shopping list, a set of features, or a list of hobbies. Browsers display each item with a bullet point.</p>
+
+                <pre><code class="language-html">&lt;ul&gt;
+    &lt;li&gt;Flour&lt;/li&gt;
+    &lt;li&gt;Sugar&lt;/li&gt;
+    &lt;li&gt;Butter&lt;/li&gt;
+    &lt;li&gt;Eggs&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+                <p>Two elements work together here:</p>
+
+                <ul>
+                    <li><code>&lt;ul&gt;</code> — the <strong>unordered list</strong> container (wraps the entire list)</li>
+                    <li><code>&lt;li&gt;</code> — each <strong>list item</strong> inside the container</li>
+                </ul>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Important Rule</h4>
+                    <p>The <em>only</em> direct children of <code>&lt;ul&gt;</code> (or <code>&lt;ol&gt;</code>) should be <code>&lt;li&gt;</code> elements. Don't put <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, or other elements directly inside the list wrapper — put them <em>inside</em> the <code>&lt;li&gt;</code> instead.</p>
+                </div>
+
+                <p>You can put almost anything inside an <code>&lt;li&gt;</code> — paragraphs, links, images, even other lists:</p>
+
+                <pre><code class="language-html">&lt;ul&gt;
+    &lt;li&gt;
+        &lt;strong&gt;Flour&lt;/strong&gt; — all-purpose, 2 cups
+    &lt;/li&gt;
+    &lt;li&gt;
+        &lt;a href="https://example.com/butter"&gt;Butter&lt;/a&gt; (unsalted)
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="ordered-lists" class="lesson-section">
+                <h2>Ordered Lists</h2>
+
+                <p>An <strong>ordered list</strong> is for items where sequence matters — step-by-step instructions, rankings, or numbered procedures. Browsers display each item with a number.</p>
+
+                <pre><code class="language-html">&lt;ol&gt;
+    &lt;li&gt;Preheat the oven to 350°F&lt;/li&gt;
+    &lt;li&gt;Mix the dry ingredients&lt;/li&gt;
+    &lt;li&gt;Add the wet ingredients&lt;/li&gt;
+    &lt;li&gt;Pour into a greased pan&lt;/li&gt;
+    &lt;li&gt;Bake for 25 minutes&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+                <p>The structure is identical to unordered lists — just swap <code>&lt;ul&gt;</code> for <code>&lt;ol&gt;</code>. The <code>&lt;li&gt;</code> elements are the same.</p>
+
+                <h3>Customizing the Start Number</h3>
+
+                <p>By default, ordered lists start at 1. You can change this with the <code>start</code> attribute:</p>
+
+                <pre><code class="language-html">&lt;!-- Starts numbering at 5 --&gt;
+&lt;ol start="5"&gt;
+    &lt;li&gt;Fifth item&lt;/li&gt;
+    &lt;li&gt;Sixth item&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+                <p>You can also reverse the order with the <code>reversed</code> attribute (useful for countdowns or "top 10" lists):</p>
+
+                <pre><code class="language-html">&lt;ol reversed&gt;
+    &lt;li&gt;Third place&lt;/li&gt;
+    &lt;li&gt;Second place&lt;/li&gt;
+    &lt;li&gt;First place!&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Lists in HTML"] --> B["&lt;ul&gt;<br/>Unordered<br/>• Bullets<br/>• Order doesn't matter"]
+                    A --> C["&lt;ol&gt;<br/>Ordered<br/>1. Numbers<br/>2. Sequence matters"]
+                    A --> D["&lt;dl&gt;<br/>Definition<br/>Term → Description"]
+                    B --> E["&lt;li&gt; items"]
+                    C --> F["&lt;li&gt; items"]
+                    D --> G["&lt;dt&gt; + &lt;dd&gt; pairs"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style G fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="nested-lists" class="lesson-section">
+                <h2>Nested Lists</h2>
+
+                <p>You can put a list inside a list item to create multi-level outlines. This is called <strong>nesting</strong>:</p>
+
+                <pre><code class="language-html">&lt;ul&gt;
+    &lt;li&gt;Frontend
+        &lt;ul&gt;
+            &lt;li&gt;HTML&lt;/li&gt;
+            &lt;li&gt;CSS&lt;/li&gt;
+            &lt;li&gt;JavaScript&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;Backend
+        &lt;ul&gt;
+            &lt;li&gt;Python&lt;/li&gt;
+            &lt;li&gt;Node.js&lt;/li&gt;
+            &lt;li&gt;Databases&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+                <p>Notice that the nested <code>&lt;ul&gt;</code> goes <em>inside</em> the <code>&lt;li&gt;</code>, not after it. The browser automatically changes the bullet style for each level (disc → circle → square), though you can customize this with CSS.</p>
+
+                <p>You can also mix list types — an ordered list inside an unordered one, or vice versa:</p>
+
+                <pre><code class="language-html">&lt;ol&gt;
+    &lt;li&gt;Go to the grocery store
+        &lt;ul&gt;
+            &lt;li&gt;Milk&lt;/li&gt;
+            &lt;li&gt;Bread&lt;/li&gt;
+            &lt;li&gt;Eggs&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li&gt;Come home and unpack&lt;/li&gt;
+    &lt;li&gt;Start cooking dinner&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 Indentation Matters (for You)</h4>
+                    <p>HTML doesn't care about indentation — the browser ignores it. But <em>you</em> should care, because well-indented code makes nested structures like this much easier to read and debug. Use consistent indentation (4 spaces or 1 tab) for every level of nesting.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="definition-lists" class="lesson-section">
+                <h2>Definition Lists</h2>
+
+                <p>A <strong>definition list</strong> is for term-description pairs — glossaries, FAQs, or any content where a label is paired with an explanation:</p>
+
+                <pre><code class="language-html">&lt;dl&gt;
+    &lt;dt&gt;HTML&lt;/dt&gt;
+    &lt;dd&gt;HyperText Markup Language — the standard
+        language for creating web pages.&lt;/dd&gt;
+
+    &lt;dt&gt;CSS&lt;/dt&gt;
+    &lt;dd&gt;Cascading Style Sheets — a language for
+        describing how HTML elements look.&lt;/dd&gt;
+
+    &lt;dt&gt;JavaScript&lt;/dt&gt;
+    &lt;dd&gt;A programming language that makes web pages
+        interactive and dynamic.&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+
+                <p>Three elements work together:</p>
+
+                <ul>
+                    <li><code>&lt;dl&gt;</code> — the <strong>definition list</strong> wrapper</li>
+                    <li><code>&lt;dt&gt;</code> — the <strong>definition term</strong> (the word or phrase being defined)</li>
+                    <li><code>&lt;dd&gt;</code> — the <strong>definition description</strong> (the explanation)</li>
+                </ul>
+
+                <p>A single term can have multiple descriptions, and a single description can apply to multiple terms:</p>
+
+                <pre><code class="language-html">&lt;dl&gt;
+    &lt;!-- One term, multiple descriptions --&gt;
+    &lt;dt&gt;HTML&lt;/dt&gt;
+    &lt;dd&gt;A markup language for web content&lt;/dd&gt;
+    &lt;dd&gt;First released in 1993 by Tim Berners-Lee&lt;/dd&gt;
+
+    &lt;!-- Multiple terms, one description --&gt;
+    &lt;dt&gt;Frontend&lt;/dt&gt;
+    &lt;dt&gt;Client-side&lt;/dt&gt;
+    &lt;dd&gt;The part of a website that runs in the browser&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+
+                <p>Definition lists are underused by beginners, but they're perfect for metadata displays, settings panels, FAQ pages, and glossaries.</p>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="tables" class="lesson-section">
+                <h2>Tables: The Basics</h2>
+
+                <p>HTML tables display data in rows and columns — like a spreadsheet. Here's the simplest possible table:</p>
+
+                <pre><code class="language-html">&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Apple&lt;/td&gt;
+        &lt;td&gt;Red&lt;/td&gt;
+        &lt;td&gt;$1.20&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Banana&lt;/td&gt;
+        &lt;td&gt;Yellow&lt;/td&gt;
+        &lt;td&gt;$0.50&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+
+                <p>The key elements:</p>
+
+                <ul>
+                    <li><code>&lt;table&gt;</code> — the table container</li>
+                    <li><code>&lt;tr&gt;</code> — a <strong>table row</strong></li>
+                    <li><code>&lt;td&gt;</code> — a <strong>table data</strong> cell (one piece of data)</li>
+                </ul>
+
+                <h3>Adding Header Cells</h3>
+
+                <p>Use <code>&lt;th&gt;</code> instead of <code>&lt;td&gt;</code> for header cells. Browsers render them bold and centered by default, and screen readers use them to announce which column or row a data cell belongs to:</p>
+
+                <pre><code class="language-html">&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Fruit&lt;/th&gt;
+        &lt;th&gt;Color&lt;/th&gt;
+        &lt;th&gt;Price&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Apple&lt;/td&gt;
+        &lt;td&gt;Red&lt;/td&gt;
+        &lt;td&gt;$1.20&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Banana&lt;/td&gt;
+        &lt;td&gt;Yellow&lt;/td&gt;
+        &lt;td&gt;$0.50&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 <code>&lt;th&gt;</code> vs. <code>&lt;td&gt;</code></h4>
+                    <p>Think of <code>&lt;th&gt;</code> as the label and <code>&lt;td&gt;</code> as the data. Just like headings versus paragraphs, the distinction is about <em>meaning</em>, not just appearance. Screen readers announce header cells differently so users can navigate large tables without getting lost.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="table-structure" class="lesson-section">
+                <h2>Proper Table Structure</h2>
+
+                <p>For better accessibility and styling control, wrap your rows in semantic sections:</p>
+
+                <pre><code class="language-html">&lt;table&gt;
+    &lt;caption&gt;Fruit Prices — Spring 2026&lt;/caption&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Fruit&lt;/th&gt;
+            &lt;th&gt;Color&lt;/th&gt;
+            &lt;th&gt;Price&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Apple&lt;/td&gt;
+            &lt;td&gt;Red&lt;/td&gt;
+            &lt;td&gt;$1.20&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Banana&lt;/td&gt;
+            &lt;td&gt;Yellow&lt;/td&gt;
+            &lt;td&gt;$0.50&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Cherry&lt;/td&gt;
+            &lt;td&gt;Red&lt;/td&gt;
+            &lt;td&gt;$3.00&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+    &lt;tfoot&gt;
+        &lt;tr&gt;
+            &lt;td colspan="2"&gt;Average&lt;/td&gt;
+            &lt;td&gt;$1.57&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tfoot&gt;
+&lt;/table&gt;</code></pre>
+
+                <p>The additional elements:</p>
+
+                <ul>
+                    <li><code>&lt;caption&gt;</code> — a visible title/description for the table (great for accessibility)</li>
+                    <li><code>&lt;thead&gt;</code> — wraps the header row(s)</li>
+                    <li><code>&lt;tbody&gt;</code> — wraps the data rows</li>
+                    <li><code>&lt;tfoot&gt;</code> — wraps footer/summary rows</li>
+                    <li><code>colspan="2"</code> — makes a cell span across multiple columns</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph TD
+                    A["&lt;table&gt;"] --> B["&lt;caption&gt;<br/>Table title"]
+                    A --> C["&lt;thead&gt;<br/>Header rows"]
+                    A --> D["&lt;tbody&gt;<br/>Data rows"]
+                    A --> E["&lt;tfoot&gt;<br/>Footer rows"]
+                    C --> F["&lt;tr&gt; → &lt;th&gt; cells"]
+                    D --> G["&lt;tr&gt; → &lt;td&gt; cells"]
+                    E --> H["&lt;tr&gt; → &lt;td&gt; cells"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:1px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style E fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style G fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style H fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <h3>Spanning Rows and Columns</h3>
+
+                <p>Sometimes a cell needs to stretch across multiple columns or rows:</p>
+
+                <pre><code class="language-html">&lt;!-- Cell spans 2 columns --&gt;
+&lt;td colspan="2"&gt;This cell is twice as wide&lt;/td&gt;
+
+&lt;!-- Cell spans 3 rows --&gt;
+&lt;td rowspan="3"&gt;This cell is three rows tall&lt;/td&gt;</code></pre>
+
+                <p>When a cell spans columns, remove the corresponding <code>&lt;td&gt;</code> cells from that row (since the spanning cell takes their place). The same logic applies to row spans — the rows below need one fewer cell.</p>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="tables-vs-layout" class="lesson-section">
+                <h2>Tables vs. Layout</h2>
+
+                <div class="card card-warning">
+                    <h4>⚠️ The Golden Rule of Tables</h4>
+                    <p><strong>Use tables for tabular data only.</strong> Never use tables to control page layout (placing sidebars, navigation, footers, etc.). This was common in the late 1990s, but it's terrible for accessibility, mobile responsiveness, and maintenance. CSS Flexbox and Grid (which you'll learn in Modules 3–4) are the right tools for layout.</p>
+                </div>
+
+                <p>How do you know if your data belongs in a table? Ask yourself:</p>
+
+                <ul>
+                    <li>Does the data have <strong>rows and columns</strong> that relate to each other?</li>
+                    <li>Would removing a column make the remaining data less meaningful?</li>
+                    <li>Could you describe it as a spreadsheet?</li>
+                </ul>
+
+                <p>If you answered yes, it's tabular data — use a table. If the data is just items in a list or content sections on a page, use lists or semantic HTML elements instead.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Use a Table For</th>
+                                <th>Don't Use a Table For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Price comparisons</td>
+                                <td>Page layout (header, sidebar, footer)</td>
+                            </tr>
+                            <tr>
+                                <td>Schedules and timetables</td>
+                                <td>Navigation menus</td>
+                            </tr>
+                            <tr>
+                                <td>Sports statistics</td>
+                                <td>Image galleries</td>
+                            </tr>
+                            <tr>
+                                <td>Nutritional information</td>
+                                <td>Form alignment</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 8: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Build a Recipe Page</h3>
+                    <p><strong>Objective:</strong> Create a page that uses unordered lists, ordered lists, and a table.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>In your <code>my-website</code> folder, create a new file called <code>recipe.html</code></li>
+                        <li>Use the Emmet shortcut to generate the HTML skeleton</li>
+                        <li>Set the <code>&lt;title&gt;</code> to "My Favorite Recipe"</li>
+                        <li>Add the following content inside <code>&lt;body&gt;</code>:
+                            <ul>
+                                <li>An <code>&lt;h1&gt;</code> with the recipe name</li>
+                                <li>A short <code>&lt;p&gt;</code> description</li>
+                                <li>An <code>&lt;h2&gt;</code> for "Ingredients" followed by a <code>&lt;ul&gt;</code> with at least 5 ingredients</li>
+                                <li>An <code>&lt;h2&gt;</code> for "Instructions" followed by an <code>&lt;ol&gt;</code> with at least 4 steps</li>
+                                <li>An <code>&lt;h2&gt;</code> for "Nutrition Facts" followed by a <code>&lt;table&gt;</code> with:
+                                    <ul>
+                                        <li>A <code>&lt;caption&gt;</code></li>
+                                        <li>A <code>&lt;thead&gt;</code> with column headers (Nutrient, Amount)</li>
+                                        <li>A <code>&lt;tbody&gt;</code> with at least 4 rows of data</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Add a link back to <code>index.html</code></li>
+                        <li>Save and view with Live Server</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Remember: <code>&lt;ul&gt;</code> for the ingredient list (order doesn't matter), <code>&lt;ol&gt;</code> for the instructions (order matters). For the table, don't forget to use <code>&lt;th&gt;</code> elements in the header row, not <code>&lt;td&gt;</code>.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Favorite Recipe&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href="index.html"&gt;Back to Home&lt;/a&gt;
+
+    &lt;h1&gt;Classic Banana Pancakes&lt;/h1&gt;
+    &lt;p&gt;Fluffy, golden pancakes made with ripe bananas.
+       Ready in under 20 minutes!&lt;/p&gt;
+
+    &lt;h2&gt;Ingredients&lt;/h2&gt;
+    &lt;ul&gt;
+        &lt;li&gt;2 ripe bananas&lt;/li&gt;
+        &lt;li&gt;1 ½ cups all-purpose flour&lt;/li&gt;
+        &lt;li&gt;1 cup milk&lt;/li&gt;
+        &lt;li&gt;1 egg&lt;/li&gt;
+        &lt;li&gt;2 tablespoons sugar&lt;/li&gt;
+        &lt;li&gt;1 teaspoon baking powder&lt;/li&gt;
+        &lt;li&gt;Pinch of salt&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h2&gt;Instructions&lt;/h2&gt;
+    &lt;ol&gt;
+        &lt;li&gt;Mash the bananas in a large bowl&lt;/li&gt;
+        &lt;li&gt;Add the egg, milk, and sugar; whisk together&lt;/li&gt;
+        &lt;li&gt;Add the flour, baking powder, and salt; stir
+            until just combined (don't over-mix!)&lt;/li&gt;
+        &lt;li&gt;Heat a non-stick pan over medium heat and add
+            a little butter&lt;/li&gt;
+        &lt;li&gt;Pour ¼ cup of batter per pancake and cook until
+            bubbles form on top (about 2 minutes)&lt;/li&gt;
+        &lt;li&gt;Flip and cook for 1 more minute&lt;/li&gt;
+        &lt;li&gt;Serve with maple syrup and fresh fruit&lt;/li&gt;
+    &lt;/ol&gt;
+
+    &lt;h2&gt;Nutrition Facts&lt;/h2&gt;
+    &lt;table&gt;
+        &lt;caption&gt;Per serving (2 pancakes)&lt;/caption&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Nutrient&lt;/th&gt;
+                &lt;th&gt;Amount&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Calories&lt;/td&gt;
+                &lt;td&gt;320 kcal&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Protein&lt;/td&gt;
+                &lt;td&gt;8 g&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Carbohydrates&lt;/td&gt;
+                &lt;td&gt;52 g&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Fat&lt;/td&gt;
+                &lt;td&gt;9 g&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> When should you use <code>&lt;ol&gt;</code> instead of <code>&lt;ul&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The number of items doesn't determine the list type.">A) When the list has more than 5 items</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Ordered lists are for content where the sequence matters — instructions, rankings, steps. Unordered lists are for items where any order is fine.">B) When the order of items matters</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Both ul and ol can contain links, images, and other elements.">C) When list items contain links</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Where does a nested list go?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The nested list goes inside an &lt;li&gt; element of the parent list.">A) Inside an <code>&lt;li&gt;</code> of the parent list</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Putting a list directly after a &lt;li&gt; (but outside it) is invalid — lists can only contain &lt;li&gt; as direct children.">B) Directly after a <code>&lt;li&gt;</code>, still inside the parent <code>&lt;ul&gt;</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="Placing a list outside the parent would make it a separate list, not a nested one.">C) After the closing <code>&lt;/ul&gt;</code> of the parent list</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What element provides a visible title for a table?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The title attribute is a tooltip, not a visible label for tables.">A) <code>title</code> attribute</button>
+                            <button class="quiz-option" data-correct="false" data-hint="&lt;th&gt; is for header cells, not the table's overall title.">B) <code>&lt;th&gt;</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The &lt;caption&gt; element provides a visible title that's associated with the table for both visual and assistive technologies.">C) <code>&lt;caption&gt;</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> Should you use a <code>&lt;table&gt;</code> to create a two-column page layout?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Page layout is not tabular data. Tables for layout were a 1990s technique that's now considered harmful.">A) Yes — tables are great for arranging content in columns</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Tables should only be used for tabular data. Page layout should be done with CSS (Flexbox or Grid), which you'll learn in Module 3.">B) No — use CSS Flexbox or Grid for layout</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Tables are fully supported, but their proper use is for data, not layout.">C) Only if the browser doesn't support CSS</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><code>&lt;ul&gt;</code> creates an unordered (bulleted) list; <code>&lt;ol&gt;</code> creates an ordered (numbered) list</li>
+                        <li>Both use <code>&lt;li&gt;</code> for individual items — and <code>&lt;li&gt;</code> must be the direct child of a list element</li>
+                        <li>Nest lists by placing a new <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> <em>inside</em> an <code>&lt;li&gt;</code></li>
+                        <li><code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, and <code>&lt;dd&gt;</code> create definition lists for term-description pairs</li>
+                        <li>Tables use <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, and <code>&lt;td&gt;</code> — plus <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, and <code>&lt;caption&gt;</code> for proper structure</li>
+                        <li>Use <code>colspan</code> and <code>rowspan</code> to span cells across multiple columns or rows</li>
+                        <li><strong>Tables are for data, not layout.</strong> CSS handles page layout.</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── images/
+│   └── sunset.jpg
+├── index.html
+├── about.html
+└── recipe.html       ← new in this lesson</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You now know how to present text, link pages, show images, and organize content with lists and tables. But most real websites also need to <strong>collect information from users</strong> — logins, search boxes, contact forms, surveys. In the next lesson, you'll learn how to build <strong>forms and input elements</strong>.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_06.html" class="prev-lesson">← Previous: Links &amp; Images</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_08.html" class="next-lesson">Next: Forms &amp; Input →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

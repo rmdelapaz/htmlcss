@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn the proper structure of an HTML document — DOCTYPE, html, head, body, meta tags, and the title element.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 4: Your First Real HTML Page - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 4: Your First Real HTML Page</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📄 Lesson 4: Your First Real HTML Page</h1>
+                <p class="lead">The HTML you typed in Notepad worked, but it was missing critical structure. Let's learn what a proper HTML document looks like — and why every piece matters.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain what the <code>&lt;!DOCTYPE html&gt;</code> declaration does</li>
+                        <li>Write a complete HTML document with <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code></li>
+                        <li>Use essential <code>&lt;meta&gt;</code> tags for character encoding and viewport</li>
+                        <li>Set a page title with the <code>&lt;title&gt;</code> element</li>
+                        <li>Understand the difference between tags, elements, and attributes</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll create a properly structured HTML page in VS Code.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#what-was-missing" class="toc-link">What Was Missing from Our Notepad Page</a></li>
+                        <li><a href="#anatomy" class="toc-link">Anatomy of an HTML Document</a></li>
+                        <li><a href="#tags-elements-attributes" class="toc-link">Tags, Elements, and Attributes</a></li>
+                        <li><a href="#building-it" class="toc-link">Building Your Page Step by Step</a></li>
+                        <li><a href="#emmet-shortcut" class="toc-link">The Emmet Shortcut</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="what-was-missing" class="lesson-section">
+                <h2>What Was Missing from Our Notepad Page</h2>
+
+                <p>In Lesson 2, you created a file that looked like this:</p>
+
+                <pre><code class="language-html">&lt;h1&gt;Hello, World!&lt;/h1&gt;
+&lt;p&gt;I just made a web page.&lt;/p&gt;</code></pre>
+
+                <p>And it worked! The browser showed it just fine. So what's the problem?</p>
+
+                <p>The browser is being <strong>incredibly forgiving</strong>. When it receives HTML that's missing pieces, it fills in the blanks silently. It adds the structure you left out, guesses what you meant, and renders something anyway. This is helpful for viewing pages, but terrible for learning — because you never know what the browser is quietly fixing for you.</p>
+
+                <p>A proper HTML document has a specific structure. Think of it like a letter: you <em>could</em> just scribble your message on a napkin and hand it to someone, and they'd probably understand it. But a real letter has a format — an address, a date, a salutation, a body, a closing. HTML has its own format too.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="anatomy" class="lesson-section">
+                <h2>Anatomy of an HTML Document</h2>
+
+                <p>Here's the complete skeleton of every HTML page:</p>
+
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Page Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Your visible content goes here --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                <p>Let's break down every piece:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["&lt;!DOCTYPE html&gt;<br/>Tells browser: 'This is HTML5'"] --> B["&lt;html lang='en'&gt;<br/>Root element — wraps everything"]
+                    B --> C["&lt;head&gt;<br/>Invisible info for the browser"]
+                    B --> D["&lt;body&gt;<br/>Visible content for the user"]
+                    C --> E["&lt;meta charset&gt;<br/>Character encoding"]
+                    C --> F["&lt;meta viewport&gt;<br/>Mobile scaling"]
+                    C --> G["&lt;title&gt;<br/>Browser tab text"]
+                    style A fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style B fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style G fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <h3><code>&lt;!DOCTYPE html&gt;</code></h3>
+                <p>This is a <strong>declaration</strong> (not a tag) that tells the browser: "This document is written in HTML5." It must be the very first line of every HTML file. Without it, the browser might render your page in a legacy compatibility mode that can cause subtle, hard-to-debug issues.</p>
+
+                <div class="card card-info">
+                    <h4>💡 History Note</h4>
+                    <p>Older versions of HTML had long, complicated DOCTYPE declarations. HTML5 simplified it to just <code>&lt;!DOCTYPE html&gt;</code>. That's one of the many reasons HTML5 is great.</p>
+                </div>
+
+                <h3><code>&lt;html lang="en"&gt;</code></h3>
+                <p>The <strong>root element</strong> that wraps everything. Every other element goes inside this one. The <code>lang="en"</code> attribute tells the browser (and screen readers) that the page is in English. If your page were in Spanish, you'd use <code>lang="es"</code>.</p>
+
+                <h3><code>&lt;head&gt;</code></h3>
+                <p>The <code>&lt;head&gt;</code> contains <strong>metadata</strong> — information <em>about</em> the page that isn't displayed on the screen. This includes the page title, character encoding, links to stylesheets, and other behind-the-scenes configuration.</p>
+
+                <h3><code>&lt;meta charset="UTF-8"&gt;</code></h3>
+                <p>This tells the browser which character encoding to use. <strong>UTF-8</strong> supports virtually every character in every language — letters, accents, emoji, Chinese characters, Arabic script, you name it. Always include this.</p>
+
+                <h3><code>&lt;meta name="viewport" ...&gt;</code></h3>
+                <p>This tells mobile browsers how to handle the page width. Without it, mobile browsers may render your page as if it were being viewed on a desktop and then zoom out, making everything tiny. With it, your page will display at the correct width on phones and tablets.</p>
+
+                <pre><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+
+                <p>Translation: "Set the page width to match the device width, and start at 1x zoom."</p>
+
+                <h3><code>&lt;title&gt;</code></h3>
+                <p>The text inside <code>&lt;title&gt;</code> appears in the <strong>browser tab</strong>, in bookmarks, and in search engine results. It doesn't appear on the page itself. Every page should have a descriptive, unique title.</p>
+
+                <h3><code>&lt;body&gt;</code></h3>
+                <p>Everything that the user actually <strong>sees</strong> goes inside the <code>&lt;body&gt;</code>. Headings, paragraphs, images, links, forms — all visible content lives here.</p>
+
+                <h3>Comments</h3>
+                <p>The line <code>&lt;!-- Your visible content goes here --&gt;</code> is a <strong>comment</strong>. Comments are invisible to the user — they're notes for you (the developer). They start with <code>&lt;!--</code> and end with <code>--&gt;</code>.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="tags-elements-attributes" class="lesson-section">
+                <h2>Tags, Elements, and Attributes</h2>
+
+                <p>Before we go further, let's nail down three terms you'll hear constantly:</p>
+
+                <h3>Tags</h3>
+                <p>A <strong>tag</strong> is the piece of code in angle brackets. Tags usually come in pairs — an <strong>opening tag</strong> and a <strong>closing tag</strong>:</p>
+
+                <pre><code class="language-html">&lt;p&gt;  ← opening tag
+&lt;/p&gt; ← closing tag (note the forward slash)</code></pre>
+
+                <h3>Elements</h3>
+                <p>An <strong>element</strong> is the whole thing — opening tag, content, and closing tag together:</p>
+
+                <pre><code class="language-html">&lt;p&gt;This is a paragraph.&lt;/p&gt;
+ ↑                          ↑
+ opening tag      closing tag
+ ←— entire element ——————————→</code></pre>
+
+                <h3>Attributes</h3>
+                <p>An <strong>attribute</strong> provides extra information about an element. Attributes go inside the opening tag:</p>
+
+                <pre><code class="language-html">&lt;html lang="en"&gt;
+       ↑     ↑
+   attribute  attribute
+     name      value</code></pre>
+
+                <p>Attributes always follow the pattern: <code>name="value"</code>. You've already seen a few:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>Where You've Seen It</th>
+                                <th>What It Does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>lang="en"</code></td>
+                                <td><code>&lt;html&gt;</code></td>
+                                <td>Sets the page language</td>
+                            </tr>
+                            <tr>
+                                <td><code>charset="UTF-8"</code></td>
+                                <td><code>&lt;meta&gt;</code></td>
+                                <td>Sets character encoding</td>
+                            </tr>
+                            <tr>
+                                <td><code>href="..."</code></td>
+                                <td><code>&lt;a&gt;</code></td>
+                                <td>Sets the link destination</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Self-Closing Tags</h3>
+                <p>Some elements don't have content, so they don't need a closing tag. These are called <strong>void elements</strong> or <strong>self-closing tags</strong>:</p>
+
+                <pre><code class="language-html">&lt;meta charset="UTF-8"&gt;     ← no closing tag needed
+&lt;img src="photo.jpg"&gt;      ← no closing tag needed
+&lt;br&gt;                       ← line break, no closing tag
+&lt;hr&gt;                       ← horizontal rule, no closing tag</code></pre>
+
+                <div class="card card-warning">
+                    <h4>⚠️ A Note on Self-Closing Syntax</h4>
+                    <p>You might see some code that writes self-closing tags as <code>&lt;br /&gt;</code> or <code>&lt;meta charset="UTF-8" /&gt;</code> (with a trailing slash). This is valid but optional in HTML5. Both <code>&lt;br&gt;</code> and <code>&lt;br /&gt;</code> work identically. In this course, we'll skip the trailing slash — it's cleaner.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="building-it" class="lesson-section">
+                <h2>Building Your Page Step by Step</h2>
+
+                <p>Let's build a proper page in VS Code. Open the <code>index.html</code> file you created in your <code>my-website</code> folder and type the following:</p>
+
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My First Website&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to My Website&lt;/h1&gt;
+    &lt;p&gt;This is my first properly structured HTML page.&lt;/p&gt;
+    &lt;p&gt;It has a DOCTYPE, a head section with metadata, and
+       a body section with visible content.&lt;/p&gt;
+
+    &lt;h2&gt;What I'm Learning&lt;/h2&gt;
+    &lt;ul&gt;
+        &lt;li&gt;HTML structure and tags&lt;/li&gt;
+        &lt;li&gt;Proper document setup&lt;/li&gt;
+        &lt;li&gt;How browsers read HTML&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                <p>Save the file and open it with Live Server (right-click → "Open with Live Server"). You should see your page in the browser.</p>
+
+                <p>Now notice a few things:</p>
+                <ul>
+                    <li>The <strong>browser tab</strong> says "My First Website" — that comes from the <code>&lt;title&gt;</code> element</li>
+                    <li>The <code>&lt;meta&gt;</code> tags and <code>&lt;head&gt;</code> content are <strong>invisible</strong> on the page</li>
+                    <li>Only the content inside <code>&lt;body&gt;</code> is displayed</li>
+                </ul>
+
+                <div class="card card-success">
+                    <h4>✅ Congratulations!</h4>
+                    <p>You've written your first <strong>properly structured</strong> HTML document. This isn't just something that "happens to work" — it's correct, standards-compliant HTML that any browser in the world will render predictably.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="emmet-shortcut" class="lesson-section">
+                <h2>The Emmet Shortcut</h2>
+
+                <p>Here's a secret: you'll almost never type all that boilerplate by hand. VS Code has a shortcut.</p>
+
+                <p>Create a new file (or clear your current one), make sure it's saved with a <code>.html</code> extension, and then:</p>
+
+                <ol>
+                    <li>Type a single exclamation mark: <code>!</code></li>
+                    <li>Press <kbd>Tab</kbd> or <kbd>Enter</kbd> when the Emmet suggestion appears</li>
+                </ol>
+
+                <p>VS Code will generate the complete HTML skeleton for you instantly:</p>
+
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                <p>All you need to do is change the title from "Document" to something meaningful, and start adding content inside <code>&lt;body&gt;</code>. From now on, this is how you'll start every new HTML file.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Remember This Shortcut</h4>
+                    <p><strong><code>!</code> + <kbd>Tab</kbd></strong> = complete HTML skeleton. You'll use this at the start of every page you create.</p>
+                </div>
+            </section>
+
+            <!-- Section 6: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Create Your About Page</h3>
+                    <p><strong>Objective:</strong> Practice creating a properly structured HTML document from scratch.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>In your <code>my-website</code> folder in VS Code, create a new file called <code>about.html</code></li>
+                        <li>Use the Emmet shortcut (<code>!</code> + <kbd>Tab</kbd>) to generate the HTML skeleton</li>
+                        <li>Change the <code>&lt;title&gt;</code> to "About Me"</li>
+                        <li>Inside the <code>&lt;body&gt;</code>, add:
+                            <ul>
+                                <li>An <code>&lt;h1&gt;</code> heading with your name (or a made-up name)</li>
+                                <li>A <code>&lt;p&gt;</code> paragraph introducing yourself</li>
+                                <li>An <code>&lt;h2&gt;</code> subheading like "My Hobbies"</li>
+                                <li>A <code>&lt;ul&gt;</code> unordered list with at least three hobbies</li>
+                            </ul>
+                        </li>
+                        <li>Save and view with Live Server</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Remember that <code>&lt;ul&gt;</code> wraps the whole list, and each item goes inside a <code>&lt;li&gt;</code> tag. Use the code from this lesson as a reference.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;About Me&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Alex Johnson&lt;/h1&gt;
+    &lt;p&gt;Hi! I'm Alex. I'm learning HTML and CSS
+       to build my own website from scratch.&lt;/p&gt;
+
+    &lt;h2&gt;My Hobbies&lt;/h2&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Photography&lt;/li&gt;
+        &lt;li&gt;Hiking&lt;/li&gt;
+        &lt;li&gt;Playing guitar&lt;/li&gt;
+        &lt;li&gt;Learning web development&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does <code>&lt;!DOCTYPE html&gt;</code> do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The DOCTYPE doesn't contain visible content.">A) Displays "HTML" at the top of the page</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! It tells the browser to use HTML5 standards mode.">B) Tells the browser this is an HTML5 document</button>
+                            <button class="quiz-option" data-correct="false" data-hint="CSS is linked separately.">C) Links the page to a CSS file</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> Where does visible page content go?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The head contains metadata, not visible content.">A) Inside <code>&lt;head&gt;</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The body element contains everything the user sees.">B) Inside <code>&lt;body&gt;</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="The title only appears in the browser tab, not on the page itself.">C) Inside <code>&lt;title&gt;</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What's the VS Code shortcut to generate a full HTML skeleton?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="That opens a new file, not a template.">A) <code>Ctrl + N</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="That's the Emmet abbreviation for a div.">B) Type <code>div</code> and press Tab</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The exclamation mark followed by Tab triggers Emmet's HTML5 boilerplate.">C) Type <code>!</code> and press Tab</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>Every HTML document starts with <code>&lt;!DOCTYPE html&gt;</code></li>
+                        <li>The <code>&lt;html&gt;</code> element wraps everything; use <code>lang</code> to set the language</li>
+                        <li>The <code>&lt;head&gt;</code> holds metadata (title, charset, viewport) — invisible to the user</li>
+                        <li>The <code>&lt;body&gt;</code> holds all visible content</li>
+                        <li>A <strong>tag</strong> is the code in angle brackets; an <strong>element</strong> is tag + content + closing tag; an <strong>attribute</strong> adds extra info to a tag</li>
+                        <li>Use <code>!</code> + <kbd>Tab</kbd> in VS Code to generate the boilerplate instantly</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── index.html     ← your homepage (built in this lesson)
+└── about.html     ← your about page (from the exercise)</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You now know the skeleton of every HTML page. Starting in the next lesson, we'll fill that skeleton with content — beginning with the most fundamental building blocks: <strong>text and headings</strong>. You'll learn all six heading levels, paragraphs, emphasis, and how to structure text content properly.</p>
+
+                <p>Module 1 is complete. Welcome to <strong>Module 2: HTML Essentials</strong>.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_03.html" class="prev-lesson">← Previous: Setting Up Your Tools</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_05.html" class="next-lesson">Next: Text &amp; Headings →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

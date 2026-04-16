@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A hands-on beginner course that teaches HTML and CSS by building a real website from scratch, culminating in publishing it live on the internet with Netlify.">
+    <meta name="author" content="Ray De La Paz">
+    <title>HTML &amp; CSS: Build and Publish Your First Website</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <!-- Progress indicator -->
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">
+                ☰
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="#introduction">Introduction</a>
+                <a href="#modules">Modules</a>
+                <a href="#prerequisites">Prerequisites</a>
+                <a href="#resources">Resources</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li aria-current="page">Home</li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <header>
+                <h1>🌐 HTML &amp; CSS: Build and Publish Your First Website</h1>
+                <p class="lead">Learn web development from scratch. By the end of this course, you'll have a real, live website on the internet — built entirely by you.</p>
+            </header>
+
+            <!-- Overall Progress -->
+            <div id="overall-progress" class="card">
+                <!-- Progress will be inserted by JavaScript -->
+            </div>
+
+            <!-- Introduction Section -->
+            <section id="introduction" class="card">
+                <h2>📚 About This Course</h2>
+                <p>This course teaches you HTML and CSS — the two core languages of the web — by building a real website step by step. No prior coding experience required. You'll start by understanding what the web is and how browsers work, learn to structure content with HTML, style it beautifully with CSS, and finish by publishing your creation live on the internet for anyone to visit.</p>
+                <p>Every lesson builds on the last, and by Module 4 you'll be assembling a complete multi-page website using everything you've learned. The final lesson walks you through deploying it to Netlify — for free — so you walk away with a live URL you can share with the world.</p>
+
+                <h3>What You'll Learn</h3>
+                <ul>
+                    <li>How the web works — browsers, servers, HTML, and CSS</li>
+                    <li>How to structure web content with semantic HTML</li>
+                    <li>How to style pages with CSS — colors, typography, layout, and responsive design</li>
+                    <li>How to build a complete multi-page website from scratch</li>
+                    <li>How to test, validate, and publish your site live on the internet</li>
+                </ul>
+
+                <h3>Who This Course Is For</h3>
+                <ul>
+                    <li>Complete beginners with zero coding experience</li>
+                    <li>Anyone curious about how websites are made</li>
+                    <li>Creative professionals who want to build their own web presence</li>
+                </ul>
+            </section>
+
+            <!-- Course Modules/Lessons -->
+            <section id="modules">
+                <h2>📖 Course Modules</h2>
+
+                <!-- Module 1 -->
+                <div class="card lesson-card">
+                    <h3>Module 1: Getting Started</h3>
+                    <p>Meet the web, write your first HTML (the messy way), then set up proper tools and do it right.</p>
+                    <ul>
+                        <li><a href="lesson_01.html" class="lesson-link">Lesson 1: Welcome to the Web</a></li>
+                        <li><a href="lesson_02.html" class="lesson-link">Lesson 2: HTML the Quick &amp; Dirty Way</a></li>
+                        <li><a href="lesson_03.html" class="lesson-link">Lesson 3: Setting Up Your Tools</a></li>
+                        <li><a href="lesson_04.html" class="lesson-link">Lesson 4: Your First Real HTML Page</a></li>
+                    </ul>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="card lesson-card">
+                    <h3>Module 2: HTML Essentials</h3>
+                    <p>Master the building blocks of every web page — text, links, images, lists, tables, forms, and semantic structure.</p>
+                    <ul>
+                        <li><a href="lesson_05.html" class="lesson-link">Lesson 5: Text &amp; Headings</a></li>
+                        <li><a href="lesson_06.html" class="lesson-link">Lesson 6: Links &amp; Images</a></li>
+                        <li><a href="lesson_07.html" class="lesson-link">Lesson 7: Lists &amp; Tables</a></li>
+                        <li><a href="lesson_08.html" class="lesson-link">Lesson 8: Forms &amp; Input</a></li>
+                        <li><a href="lesson_09.html" class="lesson-link">Lesson 9: Semantic HTML</a></li>
+                    </ul>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="card lesson-card">
+                    <h3>Module 3: CSS Essentials</h3>
+                    <p>Make your pages look great — colors, fonts, spacing, layout with Flexbox and Grid, and responsive design.</p>
+                    <ul>
+                        <li><a href="lesson_10.html" class="lesson-link">Lesson 10: Introduction to CSS</a></li>
+                        <li><a href="lesson_11.html" class="lesson-link">Lesson 11: Colors &amp; Typography</a></li>
+                        <li><a href="lesson_12.html" class="lesson-link">Lesson 12: The Box Model</a></li>
+                        <li><a href="lesson_13.html" class="lesson-link">Lesson 13: Layout with Flexbox</a></li>
+                        <li><a href="lesson_14.html" class="lesson-link">Lesson 14: CSS Grid Basics</a></li>
+                        <li><a href="lesson_15.html" class="lesson-link">Lesson 15: Responsive Design</a></li>
+                    </ul>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="card lesson-card">
+                    <h3>Module 4: Building Your Website</h3>
+                    <p>Assemble everything into a real multi-page website — plan it, build it, and polish it.</p>
+                    <ul>
+                        <li><a href="lesson_16.html" class="lesson-link">Lesson 16: Planning Your Site</a></li>
+                        <li><a href="lesson_17.html" class="lesson-link">Lesson 17: Building the Homepage</a></li>
+                        <li><a href="lesson_18.html" class="lesson-link">Lesson 18: Building Content Pages</a></li>
+                        <li><a href="lesson_19.html" class="lesson-link">Lesson 19: Adding Polish</a></li>
+                    </ul>
+                </div>
+
+                <!-- Module 5 -->
+                <div class="card lesson-card">
+                    <h3>Module 5: Going Live</h3>
+                    <p>Test your site, fix any issues, and publish it to the internet for the world to see.</p>
+                    <ul>
+                        <li><a href="lesson_20.html" class="lesson-link">Lesson 20: Testing &amp; Validation</a></li>
+                        <li><a href="lesson_21.html" class="lesson-link">Lesson 21: Publishing to Netlify</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Prerequisites Section -->
+            <section id="prerequisites" class="card">
+                <h2>✅ Prerequisites</h2>
+                <p>This course is designed for absolute beginners. You need:</p>
+                <ul>
+                    <li>A computer (Windows, Mac, or Linux)</li>
+                    <li>An internet connection</li>
+                    <li>A willingness to experiment and make mistakes</li>
+                </ul>
+
+                <h3>Required Software (installed during the course)</h3>
+                <ul>
+                    <li><strong>A web browser</strong> — Chrome, Firefox, or Edge (you probably already have one)</li>
+                    <li><strong>Visual Studio Code</strong> — free code editor (Lesson 3 walks you through installation)</li>
+                    <li><strong>A Netlify account</strong> — free (created in Lesson 21)</li>
+                </ul>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resources" class="card">
+                <h2>📚 Additional Resources</h2>
+
+                <h3>Reference</h3>
+                <ul>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noopener">MDN Web Docs — HTML</a></li>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noopener">MDN Web Docs — CSS</a></li>
+                    <li><a href="https://www.w3schools.com/" target="_blank" rel="noopener">W3Schools</a></li>
+                </ul>
+
+                <h3>Tools</h3>
+                <ul>
+                    <li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a></li>
+                    <li><a href="https://validator.w3.org/" target="_blank" rel="noopener">W3C HTML Validator</a></li>
+                    <li><a href="https://jigsaw.w3.org/css-validator/" target="_blank" rel="noopener">W3C CSS Validator</a></li>
+                    <li><a href="https://www.netlify.com/" target="_blank" rel="noopener">Netlify</a></li>
+                </ul>
+
+                <h3>Support</h3>
+                <p>Questions or feedback? Reach out:</p>
+                <ul>
+                    <li><a href="https://rays-home.netlify.app/contact">Contact Ray</a></li>
+                </ul>
+            </section>
+
+            <!-- Search Section -->
+            <section class="card">
+                <h2>🔍 Search Course Content</h2>
+                <div style="position: relative;">
+                    <input type="text" id="search-input" placeholder="Search lessons, topics, or keywords..."
+                           aria-label="Search course content">
+                    <div id="search-results" style="display: none; position: absolute; top: 100%; left: 0; right: 0;"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

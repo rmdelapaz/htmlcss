@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to structure text with headings (h1–h6), paragraphs, emphasis, strong, line breaks, and horizontal rules in HTML.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 5: Text &amp; Headings - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 5: Text &amp; Headings</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>✏️ Lesson 5: Text &amp; Headings</h1>
+                <p class="lead">Every web page is built on text. Before you can style anything, you need to know how to structure words on a page — with headings that organize, paragraphs that group ideas, and inline elements that add meaning.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Use all six heading levels (<code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>) to create a clear content hierarchy</li>
+                        <li>Write paragraphs with the <code>&lt;p&gt;</code> element</li>
+                        <li>Add emphasis with <code>&lt;em&gt;</code> and strong importance with <code>&lt;strong&gt;</code></li>
+                        <li>Insert line breaks with <code>&lt;br&gt;</code> and thematic separators with <code>&lt;hr&gt;</code></li>
+                        <li>Understand why HTML structure matters for accessibility and SEO</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 40 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll build a structured "About Me" page using only text elements.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-structure" class="toc-link">Why Text Structure Matters</a></li>
+                        <li><a href="#headings" class="toc-link">Heading Levels: h1 through h6</a></li>
+                        <li><a href="#paragraphs" class="toc-link">Paragraphs</a></li>
+                        <li><a href="#emphasis" class="toc-link">Emphasis and Importance</a></li>
+                        <li><a href="#breaks-rules" class="toc-link">Line Breaks and Horizontal Rules</a></li>
+                        <li><a href="#putting-it-together" class="toc-link">Putting It All Together</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="why-structure" class="lesson-section">
+                <h2>Why Text Structure Matters</h2>
+
+                <p>Open any news article, textbook, or blog post. You'll notice it's not just a wall of text — it has a title, subheadings, and paragraphs that break the content into digestible pieces. That structure isn't just for looks. It serves three audiences:</p>
+
+                <ul>
+                    <li><strong>Readers</strong> can scan headings to find what they need instead of reading everything</li>
+                    <li><strong>Screen readers</strong> use headings to let visually impaired users jump between sections — like a table of contents they can navigate by voice</li>
+                    <li><strong>Search engines</strong> use headings to understand what your page is about, which affects how it appears in search results</li>
+                </ul>
+
+                <p>In HTML, you don't just make text bigger to create a heading — you use a <strong>heading element</strong> that tells the browser (and everyone else) "this is a heading." The visual appearance is secondary; the <em>meaning</em> is what counts.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["HTML Text Elements"] --> B["Headings<br/>h1 – h6"]
+                    A --> C["Paragraphs<br/>p"]
+                    A --> D["Inline Emphasis<br/>em, strong"]
+                    A --> E["Separators<br/>br, hr"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style E fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="headings" class="lesson-section">
+                <h2>Heading Levels: h1 through h6</h2>
+
+                <p>HTML provides six levels of headings, from <code>&lt;h1&gt;</code> (the most important) down to <code>&lt;h6&gt;</code> (the least important):</p>
+
+                <pre><code class="language-html">&lt;h1&gt;Main Page Title&lt;/h1&gt;
+&lt;h2&gt;Major Section&lt;/h2&gt;
+&lt;h3&gt;Subsection&lt;/h3&gt;
+&lt;h4&gt;Sub-subsection&lt;/h4&gt;
+&lt;h5&gt;Minor heading&lt;/h5&gt;
+&lt;h6&gt;Smallest heading&lt;/h6&gt;</code></pre>
+
+                <p>By default, browsers render these in decreasing sizes — <code>&lt;h1&gt;</code> is the largest and <code>&lt;h6&gt;</code> is the smallest. But remember: you're not choosing heading levels for their <em>size</em>. You're choosing them for their <em>importance in the page hierarchy</em>. You'll change sizes later with CSS.</p>
+
+                <h3>The Heading Hierarchy</h3>
+
+                <p>Think of headings like a document outline. You wouldn't put a sub-sub-section before a section, and you shouldn't skip heading levels either:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["h1: My Travel Blog"] --> B["h2: Europe Trip"]
+                    A --> C["h2: Asia Trip"]
+                    B --> D["h3: Paris"]
+                    B --> E["h3: Rome"]
+                    C --> F["h3: Tokyo"]
+                    C --> G["h3: Seoul"]
+                    D --> H["h4: Eiffel Tower"]
+                    D --> I["h4: Louvre Museum"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style E fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style F fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style G fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style H fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style I fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <h3>Rules of Thumb</h3>
+
+                <div class="card card-info">
+                    <h4>💡 Heading Best Practices</h4>
+                    <ul>
+                        <li><strong>One <code>&lt;h1&gt;</code> per page.</strong> This is your main title. Search engines treat it as the most important text on the page.</li>
+                        <li><strong>Don't skip levels.</strong> Go from <code>&lt;h2&gt;</code> to <code>&lt;h3&gt;</code>, not from <code>&lt;h2&gt;</code> to <code>&lt;h4&gt;</code>. Skipping confuses screen readers and weakens your document outline.</li>
+                        <li><strong>Don't use headings just for size.</strong> If you want bigger text, use CSS. Headings carry <em>meaning</em>, not just style.</li>
+                    </ul>
+                </div>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Common Mistake</h4>
+                    <p>Beginners often use <code>&lt;h1&gt;</code> or <code>&lt;h2&gt;</code> everywhere because the text looks big and bold. But a page with five <code>&lt;h1&gt;</code> tags is like a book where every chapter is titled "Chapter 1" — it tells the browser (and search engines) nothing useful about the page structure.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="paragraphs" class="lesson-section">
+                <h2>Paragraphs</h2>
+
+                <p>The <code>&lt;p&gt;</code> element defines a paragraph — a block of related text separated from surrounding content by vertical space:</p>
+
+                <pre><code class="language-html">&lt;p&gt;This is a paragraph. It can contain as many
+   sentences as you want. The browser will wrap
+   the text to fit the window width.&lt;/p&gt;
+
+&lt;p&gt;This is a second paragraph. Notice how the
+   browser adds space between them automatically.&lt;/p&gt;</code></pre>
+
+                <h3>White Space Collapsing</h3>
+
+                <p>Here's something that surprises everyone the first time: <strong>HTML collapses white space</strong>. No matter how many spaces, tabs, or line breaks you put in your source code, the browser treats them all as a single space.</p>
+
+                <pre><code class="language-html">&lt;!-- You type this: --&gt;
+&lt;p&gt;Hello      World!
+
+   How    are      you?&lt;/p&gt;
+
+&lt;!-- Browser displays: "Hello World! How are you?" --&gt;</code></pre>
+
+                <p>All those extra spaces and the blank line between sentences? Gone. The browser collapses them into single spaces and removes the line break entirely. This is called <strong>white space collapsing</strong>, and it means you can't create visual spacing just by pressing Enter or Space. You'll use CSS for spacing (or the <code>&lt;br&gt;</code> element for intentional line breaks — more on that below).</p>
+
+                <div class="card card-info">
+                    <h4>💡 Why Does HTML Collapse White Space?</h4>
+                    <p>Because HTML is about <em>structure</em>, not presentation. If every space and newline in your code appeared on screen, formatting your code neatly would wreck the page layout. White space collapsing lets you indent and organize your code however you like without affecting what the user sees.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="emphasis" class="lesson-section">
+                <h2>Emphasis and Importance</h2>
+
+                <p>Sometimes you need to call attention to specific words within a paragraph. HTML gives you two elements for this:</p>
+
+                <h3><code>&lt;em&gt;</code> — Emphasis</h3>
+
+                <p>The <code>&lt;em&gt;</code> element marks text that has <strong>stress emphasis</strong> — as if you're stressing that word when speaking aloud:</p>
+
+                <pre><code class="language-html">&lt;p&gt;You need to submit the form &lt;em&gt;before&lt;/em&gt; Friday.&lt;/p&gt;
+&lt;p&gt;I &lt;em&gt;never&lt;/em&gt; said that.&lt;/p&gt;</code></pre>
+
+                <p>Browsers render <code>&lt;em&gt;</code> in <em>italics</em> by default. But the point isn't the italics — it's the meaning. Screen readers change their tone of voice when they encounter <code>&lt;em&gt;</code>, emphasizing the word audibly.</p>
+
+                <h3><code>&lt;strong&gt;</code> — Strong Importance</h3>
+
+                <p>The <code>&lt;strong&gt;</code> element marks text of <strong>strong importance</strong> — content that is serious, urgent, or critical:</p>
+
+                <pre><code class="language-html">&lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; Do not delete this file.&lt;/p&gt;
+&lt;p&gt;The deadline is &lt;strong&gt;absolutely final&lt;/strong&gt;.&lt;/p&gt;</code></pre>
+
+                <p>Browsers render <code>&lt;strong&gt;</code> in <strong>bold</strong> by default. Again, the styling is secondary — what matters is the semantic meaning.</p>
+
+                <h3>Nesting <code>&lt;em&gt;</code> and <code>&lt;strong&gt;</code></h3>
+
+                <p>You can combine them for text that's both emphasized and important:</p>
+
+                <pre><code class="language-html">&lt;p&gt;&lt;strong&gt;&lt;em&gt;Do not&lt;/em&gt; touch the red button.&lt;/strong&gt;&lt;/p&gt;</code></pre>
+
+                <div class="card card-warning">
+                    <h4>⚠️ <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> — The Old Way</h4>
+                    <p>You'll sometimes see <code>&lt;b&gt;</code> (bold) and <code>&lt;i&gt;</code> (italic) in older code. These still work, but they're <strong>purely visual</strong> — they don't convey any meaning. Prefer <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> because they tell browsers, screen readers, and search engines <em>why</em> the text is different, not just how it looks.</p>
+                    <p>There are edge cases where <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> are appropriate (like a ship name in italics or a keyword in a technical definition), but when in doubt, use <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code>.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="breaks-rules" class="lesson-section">
+                <h2>Line Breaks and Horizontal Rules</h2>
+
+                <h3><code>&lt;br&gt;</code> — Line Break</h3>
+
+                <p>The <code>&lt;br&gt;</code> element forces a line break <em>within</em> a block of text. It's a void element — no closing tag needed:</p>
+
+                <pre><code class="language-html">&lt;p&gt;
+    Roses are red,&lt;br&gt;
+    Violets are blue,&lt;br&gt;
+    HTML is fun,&lt;br&gt;
+    And so are you.
+&lt;/p&gt;</code></pre>
+
+                <p>Use <code>&lt;br&gt;</code> when a line break is part of the content itself — poetry, song lyrics, addresses, or anywhere the break carries meaning:</p>
+
+                <pre><code class="language-html">&lt;p&gt;
+    123 Main Street&lt;br&gt;
+    Springfield, IL 62701&lt;br&gt;
+    United States
+&lt;/p&gt;</code></pre>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Don't Abuse <code>&lt;br&gt;</code></h4>
+                    <p>Never use <code>&lt;br&gt;&lt;br&gt;</code> to create space between paragraphs. That's what separate <code>&lt;p&gt;</code> elements are for. And never use repeated <code>&lt;br&gt;</code> tags to push content down the page — that's a job for CSS margins and padding.</p>
+                </div>
+
+                <h3><code>&lt;hr&gt;</code> — Horizontal Rule (Thematic Break)</h3>
+
+                <p>The <code>&lt;hr&gt;</code> element creates a <strong>thematic break</strong> — a visible horizontal line that signals a shift in topic or section. Like <code>&lt;br&gt;</code>, it's a void element:</p>
+
+                <pre><code class="language-html">&lt;p&gt;That concludes our discussion of headings.&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;Now let's talk about something completely different.&lt;/p&gt;</code></pre>
+
+                <p>Think of <code>&lt;hr&gt;</code> like the <code>* * *</code> separator you see in novels between scenes. It means "we're changing topics." Don't use it as a decorative line — if you just want a line, use CSS borders.</p>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="putting-it-together" class="lesson-section">
+                <h2>Putting It All Together</h2>
+
+                <p>Here's a complete example using every element from this lesson:</p>
+
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;About Me&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;About Alex Johnson&lt;/h1&gt;
+    &lt;p&gt;Welcome to my personal page! I'm a student learning
+       &lt;strong&gt;web development&lt;/strong&gt; from scratch.&lt;/p&gt;
+
+    &lt;h2&gt;Background&lt;/h2&gt;
+    &lt;p&gt;I started coding in &lt;em&gt;January 2026&lt;/em&gt; with no
+       prior experience. My goal is to build a portfolio
+       website by the end of this course.&lt;/p&gt;
+
+    &lt;p&gt;&lt;strong&gt;Fun fact:&lt;/strong&gt; I once tried to learn
+       HTML from a YouTube video and gave up after 10
+       minutes. This course is &lt;em&gt;much&lt;/em&gt; better.&lt;/p&gt;
+
+    &lt;hr&gt;
+
+    &lt;h2&gt;Contact&lt;/h2&gt;
+    &lt;p&gt;You can reach me at:&lt;/p&gt;
+    &lt;p&gt;
+        Alex Johnson&lt;br&gt;
+        123 Web Dev Lane&lt;br&gt;
+        Codeville, TX 75001
+    &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                <p>Notice how the document flows naturally: one <code>&lt;h1&gt;</code> for the main title, <code>&lt;h2&gt;</code> headings for sections, paragraphs for content, <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> for inline emphasis, <code>&lt;hr&gt;</code> for a topic shift, and <code>&lt;br&gt;</code> for address formatting.</p>
+            </section>
+
+            <!-- Section 7: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Build a Structured Profile Page</h3>
+                    <p><strong>Objective:</strong> Create a page that uses headings, paragraphs, emphasis, line breaks, and a horizontal rule.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>In your <code>my-website</code> folder, open <code>about.html</code> (or create it if you haven't)</li>
+                        <li>Use the Emmet shortcut (<code>!</code> + <kbd>Tab</kbd>) if starting fresh</li>
+                        <li>Set the <code>&lt;title&gt;</code> to "About Me"</li>
+                        <li>Add the following content inside <code>&lt;body&gt;</code>:
+                            <ul>
+                                <li>An <code>&lt;h1&gt;</code> with your name</li>
+                                <li>A <code>&lt;p&gt;</code> introducing yourself, with at least one word wrapped in <code>&lt;strong&gt;</code></li>
+                                <li>An <code>&lt;h2&gt;</code> for "My Interests"</li>
+                                <li>Two or more <code>&lt;p&gt;</code> paragraphs describing your interests, with at least one word wrapped in <code>&lt;em&gt;</code></li>
+                                <li>An <code>&lt;hr&gt;</code> to separate the content from a contact section</li>
+                                <li>An <code>&lt;h2&gt;</code> for "Contact"</li>
+                                <li>A <code>&lt;p&gt;</code> containing a mailing address formatted with <code>&lt;br&gt;</code> tags</li>
+                            </ul>
+                        </li>
+                        <li>Save and view in the browser with Live Server</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Use only one <code>&lt;h1&gt;</code> at the top of the page. The sections underneath should use <code>&lt;h2&gt;</code>. If you needed to subdivide a section, you'd use <code>&lt;h3&gt;</code> — but that's not required for this exercise.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;About Me&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Jordan Rivera&lt;/h1&gt;
+    &lt;p&gt;Hi there! I'm Jordan, a &lt;strong&gt;web development
+       student&lt;/strong&gt; who is learning to build websites
+       from the ground up.&lt;/p&gt;
+
+    &lt;h2&gt;My Interests&lt;/h2&gt;
+    &lt;p&gt;I spend most of my free time drawing and painting.
+       I'm &lt;em&gt;especially&lt;/em&gt; interested in digital
+       illustration and hope to combine art with code
+       someday.&lt;/p&gt;
+
+    &lt;p&gt;I also enjoy board games, hiking, and trying out
+       new recipes in the kitchen. My latest obsession
+       is &lt;em&gt;sourdough bread&lt;/em&gt; — my third attempt
+       was &lt;strong&gt;finally&lt;/strong&gt; edible.&lt;/p&gt;
+
+    &lt;hr&gt;
+
+    &lt;h2&gt;Contact&lt;/h2&gt;
+    &lt;p&gt;
+        Jordan Rivera&lt;br&gt;
+        456 Pixel Avenue&lt;br&gt;
+        Webtown, CA 90210
+    &lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> How many <code>&lt;h1&gt;</code> headings should a page have?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Zero means the page has no main title — not ideal for accessibility or SEO.">A) Zero — headings are optional</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! One h1 per page acts as the main title. Use h2–h6 for subsections.">B) Exactly one</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Multiple h1 tags dilute the page structure and confuse screen readers.">C) As many as you want</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What happens when you put 10 spaces between two words in HTML?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="HTML doesn't preserve multiple spaces in regular text.">A) The browser shows 10 spaces</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! HTML collapses all consecutive spaces into a single space.">B) The browser shows 1 space</button>
+                            <button class="quiz-option" data-correct="false" data-hint="HTML won't show an error — it silently collapses the spaces.">C) The browser shows an error</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What's the difference between <code>&lt;em&gt;</code> and <code>&lt;i&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both render as italics by default, but they mean different things.">A) <code>&lt;em&gt;</code> makes text italic; <code>&lt;i&gt;</code> makes it bold</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! &lt;em&gt; tells the browser the text is emphasized (meaningful), while &lt;i&gt; is purely visual. Screen readers respond to &lt;em&gt; but not &lt;i&gt;.">B) <code>&lt;em&gt;</code> carries semantic meaning; <code>&lt;i&gt;</code> is visual only</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Both are still valid in HTML5, though &lt;em&gt; is preferred for emphasis.">C) <code>&lt;i&gt;</code> is deprecated and shouldn't be used</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> When should you use <code>&lt;br&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Use separate &lt;p&gt; elements for paragraph spacing, not &lt;br&gt; tags.">A) To add space between paragraphs</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Use &lt;br&gt; when the line break is part of the content itself, like in addresses, poetry, or song lyrics.">B) When a line break is part of the content (addresses, poetry)</button>
+                            <button class="quiz-option" data-correct="false" data-hint="&lt;br&gt; only creates line breaks, not horizontal lines. That's &lt;hr&gt;.">C) To draw a horizontal line across the page</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> create a heading hierarchy — use one <code>&lt;h1&gt;</code> per page and don't skip levels</li>
+                        <li><code>&lt;p&gt;</code> defines a paragraph — the browser adds spacing between paragraphs automatically</li>
+                        <li>HTML collapses all consecutive spaces and line breaks into a single space (white space collapsing)</li>
+                        <li><code>&lt;em&gt;</code> marks emphasized text (renders italic); <code>&lt;strong&gt;</code> marks important text (renders bold) — both carry semantic meaning</li>
+                        <li>Prefer <code>&lt;em&gt;</code>/<code>&lt;strong&gt;</code> over <code>&lt;i&gt;</code>/<code>&lt;b&gt;</code> for meaning, not just appearance</li>
+                        <li><code>&lt;br&gt;</code> inserts a line break within content; <code>&lt;hr&gt;</code> creates a thematic break between sections</li>
+                        <li>Both <code>&lt;br&gt;</code> and <code>&lt;hr&gt;</code> are void elements — no closing tag needed</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── index.html     ← homepage (from Lesson 4)
+└── about.html     ← profile page (updated in this lesson)</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You now know how to structure text — but a page with only text and headings would be pretty boring. In the next lesson, you'll learn how to connect pages together with <strong>links</strong> and make your content visual with <strong>images</strong>. These two elements are what make the web a <em>web</em>.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_04.html" class="prev-lesson">← Previous: Your First Real HTML Page</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_06.html" class="next-lesson">Next: Links &amp; Images →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

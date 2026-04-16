@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Master the CSS Box Model — content, padding, border, and margin — the foundation of how every element takes up space on a web page.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 12: The Box Model - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 12: The Box Model</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📦 Lesson 12: The Box Model</h1>
+                <p class="lead">Every single element on a web page — every heading, paragraph, image, link, and div — is a <strong>rectangular box</strong>. Even things that look round or irregular are boxes underneath. The <strong>CSS Box Model</strong> defines how these boxes are sized, spaced, and laid out. Once you understand it, you control the page.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Identify the four layers of the box model: content, padding, border, margin</li>
+                        <li>Use <code>padding</code>, <code>border</code>, and <code>margin</code> properties to control spacing</li>
+                        <li>Explain why <code>box-sizing: border-box</code> makes sizing predictable</li>
+                        <li>Use shorthand properties for padding, margin, and border</li>
+                        <li>Understand the difference between block and inline elements</li>
+                        <li>Inspect the box model visually using browser DevTools</li>
+                        <li>Apply spacing and borders to your project pages</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 50 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll use DevTools to inspect boxes and add spacing to your site.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#everything-is-a-box" class="toc-link">Everything Is a Box</a></li>
+                        <li><a href="#four-layers" class="toc-link">The Four Layers</a></li>
+                        <li><a href="#padding" class="toc-link">Padding — Inner Breathing Room</a></li>
+                        <li><a href="#border" class="toc-link">Border — The Visible Edge</a></li>
+                        <li><a href="#margin" class="toc-link">Margin — Outer Breathing Room</a></li>
+                        <li><a href="#box-sizing" class="toc-link">The box-sizing Fix</a></li>
+                        <li><a href="#block-vs-inline" class="toc-link">Block vs. Inline Elements</a></li>
+                        <li><a href="#devtools" class="toc-link">Inspecting the Box Model in DevTools</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="everything-is-a-box" class="lesson-section">
+                <h2>Everything Is a Box</h2>
+
+                <p>This might be the single most important concept in CSS: <strong>every element is a rectangular box.</strong> A heading is a box. A paragraph is a box. An image is a box. A link inside a paragraph is a box. Even a single word wrapped in a <code>&lt;span&gt;</code> is a box.</p>
+
+                <p>You can prove it to yourself right now. Add this CSS to any page:</p>
+
+                <pre><code class="language-css">/* Temporary debug rule — shows every element's box */
+* {
+    outline: 2px solid red;
+}</code></pre>
+
+                <p>The <code>*</code> selector targets every element, and <code>outline</code> draws a line around each box without affecting layout. Suddenly your page looks like a grid of nested rectangles — because that's exactly what it is.</p>
+
+                <p>The box model is the system that controls <strong>how big each box is</strong> and <strong>how much space it takes up</strong>. Master the box model, and layout stops being mysterious.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="four-layers" class="lesson-section">
+                <h2>The Four Layers</h2>
+
+                <p>Every box has four layers, from inside to outside:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Margin<br/>(outer space — transparent)"] --> B["Border<br/>(visible edge)"]
+                    B --> C["Padding<br/>(inner space — shows background)"]
+                    C --> D["Content<br/>(text, images, child elements)"]
+                    style A fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                </div>
+
+                <ol>
+                    <li><strong>Content</strong> — the actual stuff inside the element: text, an image, child elements. This is what <code>width</code> and <code>height</code> control (by default).</li>
+                    <li><strong>Padding</strong> — space <em>between</em> the content and the border. Padding is inside the box — the element's background color shows through it.</li>
+                    <li><strong>Border</strong> — a visible (or invisible) line around the padding. You control its width, style, and color.</li>
+                    <li><strong>Margin</strong> — space <em>outside</em> the border. Margin pushes other elements away. It's always transparent — the parent's background shows through.</li>
+                </ol>
+
+                <p>Here's a concrete example. Imagine a box with these styles:</p>
+
+                <pre><code class="language-css">.card {
+    width: 300px;
+    padding: 20px;
+    border: 2px solid #3b82f6;
+    margin: 15px;
+}</code></pre>
+
+                <p>How much total horizontal space does this box occupy?</p>
+
+                <ul>
+                    <li>Content: 300px</li>
+                    <li>Padding: 20px left + 20px right = 40px</li>
+                    <li>Border: 2px left + 2px right = 4px</li>
+                    <li>Margin: 15px left + 15px right = 30px</li>
+                    <li><strong>Total: 300 + 40 + 4 + 30 = 374px</strong></li>
+                </ul>
+
+                <p>Wait — we set <code>width: 300px</code> but the box takes up 374px? That's the default behavior, and it trips up everyone. We'll fix it shortly with <code>box-sizing</code>.</p>
+
+                <div class="card card-info">
+                    <h4>💡 A Real-World Analogy</h4>
+                    <p>Think of the box model like a framed picture. The <strong>content</strong> is the photo itself. The <strong>padding</strong> is the matting around the photo. The <strong>border</strong> is the frame. The <strong>margin</strong> is the wall space between this frame and the next one.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="padding" class="lesson-section">
+                <h2>Padding — Inner Breathing Room</h2>
+
+                <p>Padding creates space <em>inside</em> the element, between the content and the border. The element's background color fills the padding area.</p>
+
+                <h3>Individual Sides</h3>
+
+                <pre><code class="language-css">.card {
+    padding-top: 20px;
+    padding-right: 30px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+}</code></pre>
+
+                <h3>Shorthand (Clockwise: Top, Right, Bottom, Left)</h3>
+
+                <p>CSS padding shorthand follows the clock — <strong>T</strong>op, <strong>R</strong>ight, <strong>B</strong>ottom, <strong>L</strong>eft (think "TRouBLe"):</p>
+
+                <pre><code class="language-css">/* All four sides different: top right bottom left */
+.card { padding: 10px 20px 15px 20px; }
+
+/* Top/bottom and left/right: vertical horizontal */
+.card { padding: 20px 30px; }
+
+/* All four sides the same */
+.card { padding: 20px; }
+
+/* Top, left/right, bottom */
+.card { padding: 10px 20px 15px; }</code></pre>
+
+                <p>The two-value shorthand (<code>padding: 20px 30px;</code>) is the most commonly used — it sets 20px top and bottom, 30px left and right.</p>
+
+                <h3>When to Use Padding</h3>
+
+                <ul>
+                    <li>Give text breathing room inside a colored box or card</li>
+                    <li>Space content away from the border</li>
+                    <li>Create clickable area around a link or button (bigger padding = easier to click)</li>
+                </ul>
+
+                <pre><code class="language-css">/* A card with comfortable inner spacing */
+.info-card {
+    background-color: #eff6ff;
+    padding: 20px 24px;
+    border-radius: 8px;
+}
+
+/* A button with generous click area */
+.btn {
+    padding: 12px 24px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}</code></pre>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="border" class="lesson-section">
+                <h2>Border — The Visible Edge</h2>
+
+                <p>The border sits between padding and margin. It has three properties: <strong>width</strong>, <strong>style</strong>, and <strong>color</strong>.</p>
+
+                <h3>The Border Shorthand</h3>
+
+                <pre><code class="language-css">/* width style color — all in one line */
+.card {
+    border: 2px solid #e2e8f0;
+}</code></pre>
+
+                <h3>Border Styles</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Common Border Styles</caption>
+                        <thead>
+                            <tr>
+                                <th>Style</th>
+                                <th>Appearance</th>
+                                <th>Common Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>solid</code></td>
+                                <td>A continuous line</td>
+                                <td>Cards, containers, dividers</td>
+                            </tr>
+                            <tr>
+                                <td><code>dashed</code></td>
+                                <td>A series of dashes</td>
+                                <td>Emphasis, selection areas</td>
+                            </tr>
+                            <tr>
+                                <td><code>dotted</code></td>
+                                <td>A series of dots</td>
+                                <td>Decorative, light dividers</td>
+                            </tr>
+                            <tr>
+                                <td><code>double</code></td>
+                                <td>Two parallel lines</td>
+                                <td>Formal, decorative</td>
+                            </tr>
+                            <tr>
+                                <td><code>none</code></td>
+                                <td>No border (default)</td>
+                                <td>Removing inherited borders</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Individual Sides</h3>
+
+                <pre><code class="language-css">/* Only a bottom border — great for section dividers */
+h2 {
+    border-bottom: 2px solid #3b82f6;
+    padding-bottom: 8px;
+}
+
+/* Left accent border — common for quotes and callouts */
+aside {
+    border-left: 4px solid #3b82f6;
+    padding-left: 16px;
+}
+
+/* Different borders on different sides */
+.fancy-card {
+    border-top: 4px solid #6366f1;
+    border-bottom: 1px solid #e2e8f0;
+    border-left: none;
+    border-right: none;
+}</code></pre>
+
+                <h3>Border Radius (Rounded Corners)</h3>
+
+                <p><code>border-radius</code> rounds the corners of an element's box — even if it has no visible border:</p>
+
+                <pre><code class="language-css">/* Slightly rounded corners */
+.card {
+    border-radius: 8px;
+}
+
+/* Pill shape */
+.tag {
+    border-radius: 999px;
+    padding: 4px 12px;
+}
+
+/* Circle (works on square elements) */
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+/* Different radius per corner: top-left, top-right, bottom-right, bottom-left */
+.modal {
+    border-radius: 12px 12px 0 0;  /* rounded top, square bottom */
+}</code></pre>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="margin" class="lesson-section">
+                <h2>Margin — Outer Breathing Room</h2>
+
+                <p>Margin creates space <em>outside</em> the element, pushing other elements away. Unlike padding, margin is always transparent — you can't see it directly.</p>
+
+                <h3>Syntax (Same as Padding)</h3>
+
+                <pre><code class="language-css">/* Individual sides */
+.card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Shorthand: top right bottom left */
+.card { margin: 20px 0 20px 0; }
+
+/* Shorthand: vertical horizontal */
+.card { margin: 20px 0; }
+
+/* All sides */
+.card { margin: 20px; }</code></pre>
+
+                <h3>Centering with <code>margin: auto</code></h3>
+
+                <p>One of the most useful tricks in CSS — centering a block element horizontally:</p>
+
+                <pre><code class="language-css">.container {
+    width: 800px;
+    margin: 0 auto;  /* 0 top/bottom, auto left/right */
+}</code></pre>
+
+                <p><code>auto</code> tells the browser to split the remaining space equally between left and right margins, centering the element. This only works on block elements with a set <code>width</code>.</p>
+
+                <h3>Margin Collapsing</h3>
+
+                <p>Here's a quirk that surprises every beginner: when two vertical margins touch, they <strong>collapse</strong> into one. The larger margin wins; they don't add together.</p>
+
+                <pre><code class="language-css">h2 {
+    margin-bottom: 20px;
+}
+
+p {
+    margin-top: 16px;
+}</code></pre>
+
+                <p>You might expect 36px of space between the <code>&lt;h2&gt;</code> and the <code>&lt;p&gt;</code>. Instead, you get <strong>20px</strong> — the larger of the two. This is called <strong>margin collapsing</strong>, and it only happens vertically (top/bottom), never horizontally (left/right).</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["h2<br/>margin-bottom: 20px"] --- B["Collapsed<br/>Result: 20px<br/>(larger wins)"]
+                    B --- C["p<br/>margin-top: 16px"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style C fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Margin vs. Padding Cheat Sheet</h4>
+                    <p><strong>Padding</strong> = space inside the box (between content and border). Background color shows through. Use it when you want breathing room <em>within</em> an element.</p>
+                    <p><strong>Margin</strong> = space outside the box (between this element and neighbors). Always transparent. Use it to separate elements <em>from each other</em>.</p>
+                    <p>Still unsure? Ask: "Do I want the background to extend through this space?" If yes → padding. If no → margin.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="box-sizing" class="lesson-section">
+                <h2>The <code>box-sizing</code> Fix</h2>
+
+                <p>Remember the 300px-wide card that actually took up 374px? That's because the default <code>box-sizing</code> is <code>content-box</code>, where <code>width</code> only controls the content area — padding and border are added on top.</p>
+
+                <pre><code class="language-css">/* Default behavior (content-box) */
+.card {
+    width: 300px;
+    padding: 20px;
+    border: 2px solid #ccc;
+}
+/* Actual width: 300 + 40 + 4 = 344px. Frustrating! */</code></pre>
+
+                <p>The fix is <code>box-sizing: border-box</code>, which includes padding and border <em>inside</em> the specified width:</p>
+
+                <pre><code class="language-css">/* With border-box */
+.card {
+    box-sizing: border-box;
+    width: 300px;
+    padding: 20px;
+    border: 2px solid #ccc;
+}
+/* Actual width: 300px. Content area shrinks to 256px to make room. */</code></pre>
+
+                <div class="mermaid">
+                    graph TD
+                    A["content-box (default)"] --> B["width = content only<br/>Total = width + padding + border<br/>300 + 40 + 4 = 344px"]
+                    C["border-box (recommended)"] --> D["width = content + padding + border<br/>Total = width<br/>300px = 300px"]
+                    style A fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style B fill:#fef2f2,stroke:#ef4444,stroke-width:1px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                </div>
+
+                <p>Every modern CSS project starts with this <strong>universal reset</strong>:</p>
+
+                <pre><code class="language-css">/* Apply border-box to EVERYTHING */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+</code></pre>
+
+                <p>This one rule eliminates the most common source of layout confusion in CSS. Put it at the very top of your stylesheet and never think about <code>content-box</code> again.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Why Isn't <code>border-box</code> the Default?</h4>
+                    <p>Historical reasons. The original CSS spec chose <code>content-box</code> in the late 1990s. By the time everyone agreed <code>border-box</code> was better, billions of existing websites depended on the old behavior. Changing the default would break the web. So we apply the fix manually with the universal selector reset. It's one of those "always do this" patterns in CSS.</p>
+                </div>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="block-vs-inline" class="lesson-section">
+                <h2>Block vs. Inline Elements</h2>
+
+                <p>The box model behaves differently depending on whether an element is <strong>block-level</strong> or <strong>inline</strong>. This distinction affects how padding, margin, and width work.</p>
+
+                <h3>Block Elements</h3>
+
+                <p>Block elements take up the <strong>full available width</strong> and start on a <strong>new line</strong>. The box model works completely as expected:</p>
+
+                <pre><code class="language-html">&lt;!-- Each of these starts on a new line --&gt;
+&lt;h1&gt;Heading&lt;/h1&gt;
+&lt;p&gt;Paragraph&lt;/p&gt;
+&lt;div&gt;Container&lt;/div&gt;
+&lt;section&gt;Section&lt;/section&gt;</code></pre>
+
+                <p>Common block elements: <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;form&gt;</code>.</p>
+
+                <h3>Inline Elements</h3>
+
+                <p>Inline elements flow <strong>within text</strong> on the same line. They only take up as much width as their content needs. Crucially, <strong>vertical padding and margin don't push other lines away</strong>:</p>
+
+                <pre><code class="language-html">&lt;!-- These flow side by side within text --&gt;
+&lt;p&gt;This is &lt;strong&gt;bold&lt;/strong&gt; and &lt;em&gt;italic&lt;/em&gt; text
+   with a &lt;a href="#"&gt;link&lt;/a&gt; inside it.&lt;/p&gt;</code></pre>
+
+                <p>Common inline elements: <code>&lt;span&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;code&gt;</code>, <code>&lt;img&gt;</code> (technically inline-replaced), <code>&lt;br&gt;</code>.</p>
+
+                <h3><code>display: inline-block</code> — The Best of Both</h3>
+
+                <p>Sometimes you want an element that flows inline but respects the full box model (width, height, vertical padding/margin). That's <code>inline-block</code>:</p>
+
+                <pre><code class="language-css">.tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    font-size: 0.875rem;
+}</code></pre>
+
+                <pre><code class="language-html">&lt;p&gt;Topics: &lt;span class="tag"&gt;HTML&lt;/span&gt;
+         &lt;span class="tag"&gt;CSS&lt;/span&gt;
+         &lt;span class="tag"&gt;Web Dev&lt;/span&gt;&lt;/p&gt;</code></pre>
+
+                <p>The tags sit side by side (inline behavior) but fully respect padding, margin, and width (block behavior).</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Block vs. Inline vs. Inline-Block</caption>
+                        <thead>
+                            <tr>
+                                <th>Behavior</th>
+                                <th><code>block</code></th>
+                                <th><code>inline</code></th>
+                                <th><code>inline-block</code></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Starts on new line?</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>Takes full width?</td>
+                                <td>Yes</td>
+                                <td>No (content width)</td>
+                                <td>No (content width)</td>
+                            </tr>
+                            <tr>
+                                <td>Width/height work?</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Vertical padding/margin push?</td>
+                                <td>Yes</td>
+                                <td>No</td>
+                                <td>Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="devtools" class="lesson-section">
+                <h2>Inspecting the Box Model in DevTools</h2>
+
+                <p>The browser's DevTools give you a visual representation of the box model for any element. This is the fastest way to debug spacing issues.</p>
+
+                <h3>How to Inspect</h3>
+
+                <ol>
+                    <li>Right-click any element on your page and choose <strong>Inspect</strong> (or press <kbd>F12</kbd>)</li>
+                    <li>In the Elements panel, click on the element you want to examine</li>
+                    <li>Look at the <strong>Computed</strong> tab (or the box model diagram in the Styles panel)</li>
+                    <li>You'll see a nested rectangle diagram showing content, padding, border, and margin with exact pixel values</li>
+                </ol>
+
+                <p>The diagram is color-coded:</p>
+
+                <ul>
+                    <li><strong>Blue</strong> — content area</li>
+                    <li><strong>Green</strong> — padding</li>
+                    <li><strong>Yellow/orange</strong> — border</li>
+                    <li><strong>Orange/salmon</strong> — margin</li>
+                </ul>
+
+                <p>When you hover over an element in DevTools, the page itself highlights these zones in the same colors. This makes it instantly obvious where space is coming from.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Debugging Tip</h4>
+                    <p>When something isn't spaced the way you expect, don't guess — inspect it. Nine times out of ten, the DevTools box model diagram will show you exactly which layer (margin, padding, or border) is causing the unexpected spacing. It's the single most useful debugging tool for CSS layout.</p>
+                </div>
+            </section>
+
+            <!-- Section 9: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Box Model Spacing</h3>
+                    <p><strong>Objective:</strong> Add the <code>box-sizing</code> reset and apply professional spacing to your website.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>Add the universal <code>box-sizing</code> reset at the top of your <code>css/style.css</code>:
+                            <pre><code class="language-css">*, *::before, *::after {
+    box-sizing: border-box;
+}</code></pre>
+                        </li>
+                        <li>Set the <code>body</code> margin to <code>0</code> (remove the browser default)</li>
+                        <li>Create a <code>.container</code> class with <code>max-width: 800px;</code> and <code>margin: 0 auto;</code> to center your page content, plus <code>padding: 0 20px;</code> for side breathing room on small screens</li>
+                        <li>Wrap your <code>&lt;main&gt;</code> content in a <code>&lt;div class="container"&gt;</code></li>
+                        <li>Create a styled <code>.card</code> class:
+                            <ul>
+                                <li>Background color: white or your <code>--color-bg-alt</code></li>
+                                <li>Padding: <code>20px 24px</code></li>
+                                <li>Border: <code>1px solid</code> with your border color variable</li>
+                                <li>Border radius: <code>8px</code></li>
+                                <li>Margin bottom: <code>20px</code></li>
+                            </ul>
+                        </li>
+                        <li>Wrap one section of your homepage content in a <code>&lt;div class="card"&gt;</code> to test it</li>
+                        <li>Style the <code>&lt;aside&gt;</code> with a left accent border, padding, and a subtle background</li>
+                        <li>Open DevTools and inspect several elements — observe the box model diagram for each</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p><code>max-width</code> is better than <code>width</code> for the container — it centers on large screens but allows the container to shrink on small screens instead of causing horizontal scroll. Combine it with <code>margin: 0 auto;</code> for centering and <code>padding: 0 20px;</code> so content never touches the screen edges on mobile.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-css">/* Add to the TOP of css/style.css */
+
+/* ===========================
+   Reset & Box Sizing
+   =========================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+/* ===========================
+   Layout
+   =========================== */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ===========================
+   Cards
+   =========================== */
+.card {
+    background-color: white;
+    padding: 20px 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.card-accent {
+    border-left: 4px solid var(--color-accent);
+}
+
+/* ===========================
+   Semantic Sections
+   =========================== */
+header {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 20px 0;
+}
+
+header .container {
+    /* The container inside the header centers the content */
+}
+
+aside {
+    background-color: var(--color-bg-alt);
+    border-left: 4px solid var(--color-accent);
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 0 8px 8px 0;
+}
+
+footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* ===========================
+   Spacing Utilities
+   =========================== */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }</code></pre>
+
+                        <pre><code class="language-html">&lt;!-- Updated page structure --&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;div class="container"&gt;
+            &lt;h1&gt;Welcome to My Website&lt;/h1&gt;
+            &lt;nav&gt;
+                &lt;a href="index.html"&gt;Home&lt;/a&gt; |
+                &lt;a href="about.html"&gt;About&lt;/a&gt; |
+                &lt;a href="recipe.html"&gt;Recipes&lt;/a&gt; |
+                &lt;a href="contact.html"&gt;Contact&lt;/a&gt;
+            &lt;/nav&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="card"&gt;
+                &lt;h2&gt;About This Site&lt;/h2&gt;
+                &lt;p&gt;This is my first properly structured website...&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;aside&gt;
+                &lt;h3&gt;Fun Fact&lt;/h3&gt;
+                &lt;p&gt;The first website is still live at info.cern.ch!&lt;/p&gt;
+            &lt;/aside&gt;
+        &lt;/div&gt;
+    &lt;/main&gt;
+
+    &lt;footer&gt;
+        &lt;div class="container"&gt;
+            &lt;p&gt;&amp;copy; 2026 Alex Johnson&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/footer&gt;
+&lt;/body&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What are the four layers of the box model, from inside to outside?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The order starts from the inside (content) and works outward.">A) Margin, border, padding, content</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Content is the innermost layer, then padding, then border, then margin on the outside. Think of it like a framed picture: photo → matting → frame → wall space.">B) Content, padding, border, margin</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Border is between padding and margin, not next to content.">C) Content, border, padding, margin</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What does <code>box-sizing: border-box</code> do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="border-box doesn't remove borders — it changes how width is calculated.">A) Removes the border from the element</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! With border-box, the width you set includes content + padding + border. So width: 300px means the total box is 300px, not 300px plus extra.">B) Includes padding and border inside the specified width</button>
+                            <button class="quiz-option" data-correct="false" data-hint="border-box doesn't add borders — it changes how width calculations work.">C) Adds a box-shaped border around the element</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> How do you horizontally center a block element?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="text-align: center centers inline content inside an element, not the element itself.">A) <code>text-align: center;</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Setting left and right margins to auto splits the remaining space equally, centering the block element. The element needs a width or max-width for this to work.">B) <code>margin: 0 auto;</code> with a set width</button>
+                            <button class="quiz-option" data-correct="false" data-hint="There's no 'center' value for padding. Centering is done with margins.">C) <code>padding: center;</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What happens when two vertical margins touch?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Vertical margins don't add — this is one of CSS's most surprising behaviors.">A) They add together</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! When two vertical margins meet, they collapse — the larger one wins. If one element has margin-bottom: 20px and the next has margin-top: 16px, the gap is 20px, not 36px.">B) They collapse — the larger one wins</button>
+                            <button class="quiz-option" data-correct="false" data-hint="CSS always produces deterministic results — nothing is random.">C) The result is unpredictable</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> What's the difference between padding and margin?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both padding and margin can be applied to the same elements. The difference is where the space goes.">A) Padding is for block elements; margin is for inline elements</button>
+                            <button class="quiz-option" data-correct="false" data-hint="It's actually the opposite — padding extends the background, margin doesn't.">B) Padding is transparent; margin shows the background</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Padding is space inside the box (between content and border) — the background shows through it. Margin is space outside the box (between this element and its neighbors) — it's always transparent.">C) Padding is space inside the box; margin is space outside the box</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>Every HTML element is a <strong>rectangular box</strong> made of four layers: content → padding → border → margin</li>
+                        <li><strong>Padding</strong> = inner space (background shows through); <strong>Margin</strong> = outer space (always transparent)</li>
+                        <li>Use the <strong>TRouBLe</strong> shorthand: <code>padding: top right bottom left;</code></li>
+                        <li><strong>Always</strong> add <code>*, *::before, *::after { box-sizing: border-box; }</code> at the top of your CSS — it makes <code>width</code> include padding and border</li>
+                        <li>Center block elements with <code>margin: 0 auto;</code> and a set <code>max-width</code></li>
+                        <li>Vertical margins <strong>collapse</strong> — the larger one wins; they don't add together</li>
+                        <li><strong>Block</strong> elements take full width and start on new lines; <strong>inline</strong> elements flow within text; <strong>inline-block</strong> gives you the best of both</li>
+                        <li>Use DevTools (<kbd>F12</kbd>) to visually inspect the box model — it's the fastest way to debug spacing</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← now with box-sizing reset, container, cards
+├── images/
+│   └── sunset.jpg
+├── index.html         ← using .container for centered layout
+├── about.html
+├── recipe.html
+└── contact.html</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You can control colors, fonts, and spacing — but everything still flows top to bottom in a single column. What if you want a sidebar next to your main content? A navigation bar with links side by side? A grid of project cards? In the next lesson, you'll learn <strong>Flexbox</strong> — the modern CSS layout system that makes arranging elements in rows and columns effortless.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_11.html" class="prev-lesson">← Previous: Colors &amp; Typography</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_13.html" class="next-lesson">Next: Layout with Flexbox →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

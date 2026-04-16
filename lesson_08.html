@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to build HTML forms with text inputs, checkboxes, radio buttons, dropdowns, textareas, and submit buttons.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 8: Forms &amp; Input - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 2</a></li>
+            <li aria-current="page">Lesson 8: Forms &amp; Input</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📝 Lesson 8: Forms &amp; Input</h1>
+                <p class="lead">Every login screen, search bar, checkout page, and contact form on the web is built with HTML form elements. Forms are how websites collect information from users — and learning to build them is one of the most practical skills in web development.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Create a form with the <code>&lt;form&gt;</code> element</li>
+                        <li>Use common input types: text, email, password, number, and more</li>
+                        <li>Associate labels with inputs using <code>&lt;label&gt;</code></li>
+                        <li>Build checkboxes, radio buttons, dropdowns, and textareas</li>
+                        <li>Group related fields with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code></li>
+                        <li>Add basic form validation with HTML attributes</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 55 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll build a contact form for your website.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#form-element" class="toc-link">The <code>&lt;form&gt;</code> Element</a></li>
+                        <li><a href="#text-inputs" class="toc-link">Text Inputs and Labels</a></li>
+                        <li><a href="#input-types" class="toc-link">Input Types</a></li>
+                        <li><a href="#choices" class="toc-link">Checkboxes, Radio Buttons, and Dropdowns</a></li>
+                        <li><a href="#textarea" class="toc-link">Textareas and Buttons</a></li>
+                        <li><a href="#grouping" class="toc-link">Grouping with Fieldset and Legend</a></li>
+                        <li><a href="#validation" class="toc-link">Basic HTML Validation</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="form-element" class="lesson-section">
+                <h2>The <code>&lt;form&gt;</code> Element</h2>
+
+                <p>All form controls (inputs, buttons, dropdowns) live inside a <code>&lt;form&gt;</code> element. The form acts as a container and tells the browser where to send the data when the user submits:</p>
+
+                <pre><code class="language-html">&lt;form action="/submit" method="post"&gt;
+    &lt;!-- form controls go here --&gt;
+&lt;/form&gt;</code></pre>
+
+                <p>The two key attributes:</p>
+
+                <ul>
+                    <li><code>action</code> — the URL where the form data gets sent (a server endpoint)</li>
+                    <li><code>method</code> — <em>how</em> the data is sent: <code>"get"</code> appends data to the URL (for searches); <code>"post"</code> sends data in the request body (for sensitive data like passwords)</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph LR
+                    A["User fills<br/>out form"] --> B["User clicks<br/>Submit"]
+                    B --> C["Browser packages<br/>form data"]
+                    C --> D["Sends to server<br/>at 'action' URL"]
+                    D --> E["Server processes<br/>and responds"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style C fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 For Now: No Server Required</h4>
+                    <p>We're building the HTML side of forms in this lesson — the user interface. Making forms actually <em>do</em> something requires a backend server, which is beyond the scope of this course. For now, your forms will look and feel real but won't send data anywhere. You can use <code>action="#"</code> as a placeholder.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="text-inputs" class="lesson-section">
+                <h2>Text Inputs and Labels</h2>
+
+                <p>The <code>&lt;input&gt;</code> element is the workhorse of forms. Its most basic form creates a single-line text field:</p>
+
+                <pre><code class="language-html">&lt;input type="text" name="username"&gt;</code></pre>
+
+                <p>But an input by itself is incomplete — the user has no idea what to type in it. That's where <code>&lt;label&gt;</code> comes in:</p>
+
+                <pre><code class="language-html">&lt;label for="username"&gt;Username:&lt;/label&gt;
+&lt;input type="text" id="username" name="username"&gt;</code></pre>
+
+                <p>The <code>for</code> attribute on the label must match the <code>id</code> attribute on the input. This connection is critical for three reasons:</p>
+
+                <ul>
+                    <li><strong>Accessibility:</strong> Screen readers announce the label when the input is focused</li>
+                    <li><strong>Usability:</strong> Clicking the label text focuses the input field (try it!)</li>
+                    <li><strong>Semantics:</strong> The browser knows these two elements belong together</li>
+                </ul>
+
+                <h3>The <code>name</code> Attribute</h3>
+
+                <p>Every input needs a <code>name</code> attribute — it's the key that identifies this field's data when the form is submitted. Without a <code>name</code>, the input's value won't be included in the form submission.</p>
+
+                <pre><code class="language-html">&lt;!-- When submitted, the server receives: username=whatever-they-typed --&gt;
+&lt;input type="text" id="username" name="username"&gt;</code></pre>
+
+                <h3>Placeholder Text</h3>
+
+                <p>The <code>placeholder</code> attribute shows a light hint inside the input that disappears when the user starts typing:</p>
+
+                <pre><code class="language-html">&lt;input type="text" id="username" name="username"
+       placeholder="e.g., alex_johnson"&gt;</code></pre>
+
+                <div class="card card-warning">
+                    <h4>⚠️ Placeholders Are Not Labels</h4>
+                    <p>Never use <code>placeholder</code> as a replacement for <code>&lt;label&gt;</code>. Placeholder text disappears when the user starts typing, leaving them with no indication of what the field is for. It also has poor contrast by design and isn't reliably read by all screen readers. Always use a visible <code>&lt;label&gt;</code>.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="input-types" class="lesson-section">
+                <h2>Input Types</h2>
+
+                <p>The <code>type</code> attribute on <code>&lt;input&gt;</code> changes both the appearance and behavior of the field. HTML5 introduced many specialized types that improve the user experience — especially on mobile, where the browser shows the right keyboard:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Common Input Types</caption>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>What It Does</th>
+                                <th>Mobile Keyboard</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>text</code></td>
+                                <td>Single-line text (default)</td>
+                                <td>Standard</td>
+                            </tr>
+                            <tr>
+                                <td><code>email</code></td>
+                                <td>Email address (validates @ format)</td>
+                                <td>Has @ and . keys</td>
+                            </tr>
+                            <tr>
+                                <td><code>password</code></td>
+                                <td>Hides typed characters with dots</td>
+                                <td>Standard</td>
+                            </tr>
+                            <tr>
+                                <td><code>number</code></td>
+                                <td>Numeric input with up/down arrows</td>
+                                <td>Number pad</td>
+                            </tr>
+                            <tr>
+                                <td><code>tel</code></td>
+                                <td>Phone number</td>
+                                <td>Phone dial pad</td>
+                            </tr>
+                            <tr>
+                                <td><code>url</code></td>
+                                <td>Web address (validates URL format)</td>
+                                <td>Has / and .com keys</td>
+                            </tr>
+                            <tr>
+                                <td><code>date</code></td>
+                                <td>Date picker</td>
+                                <td>Calendar picker</td>
+                            </tr>
+                            <tr>
+                                <td><code>color</code></td>
+                                <td>Color picker</td>
+                                <td>Color palette</td>
+                            </tr>
+                            <tr>
+                                <td><code>range</code></td>
+                                <td>Slider between a min and max value</td>
+                                <td>Drag slider</td>
+                            </tr>
+                            <tr>
+                                <td><code>search</code></td>
+                                <td>Search field (may show clear button)</td>
+                                <td>Has Search key</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <pre><code class="language-html">&lt;label for="email"&gt;Email:&lt;/label&gt;
+&lt;input type="email" id="email" name="email"
+       placeholder="you@example.com"&gt;
+
+&lt;label for="password"&gt;Password:&lt;/label&gt;
+&lt;input type="password" id="password" name="password"&gt;
+
+&lt;label for="age"&gt;Age:&lt;/label&gt;
+&lt;input type="number" id="age" name="age" min="1" max="120"&gt;
+
+&lt;label for="birthday"&gt;Birthday:&lt;/label&gt;
+&lt;input type="date" id="birthday" name="birthday"&gt;
+
+&lt;label for="fav-color"&gt;Favorite Color:&lt;/label&gt;
+&lt;input type="color" id="fav-color" name="fav-color" value="#3b82f6"&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 Graceful Degradation</h4>
+                    <p>If a browser doesn't support a specialized input type (like <code>date</code> on an older browser), it falls back to a plain <code>text</code> input. The form still works — the user just types the date instead of using a picker. This is called <strong>graceful degradation</strong>.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="choices" class="lesson-section">
+                <h2>Checkboxes, Radio Buttons, and Dropdowns</h2>
+
+                <h3>Checkboxes</h3>
+
+                <p>Checkboxes let users select <strong>zero or more</strong> options from a set:</p>
+
+                <pre><code class="language-html">&lt;p&gt;Select your interests:&lt;/p&gt;
+
+&lt;input type="checkbox" id="html" name="interests" value="html"&gt;
+&lt;label for="html"&gt;HTML&lt;/label&gt;
+
+&lt;input type="checkbox" id="css" name="interests" value="css"&gt;
+&lt;label for="css"&gt;CSS&lt;/label&gt;
+
+&lt;input type="checkbox" id="js" name="interests" value="javascript"&gt;
+&lt;label for="js"&gt;JavaScript&lt;/label&gt;</code></pre>
+
+                <p>Notice that all three checkboxes share the same <code>name</code> ("interests") but have different <code>value</code> attributes. The <code>value</code> is what gets sent to the server when that box is checked.</p>
+
+                <h3>Radio Buttons</h3>
+
+                <p>Radio buttons let users select <strong>exactly one</strong> option from a set:</p>
+
+                <pre><code class="language-html">&lt;p&gt;Experience level:&lt;/p&gt;
+
+&lt;input type="radio" id="beginner" name="level" value="beginner"&gt;
+&lt;label for="beginner"&gt;Beginner&lt;/label&gt;
+
+&lt;input type="radio" id="intermediate" name="level" value="intermediate"&gt;
+&lt;label for="intermediate"&gt;Intermediate&lt;/label&gt;
+
+&lt;input type="radio" id="advanced" name="level" value="advanced"&gt;
+&lt;label for="advanced"&gt;Advanced&lt;/label&gt;</code></pre>
+
+                <p>The key difference from checkboxes: radio buttons with the <strong>same <code>name</code></strong> form a group, and only one in the group can be selected at a time. Selecting one automatically deselects the others.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Choice Controls"] --> B["Checkbox<br/>☑ Multiple selections<br/>☑ Independent toggles"]
+                    A --> C["Radio Button<br/>◉ One selection only<br/>◉ Grouped by name"]
+                    A --> D["Dropdown<br/>▾ One selection<br/>▾ Saves space"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#fdf4ff,stroke:#a855f7,stroke-width:2px,color:#1e293b
+                    style D fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                </div>
+
+                <h3>Dropdown Menus (<code>&lt;select&gt;</code>)</h3>
+
+                <p>A dropdown (or "select menu") presents a list of options in a compact space:</p>
+
+                <pre><code class="language-html">&lt;label for="country"&gt;Country:&lt;/label&gt;
+&lt;select id="country" name="country"&gt;
+    &lt;option value=""&gt;-- Select a country --&lt;/option&gt;
+    &lt;option value="us"&gt;United States&lt;/option&gt;
+    &lt;option value="ca"&gt;Canada&lt;/option&gt;
+    &lt;option value="uk"&gt;United Kingdom&lt;/option&gt;
+    &lt;option value="au"&gt;Australia&lt;/option&gt;
+&lt;/select&gt;</code></pre>
+
+                <p>The first <code>&lt;option&gt;</code> with an empty <code>value</code> serves as a placeholder prompt. Each <code>&lt;option&gt;</code> has a <code>value</code> (sent to the server) and display text (shown to the user).</p>
+
+                <p>You can group options using <code>&lt;optgroup&gt;</code>:</p>
+
+                <pre><code class="language-html">&lt;select id="language" name="language"&gt;
+    &lt;optgroup label="Frontend"&gt;
+        &lt;option value="html"&gt;HTML&lt;/option&gt;
+        &lt;option value="css"&gt;CSS&lt;/option&gt;
+        &lt;option value="js"&gt;JavaScript&lt;/option&gt;
+    &lt;/optgroup&gt;
+    &lt;optgroup label="Backend"&gt;
+        &lt;option value="python"&gt;Python&lt;/option&gt;
+        &lt;option value="java"&gt;Java&lt;/option&gt;
+        &lt;option value="csharp"&gt;C#&lt;/option&gt;
+    &lt;/optgroup&gt;
+&lt;/select&gt;</code></pre>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="textarea" class="lesson-section">
+                <h2>Textareas and Buttons</h2>
+
+                <h3><code>&lt;textarea&gt;</code></h3>
+
+                <p>For multi-line text (messages, comments, bios), use <code>&lt;textarea&gt;</code> instead of <code>&lt;input&gt;</code>:</p>
+
+                <pre><code class="language-html">&lt;label for="message"&gt;Message:&lt;/label&gt;
+&lt;textarea id="message" name="message"
+          rows="5" cols="40"
+          placeholder="Type your message here..."&gt;&lt;/textarea&gt;</code></pre>
+
+                <p>Unlike <code>&lt;input&gt;</code>, the <code>&lt;textarea&gt;</code> has an opening and closing tag. Any text between the tags becomes the default value. The <code>rows</code> and <code>cols</code> attributes set the initial visible size (though CSS is a better way to control this).</p>
+
+                <h3>Buttons</h3>
+
+                <p>There are two ways to create a submit button:</p>
+
+                <pre><code class="language-html">&lt;!-- Method 1: input with type="submit" --&gt;
+&lt;input type="submit" value="Send Message"&gt;
+
+&lt;!-- Method 2: button element (more flexible) --&gt;
+&lt;button type="submit"&gt;Send Message&lt;/button&gt;</code></pre>
+
+                <p>The <code>&lt;button&gt;</code> element is preferred because you can put anything inside it — text, icons, images — while <code>&lt;input type="submit"&gt;</code> can only display text via the <code>value</code> attribute.</p>
+
+                <p>Button types:</p>
+
+                <ul>
+                    <li><code>type="submit"</code> — sends the form data (default for <code>&lt;button&gt;</code> inside a form)</li>
+                    <li><code>type="reset"</code> — clears all form fields back to their default values</li>
+                    <li><code>type="button"</code> — does nothing by default (used with JavaScript for custom actions)</li>
+                </ul>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="grouping" class="lesson-section">
+                <h2>Grouping with Fieldset and Legend</h2>
+
+                <p>When a form has related groups of fields, use <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code> to organize them:</p>
+
+                <pre><code class="language-html">&lt;form action="#" method="post"&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Personal Information&lt;/legend&gt;
+
+        &lt;label for="fname"&gt;First Name:&lt;/label&gt;
+        &lt;input type="text" id="fname" name="fname"&gt;
+
+        &lt;label for="lname"&gt;Last Name:&lt;/label&gt;
+        &lt;input type="text" id="lname" name="lname"&gt;
+
+        &lt;label for="email"&gt;Email:&lt;/label&gt;
+        &lt;input type="email" id="email" name="email"&gt;
+    &lt;/fieldset&gt;
+
+    &lt;fieldset&gt;
+        &lt;legend&gt;Preferences&lt;/legend&gt;
+
+        &lt;input type="checkbox" id="newsletter" name="newsletter" value="yes"&gt;
+        &lt;label for="newsletter"&gt;Subscribe to newsletter&lt;/label&gt;
+
+        &lt;input type="checkbox" id="updates" name="updates" value="yes"&gt;
+        &lt;label for="updates"&gt;Receive product updates&lt;/label&gt;
+    &lt;/fieldset&gt;
+
+    &lt;button type="submit"&gt;Save&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+                <ul>
+                    <li><code>&lt;fieldset&gt;</code> draws a visual border around the group (which you can style with CSS)</li>
+                    <li><code>&lt;legend&gt;</code> provides a caption that appears embedded in the border</li>
+                </ul>
+
+                <p>Fieldsets are especially important for radio button groups and checkbox groups — screen readers use the legend to announce what the group of choices is for.</p>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="validation" class="lesson-section">
+                <h2>Basic HTML Validation</h2>
+
+                <p>HTML has built-in attributes that validate form data <em>before</em> it's submitted — no JavaScript required:</p>
+
+                <pre><code class="language-html">&lt;!-- Required: field can't be empty --&gt;
+&lt;input type="text" name="username" required&gt;
+
+&lt;!-- Minimum and maximum length --&gt;
+&lt;input type="text" name="username"
+       minlength="3" maxlength="20" required&gt;
+
+&lt;!-- Number range --&gt;
+&lt;input type="number" name="age" min="18" max="99"&gt;
+
+&lt;!-- Pattern: must match a regular expression --&gt;
+&lt;input type="text" name="zipcode"
+       pattern="[0-9]{5}"
+       title="Five-digit ZIP code"&gt;</code></pre>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>HTML Validation Attributes</caption>
+                        <thead>
+                            <tr>
+                                <th>Attribute</th>
+                                <th>What It Does</th>
+                                <th>Works On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>required</code></td>
+                                <td>Field must be filled in</td>
+                                <td>Most input types, textarea, select</td>
+                            </tr>
+                            <tr>
+                                <td><code>minlength</code></td>
+                                <td>Minimum characters required</td>
+                                <td>text, email, password, textarea</td>
+                            </tr>
+                            <tr>
+                                <td><code>maxlength</code></td>
+                                <td>Maximum characters allowed</td>
+                                <td>text, email, password, textarea</td>
+                            </tr>
+                            <tr>
+                                <td><code>min</code> / <code>max</code></td>
+                                <td>Minimum / maximum numeric value</td>
+                                <td>number, range, date</td>
+                            </tr>
+                            <tr>
+                                <td><code>pattern</code></td>
+                                <td>Must match a regular expression</td>
+                                <td>text, tel, email, url, search</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>When validation fails, the browser blocks the form submission and shows a built-in error message near the offending field. The <code>title</code> attribute provides extra context in the error tooltip.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Client-Side vs. Server-Side Validation</h4>
+                    <p>HTML validation is convenient and fast, but it's <strong>client-side only</strong> — a tech-savvy user can bypass it by editing the HTML in DevTools. Real applications always validate data on the server too. Think of HTML validation as a friendly first check, not a security measure.</p>
+                </div>
+            </section>
+
+            <!-- Section 8: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Build a Contact Form</h3>
+                    <p><strong>Objective:</strong> Create a complete contact form using the elements covered in this lesson.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>In your <code>my-website</code> folder, create a new file called <code>contact.html</code></li>
+                        <li>Use the Emmet shortcut to generate the HTML skeleton</li>
+                        <li>Set the <code>&lt;title&gt;</code> to "Contact Me"</li>
+                        <li>Create a <code>&lt;form&gt;</code> with <code>action="#"</code> and <code>method="post"</code></li>
+                        <li>Add the following fields (each with a proper <code>&lt;label&gt;</code>):
+                            <ul>
+                                <li>Name — <code>type="text"</code>, required</li>
+                                <li>Email — <code>type="email"</code>, required</li>
+                                <li>Subject — a <code>&lt;select&gt;</code> dropdown with options: General Inquiry, Feedback, Bug Report, Other</li>
+                                <li>Message — a <code>&lt;textarea&gt;</code>, required, minimum 20 characters</li>
+                            </ul>
+                        </li>
+                        <li>Wrap the Name and Email fields in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code> of "Your Info"</li>
+                        <li>Add a <code>&lt;button type="submit"&gt;</code></li>
+                        <li>Add a navigation link back to <code>index.html</code></li>
+                        <li>Save and test — try submitting the form without filling in required fields</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Make sure every <code>&lt;label&gt;</code> has a <code>for</code> attribute that matches the <code>id</code> of its corresponding input. Don't forget the <code>name</code> attribute on every form control — it's what identifies the data.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Contact Me&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;a href="index.html"&gt;Back to Home&lt;/a&gt;
+
+    &lt;h1&gt;Contact Me&lt;/h1&gt;
+    &lt;p&gt;Have a question or feedback? Fill out the form
+       below and I'll get back to you.&lt;/p&gt;
+
+    &lt;form action="#" method="post"&gt;
+        &lt;fieldset&gt;
+            &lt;legend&gt;Your Info&lt;/legend&gt;
+
+            &lt;label for="name"&gt;Name:&lt;/label&gt;&lt;br&gt;
+            &lt;input type="text" id="name" name="name"
+                   required&gt;&lt;br&gt;&lt;br&gt;
+
+            &lt;label for="email"&gt;Email:&lt;/label&gt;&lt;br&gt;
+            &lt;input type="email" id="email" name="email"
+                   required placeholder="you@example.com"&gt;
+        &lt;/fieldset&gt;
+        &lt;br&gt;
+
+        &lt;label for="subject"&gt;Subject:&lt;/label&gt;&lt;br&gt;
+        &lt;select id="subject" name="subject"&gt;
+            &lt;option value=""&gt;-- Choose a subject --&lt;/option&gt;
+            &lt;option value="general"&gt;General Inquiry&lt;/option&gt;
+            &lt;option value="feedback"&gt;Feedback&lt;/option&gt;
+            &lt;option value="bug"&gt;Bug Report&lt;/option&gt;
+            &lt;option value="other"&gt;Other&lt;/option&gt;
+        &lt;/select&gt;&lt;br&gt;&lt;br&gt;
+
+        &lt;label for="message"&gt;Message:&lt;/label&gt;&lt;br&gt;
+        &lt;textarea id="message" name="message"
+                  rows="6" cols="40"
+                  minlength="20" required
+                  placeholder="Write at least 20 characters..."&gt;&lt;/textarea&gt;
+        &lt;br&gt;&lt;br&gt;
+
+        &lt;button type="submit"&gt;Send Message&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> Why must every input have a <code>&lt;label&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Labels aren't strictly required by the browser, but omitting them is an accessibility failure.">A) The form won't submit without one</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Labels are essential for screen readers to announce what each input is for. They also improve usability by making the click target larger (clicking the label focuses the input).">B) For accessibility — screen readers need them to identify each field</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Labels don't provide any validation. HTML attributes like required and pattern handle that.">C) Labels validate the input data</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What's the difference between checkboxes and radio buttons?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="They look different (square vs. circle), but the real difference is functional.">A) Only their visual appearance</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Checkboxes allow multiple selections; radio buttons (with the same name) allow only one selection in the group.">B) Checkboxes allow multiple selections; radio buttons allow only one</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Both checkboxes and radio buttons send values when the form is submitted.">C) Checkboxes send data; radio buttons don't</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Which attribute makes a field mandatory?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="mandatory is not a standard HTML attribute.">A) <code>mandatory</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The required attribute prevents form submission if the field is empty.">B) <code>required</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="minlength sets a minimum character count, but doesn't make the field mandatory on its own.">C) <code>minlength</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> Why is <code>&lt;button&gt;</code> preferred over <code>&lt;input type="submit"&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both submit the form the same way. The difference is what you can put inside the element.">A) It submits faster</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The &lt;button&gt; element can contain text, icons, images, or other HTML. The &lt;input type='submit'&gt; can only display text via the value attribute.">B) It can contain any HTML content (text, icons, images)</button>
+                            <button class="quiz-option" data-correct="false" data-hint="&lt;input type='submit'&gt; is still valid HTML5 and supported everywhere.">C) <code>&lt;input type="submit"&gt;</code> is deprecated</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li>The <code>&lt;form&gt;</code> element wraps all form controls; <code>action</code> sets where data is sent, <code>method</code> sets how</li>
+                        <li>Always pair <code>&lt;input&gt;</code> elements with <code>&lt;label&gt;</code> using matching <code>for</code>/<code>id</code> attributes</li>
+                        <li>Every form control needs a <code>name</code> attribute — it's the key for the submitted data</li>
+                        <li>HTML5 input types (<code>email</code>, <code>number</code>, <code>date</code>, etc.) improve UX by showing the right keyboard and providing built-in validation</li>
+                        <li>Checkboxes allow multiple selections; radio buttons (with the same <code>name</code>) allow only one</li>
+                        <li><code>&lt;select&gt;</code> creates dropdowns; <code>&lt;textarea&gt;</code> creates multi-line text fields</li>
+                        <li><code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code> group related fields and improve accessibility</li>
+                        <li>HTML validation attributes (<code>required</code>, <code>minlength</code>, <code>pattern</code>, etc.) provide a first layer of data checking</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── images/
+│   └── sunset.jpg
+├── index.html
+├── about.html
+├── recipe.html
+└── contact.html      ← new in this lesson</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>You've now learned every fundamental HTML element you need for a real website — text, links, images, lists, tables, and forms. But there's one more critical concept before we move on to CSS: <strong>semantic HTML</strong>. In the next lesson, you'll learn how to use elements like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, and <code>&lt;footer&gt;</code> to give your page <em>meaning</em> and structure that goes far beyond plain <code>&lt;div&gt;</code> tags.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_07.html" class="prev-lesson">← Previous: Lists &amp; Tables</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_09.html" class="next-lesson">Next: Semantic HTML →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

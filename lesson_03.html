@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Install Visual Studio Code, explore its features, and set up a proper project folder for web development.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 3: Setting Up Your Tools - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 1</a></li>
+            <li aria-current="page">Lesson 3: Setting Up Your Tools</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🛠️ Lesson 3: Setting Up Your Tools</h1>
+                <p class="lead">Install Visual Studio Code, see the difference immediately, and set up a proper project folder for the rest of this course.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Download and install Visual Studio Code</li>
+                        <li>Open a file and a folder in VS Code</li>
+                        <li>Identify the key parts of the VS Code interface</li>
+                        <li>Install the Live Server extension for live preview</li>
+                        <li>Create a proper project folder structure for your website</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll install VS Code, open your Notepad file in it, and set up your project folder.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-vscode" class="toc-link">Why Visual Studio Code?</a></li>
+                        <li><a href="#installing" class="toc-link">Installing VS Code</a></li>
+                        <li><a href="#the-aha-moment" class="toc-link">The "Aha" Moment</a></li>
+                        <li><a href="#tour" class="toc-link">Quick Tour of VS Code</a></li>
+                        <li><a href="#live-server" class="toc-link">Installing Live Server</a></li>
+                        <li><a href="#project-folder" class="toc-link">Setting Up Your Project Folder</a></li>
+                        <li><a href="#browser-devtools" class="toc-link">Bonus: Browser DevTools</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="why-vscode" class="lesson-section">
+                <h2>Why Visual Studio Code?</h2>
+
+                <p>Visual Studio Code (VS Code) is a <strong>free, open-source code editor</strong> made by Microsoft. It's the most popular code editor in the world, used by millions of developers for everything from simple HTML pages to massive applications.</p>
+
+                <p>Here's why we're using it:</p>
+
+                <ul>
+                    <li><strong>Free</strong> — no license, no trial period, no hidden costs</li>
+                    <li><strong>Cross-platform</strong> — works on Windows, Mac, and Linux</li>
+                    <li><strong>Lightweight</strong> — installs fast, runs fast</li>
+                    <li><strong>Extensible</strong> — thousands of free extensions add extra features</li>
+                    <li><strong>Industry standard</strong> — learning VS Code is a transferable skill</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 VS Code vs. Visual Studio</h4>
+                    <p>Don't confuse <strong>Visual Studio Code</strong> with <strong>Visual Studio</strong>. They're different products. Visual Studio (without "Code") is a much larger, heavier IDE mainly used for C# and .NET development. We want the lightweight one: <strong>Visual Studio Code</strong>.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="installing" class="lesson-section">
+                <h2>Installing VS Code</h2>
+
+                <h3>Step 1: Download</h3>
+                <ol>
+                    <li>Go to <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">code.visualstudio.com</a></li>
+                    <li>Click the big blue <strong>Download</strong> button — it will detect your operating system automatically</li>
+                    <li>The download should start within a few seconds</li>
+                </ol>
+
+                <h3>Step 2: Install</h3>
+
+                <p><strong>Windows:</strong></p>
+                <ol>
+                    <li>Run the downloaded <code>.exe</code> installer</li>
+                    <li>Accept the license agreement</li>
+                    <li>On the "Select Additional Tasks" screen, check these boxes:
+                        <ul>
+                            <li>✅ <strong>Add "Open with Code" action to Windows Explorer file context menu</strong></li>
+                            <li>✅ <strong>Add "Open with Code" action to Windows Explorer directory context menu</strong></li>
+                            <li>✅ <strong>Add to PATH</strong></li>
+                        </ul>
+                    </li>
+                    <li>Click <strong>Install</strong>, then <strong>Finish</strong></li>
+                </ol>
+
+                <p><strong>Mac:</strong></p>
+                <ol>
+                    <li>Open the downloaded <code>.zip</code> file</li>
+                    <li>Drag <strong>Visual Studio Code.app</strong> to your <strong>Applications</strong> folder</li>
+                    <li>Open it from Applications</li>
+                </ol>
+
+                <h3>Step 3: Launch</h3>
+                <p>Open VS Code. You'll see a Welcome tab with some getting-started options. You can close that tab — we'll walk through everything you need.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="the-aha-moment" class="lesson-section">
+                <h2>The "Aha" Moment</h2>
+
+                <p>Remember that <code>my-page.html</code> file you created on your Desktop in the last lesson? Let's open it in VS Code.</p>
+
+                <ol>
+                    <li>In VS Code, go to <strong>File → Open File</strong> (or press <kbd>Ctrl</kbd> + <kbd>O</kbd>)</li>
+                    <li>Navigate to your Desktop and select <code>my-page.html</code></li>
+                    <li>Click <strong>Open</strong></li>
+                </ol>
+
+                <p>Look at that. <strong>The exact same text you typed in Notepad</strong> — but now it has colors:</p>
+
+                <ul>
+                    <li>Tags like <code>&lt;h1&gt;</code> and <code>&lt;p&gt;</code> are one color</li>
+                    <li>Attribute names like <code>href</code> are another color</li>
+                    <li>Attribute values like <code>"https://www.google.com"</code> are yet another color</li>
+                    <li>The actual text content is a different color from the tags</li>
+                </ul>
+
+                <p>This is <strong>syntax highlighting</strong>, and it makes reading HTML infinitely easier. You can instantly see the structure of your document at a glance. No more squinting at a wall of black text.</p>
+
+                <div class="card card-accent" style="text-align: center; padding: 2rem;">
+                    <h3>💡 Same File. Different Experience.</h3>
+                    <p>Nothing about the file changed — it's the same text. The tool changed, and suddenly the code is readable.</p>
+                </div>
+
+                <p>Now try this: place your cursor after a <code>&lt;</code> character and start typing a tag name like <code>h2</code>. See that dropdown menu that appears? That's <strong>auto-complete</strong> (also called IntelliSense in VS Code). It suggests tags as you type and can fill them in for you.</p>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="tour" class="lesson-section">
+                <h2>Quick Tour of VS Code</h2>
+
+                <p>Let's get familiar with the interface. VS Code has five main areas:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["VS Code Interface"] --> B["1. Activity Bar<br/>(left edge — icons)"]
+                    A --> C["2. Sidebar<br/>(file explorer, search)"]
+                    A --> D["3. Editor<br/>(center — where you write code)"]
+                    A --> E["4. Terminal<br/>(bottom panel — optional)"]
+                    A --> F["5. Status Bar<br/>(bottom edge — info)"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style C fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style E fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style F fill:#f8fafc,stroke:#64748b,stroke-width:1px,color:#1e293b
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Area</th>
+                                <th>What It Does</th>
+                                <th>Key Shortcut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Activity Bar</strong></td>
+                                <td>The vertical strip of icons on the far left. Switches between Explorer, Search, Extensions, etc.</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sidebar</strong></td>
+                                <td>Shows your files and folders when Explorer is selected. Toggle it on/off.</td>
+                                <td><kbd>Ctrl</kbd> + <kbd>B</kbd></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Editor</strong></td>
+                                <td>The main area where you write and edit code. You can open multiple files in tabs.</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Terminal</strong></td>
+                                <td>A built-in command line (we won't need this much for HTML/CSS).</td>
+                                <td><kbd>Ctrl</kbd> + <kbd>`</kbd></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status Bar</strong></td>
+                                <td>The thin bar at the very bottom. Shows file type, line number, encoding, etc.</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Essential Keyboard Shortcuts</h3>
+                <p>You don't need to memorize these now, but these will become second nature:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Shortcut</th>
+                                <th>What It Does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> + <kbd>S</kbd></td>
+                                <td>Save the current file</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> + <kbd>N</kbd></td>
+                                <td>Create a new file</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+                                <td>Undo</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td>
+                                <td>Open the Command Palette (search any command)</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> + <kbd>/</kbd></td>
+                                <td>Toggle comment on/off for selected lines</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-success">
+                    <h4>✅ Pro Tip: Emmet</h4>
+                    <p>VS Code has a built-in tool called <strong>Emmet</strong> that lets you write HTML lightning-fast. For example, type <code>h1</code> and press <kbd>Tab</kbd> — it expands to <code>&lt;h1&gt;&lt;/h1&gt;</code> with your cursor inside. Type <code>ul&gt;li*3</code> and press <kbd>Tab</kbd> — it creates a <code>&lt;ul&gt;</code> with three <code>&lt;li&gt;</code> items. You'll pick this up naturally as you use VS Code.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="live-server" class="lesson-section">
+                <h2>Installing Live Server</h2>
+
+                <p>Remember the edit-save-refresh cycle from Lesson 2? Let's make it better. <strong>Live Server</strong> is a free VS Code extension that automatically refreshes your browser every time you save a file.</p>
+
+                <h3>How to Install It</h3>
+                <ol>
+                    <li>In VS Code, click the <strong>Extensions icon</strong> in the Activity Bar (it looks like four small squares, or press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>)</li>
+                    <li>In the search box, type <strong>Live Server</strong></li>
+                    <li>Find the one by <strong>Ritwick Dey</strong> (it'll be the first result with millions of downloads)</li>
+                    <li>Click <strong>Install</strong></li>
+                </ol>
+
+                <h3>How to Use It</h3>
+                <ol>
+                    <li>Open an HTML file in VS Code</li>
+                    <li>Right-click anywhere in the editor and choose <strong>"Open with Live Server"</strong></li>
+                    <li>Your browser will open with the page — and it will <strong>auto-refresh</strong> whenever you save</li>
+                </ol>
+
+                <p>No more manually refreshing. Edit, save, and watch the page update instantly. This small change makes development dramatically faster.</p>
+
+                <div class="card card-info">
+                    <h4>💡 What's Happening Behind the Scenes?</h4>
+                    <p>Live Server runs a tiny local web server on your computer. Instead of <code>file:///...</code> in the address bar, you'll see something like <code>http://127.0.0.1:5500/</code>. This is still your local machine — nothing is on the internet — but it more closely mimics how a real website works.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="project-folder" class="lesson-section">
+                <h2>Setting Up Your Project Folder</h2>
+
+                <p>It's time to get organized. Instead of saving random files to the Desktop, let's create a proper project folder.</p>
+
+                <h3>Step 1: Create the Folder</h3>
+                <ol>
+                    <li>Open <strong>File Explorer</strong> (Windows) or <strong>Finder</strong> (Mac)</li>
+                    <li>Navigate to your <strong>Documents</strong> folder (or wherever you keep projects)</li>
+                    <li>Create a new folder called <code>my-website</code></li>
+                </ol>
+
+                <h3>Step 2: Open It in VS Code</h3>
+                <ol>
+                    <li>In VS Code, go to <strong>File → Open Folder</strong></li>
+                    <li>Select the <code>my-website</code> folder you just created</li>
+                    <li>Click <strong>Select Folder</strong></li>
+                </ol>
+
+                <p>Now look at the Sidebar — you should see your folder name at the top, with an empty explorer below it. This is your <strong>workspace</strong>. All of your website files will live here.</p>
+
+                <h3>Step 3: Create Your First File</h3>
+                <ol>
+                    <li>In the Sidebar, hover over the folder name and click the <strong>New File</strong> icon (a page with a plus sign)</li>
+                    <li>Name it <code>index.html</code></li>
+                    <li>Press Enter — the file opens in the editor, ready for you to write</li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 Why "index.html"?</h4>
+                    <p>The name <code>index.html</code> is special. When a web server receives a request for a folder (like <code>www.example.com/</code>), it automatically looks for a file called <code>index.html</code> and serves that. It's the default homepage. Every website project starts with an <code>index.html</code>.</p>
+                </div>
+
+                <h3>What Your Project Should Look Like</h3>
+                <p>Right now you have just one file:</p>
+
+                <pre><code>my-website/
+└── index.html</code></pre>
+
+                <p>As the course progresses, you'll add more files and folders. By the end, your project will look something like this:</p>
+
+                <pre><code>my-website/
+├── index.html        (your homepage)
+├── about.html        (about page)
+├── contact.html      (contact page)
+├── styles/
+│   └── style.css     (your stylesheet)
+└── images/
+    ├── hero.jpg
+    └── profile.jpg</code></pre>
+
+                <p>But for now, one file is all you need. We'll build from here.</p>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="browser-devtools" class="lesson-section">
+                <h2>Bonus: Browser DevTools</h2>
+
+                <p>One more tool worth knowing about — your browser has built-in <strong>developer tools</strong> (DevTools) that let you inspect any web page and see its HTML and CSS in real time.</p>
+
+                <h3>How to Open DevTools</h3>
+                <ul>
+                    <li><strong>Chrome / Edge:</strong> Press <kbd>F12</kbd> or <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd></li>
+                    <li><strong>Firefox:</strong> Press <kbd>F12</kbd> or <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd></li>
+                    <li><strong>Any browser:</strong> Right-click any element on a page and choose <strong>"Inspect"</strong></li>
+                </ul>
+
+                <p>A panel will appear showing you the HTML and CSS behind whatever page you're looking at. This works on <em>any</em> website — you can inspect Google, YouTube, Wikipedia, anything.</p>
+
+                <p>We won't use DevTools heavily in this course, but it's an incredibly valuable learning tool. Whenever you see a design you like on a website, you can right-click it, choose Inspect, and see exactly how it was built.</p>
+
+                <div class="card card-success">
+                    <h4>✅ Try It Now</h4>
+                    <p>Right-click on this paragraph and choose <strong>"Inspect"</strong>. You'll see the HTML that makes up this very page. Feel free to explore — you can't break anything. All changes you make in DevTools are temporary and disappear when you refresh.</p>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>VS Code</strong> is a free, powerful code editor with syntax highlighting, auto-complete, and Emmet shortcuts</li>
+                        <li>The <strong>Live Server extension</strong> auto-refreshes your browser on save</li>
+                        <li>A proper <strong>project folder</strong> keeps your files organized</li>
+                        <li><code>index.html</code> is the default homepage filename</li>
+                        <li><strong>Browser DevTools</strong> let you inspect any website's HTML and CSS</li>
+                    </ul>
+                </div>
+
+                <h3>✅ Your Setup Checklist</h3>
+                <p>Before moving on, make sure you have:</p>
+                <ul>
+                    <li>✅ VS Code installed and working</li>
+                    <li>✅ Live Server extension installed</li>
+                    <li>✅ A <code>my-website</code> folder created and opened in VS Code</li>
+                    <li>✅ An empty <code>index.html</code> file inside that folder</li>
+                </ul>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your tools are ready. Your project folder is set up. In the next lesson, you'll learn the <strong>proper structure of an HTML document</strong> — DOCTYPE, html, head, body, and all the pieces that make a page "correct" (not just something that happens to work). The HTML you typed in Notepad was functional, but it was missing a lot. Time to fix that.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_02.html" class="prev-lesson">← Previous: HTML the Quick &amp; Dirty Way</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_04.html" class="next-lesson">Next: Your First Real HTML Page →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>
