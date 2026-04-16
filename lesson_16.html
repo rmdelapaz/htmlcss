@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to plan a website before writing code — sitemaps, wireframes, content strategy, and design decisions that save hours of rework.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 16: Planning Your Site - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 4</a></li>
+            <li aria-current="page">Lesson 16: Planning Your Site</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🗺️ Lesson 16: Planning Your Site</h1>
+                <p class="lead">The biggest mistake beginners make isn't a CSS typo or a missing closing tag — it's <strong>jumping straight into code without a plan</strong>. Professional web developers spend significant time planning before they write a single line of HTML. A clear plan saves hours of rework, prevents "blank page paralysis," and produces a better result. In this lesson, you'll plan the multi-page website you'll build in the next three lessons.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Define your site's purpose, audience, and goals</li>
+                        <li>Create a sitemap showing all pages and how they connect</li>
+                        <li>Sketch wireframes for desktop and mobile layouts</li>
+                        <li>Plan your content before writing code</li>
+                        <li>Choose a color palette and typography system</li>
+                        <li>Set up your project folder structure</li>
+                        <li>Create a style guide with CSS custom properties</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll produce a complete plan for your website — sitemap, wireframes, content outline, and style guide.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-plan" class="toc-link">Why Planning Matters</a></li>
+                        <li><a href="#purpose-audience" class="toc-link">Define Your Purpose &amp; Audience</a></li>
+                        <li><a href="#sitemap" class="toc-link">Creating a Sitemap</a></li>
+                        <li><a href="#wireframes" class="toc-link">Sketching Wireframes</a></li>
+                        <li><a href="#content-first" class="toc-link">Content-First Planning</a></li>
+                        <li><a href="#color-palette" class="toc-link">Choosing a Color Palette</a></li>
+                        <li><a href="#typography" class="toc-link">Choosing Typography</a></li>
+                        <li><a href="#style-guide" class="toc-link">Building a Style Guide with Custom Properties</a></li>
+                        <li><a href="#folder-structure" class="toc-link">Project Folder Structure</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="why-plan" class="lesson-section">
+                <h2>Why Planning Matters</h2>
+
+                <p>Imagine building a house by laying bricks first and deciding where the rooms go later. Absurd, right? Yet that's what many beginner developers do — they open an editor, start typing HTML, and figure it out as they go. The result is usually a tangled mess that needs to be rewritten.</p>
+
+                <p>Planning before coding gives you:</p>
+
+                <ul>
+                    <li><strong>Direction</strong> — you know what you're building before you start</li>
+                    <li><strong>Consistency</strong> — colors, fonts, and spacing are decided once and applied everywhere</li>
+                    <li><strong>Speed</strong> — no staring at a blank page wondering what to do next</li>
+                    <li><strong>Quality</strong> — problems are easier to spot in a sketch than in code</li>
+                </ul>
+
+                <p>The plan doesn't need to be fancy. A napkin sketch, a text outline, and a few color choices is enough. What matters is having <em>something</em> before you code.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="purpose-audience" class="lesson-section">
+                <h2>Define Your Purpose &amp; Audience</h2>
+
+                <p>Before designing anything, answer three questions:</p>
+
+                <ol>
+                    <li><strong>What is the site for?</strong> — A personal portfolio? A recipe collection? A small business? A hobby blog?</li>
+                    <li><strong>Who is the audience?</strong> — Friends and family? Potential employers? Customers? Strangers who love cooking?</li>
+                    <li><strong>What should visitors do?</strong> — Read your story? Contact you? Browse recipes? View your work?</li>
+                </ol>
+
+                <p>Write your answers down in one or two sentences each. This becomes your <strong>project brief</strong> — a north star for every decision you'll make.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Example Project Brief</h4>
+                    <p><strong>Purpose:</strong> A personal website to share my recipes and a little about myself.</p>
+                    <p><strong>Audience:</strong> Friends, family, and anyone who finds my recipes through search.</p>
+                    <p><strong>Goal:</strong> Visitors should be able to browse recipes easily and contact me if they want.</p>
+                </div>
+
+                <p>This example is what we'll use for the course project. If you have a different idea for your site — a portfolio, a fan page, a small business — adapt the exercises to fit. The skills are the same regardless of the topic.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="sitemap" class="lesson-section">
+                <h2>Creating a Sitemap</h2>
+
+                <p>A <strong>sitemap</strong> is a diagram showing every page on your site and how they link to each other. It's the blueprint for your navigation.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Home<br/>(index.html)"] --> B["About<br/>(about.html)"]
+                    A --> C["Recipes<br/>(recipe.html)"]
+                    A --> D["Contact<br/>(contact.html)"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>For our course project, the sitemap is simple: four pages all linked from the homepage. Every page has the same navigation bar, so visitors can reach any page from any other page.</p>
+
+                <h3>How to Create a Sitemap</h3>
+
+                <ol>
+                    <li><strong>List every page</strong> your site needs. Start with the obvious ones: Home, About, Contact. Then add content pages.</li>
+                    <li><strong>Decide the hierarchy</strong> — which pages are top-level (in the main nav) and which are deeper?</li>
+                    <li><strong>Draw the connections</strong> — how does a visitor get from one page to another?</li>
+                </ol>
+
+                <p>Keep it small. A four to six page site is perfect for a first project. You can always add pages later.</p>
+
+                <h3>Page Inventory</h3>
+
+                <p>For each page, write a one-line description of its purpose:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Course Project — Page Inventory</caption>
+                        <thead>
+                            <tr>
+                                <th>Page</th>
+                                <th>File</th>
+                                <th>Purpose</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Home</td>
+                                <td><code>index.html</code></td>
+                                <td>Welcome message, featured content, quick links to other pages</td>
+                            </tr>
+                            <tr>
+                                <td>About</td>
+                                <td><code>about.html</code></td>
+                                <td>Personal story, photo, interests, what the site is about</td>
+                            </tr>
+                            <tr>
+                                <td>Recipes</td>
+                                <td><code>recipe.html</code></td>
+                                <td>Collection of recipes with ingredients and instructions</td>
+                            </tr>
+                            <tr>
+                                <td>Contact</td>
+                                <td><code>contact.html</code></td>
+                                <td>Contact form, social media links, email address</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="wireframes" class="lesson-section">
+                <h2>Sketching Wireframes</h2>
+
+                <p>A <strong>wireframe</strong> is a simple sketch showing where elements go on a page — without colors, images, or final content. Think of it as a floor plan for your layout.</p>
+
+                <p>Wireframes don't need to be pretty. Boxes and labels on paper or a whiteboard are perfect. The goal is to answer: "Where does everything go?"</p>
+
+                <h3>What to Include in a Wireframe</h3>
+
+                <ul>
+                    <li>Navigation bar position and contents</li>
+                    <li>Header/hero area</li>
+                    <li>Main content sections</li>
+                    <li>Sidebar (if any)</li>
+                    <li>Footer</li>
+                    <li>Key UI elements: buttons, forms, card grids, images</li>
+                </ul>
+
+                <h3>Desktop vs. Mobile Wireframes</h3>
+
+                <p>Sketch at least two versions: desktop (wide) and mobile (narrow). The mobile wireframe should show how the layout collapses — sidebar stacks below main content, nav becomes a hamburger menu, card grids go to single column.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    subgraph "Desktop Wireframe"
+                        DH["[ Navigation Bar ]"]
+                        DHero["[ Hero / Welcome Section ]"]
+                        DCards["[ Card Row: 3 across ]"]
+                        DFooter["[ Footer ]"]
+                    end
+                    DH --> DHero --> DCards --> DFooter
+                    style DH fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style DHero fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style DCards fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style DFooter fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                </div>
+
+                <div class="mermaid">
+                    graph TD
+                    subgraph "Mobile Wireframe"
+                        MH["[ ☰ Nav ]"]
+                        MHero["[ Hero ]"]
+                        MC1["[ Card 1 ]"]
+                        MC2["[ Card 2 ]"]
+                        MC3["[ Card 3 ]"]
+                        MFooter["[ Footer ]"]
+                    end
+                    MH --> MHero --> MC1 --> MC2 --> MC3 --> MFooter
+                    style MH fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style MHero fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style MC1 fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style MC2 fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style MC3 fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style MFooter fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Tools for Wireframing</h4>
+                    <p>You don't need fancy software. These all work:</p>
+                    <ul>
+                        <li><strong>Paper and pencil</strong> — the fastest option. Draw boxes.</li>
+                        <li><strong>Excalidraw</strong> (excalidraw.com) — free, browser-based, looks hand-drawn</li>
+                        <li><strong>Figma</strong> (figma.com) — free tier, industry-standard design tool</li>
+                        <li><strong>Whiteboard</strong> — great for brainstorming with others</li>
+                    </ul>
+                    <p>For this course, a quick paper sketch is all you need.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="content-first" class="lesson-section">
+                <h2>Content-First Planning</h2>
+
+                <p>"Content first" means deciding <em>what you'll say</em> before deciding <em>how it looks</em>. Too many beginners design beautiful layouts and then realize they have nothing to put in them — or worse, they stretch thin content across a layout designed for more.</p>
+
+                <h3>Write a Content Outline</h3>
+
+                <p>For each page, list the sections and what goes in them. You don't need final text — just a roadmap:</p>
+
+                <h4>Home Page Content Outline:</h4>
+                <ol>
+                    <li><strong>Hero section</strong> — welcome heading, one-sentence tagline, call-to-action button</li>
+                    <li><strong>Feature cards</strong> — 3 cards linking to About, Recipes, Contact</li>
+                    <li><strong>Featured recipe</strong> — preview of one recipe with image and link</li>
+                    <li><strong>Footer</strong> — copyright, links, social icons</li>
+                </ol>
+
+                <h4>About Page Content Outline:</h4>
+                <ol>
+                    <li><strong>Introduction</strong> — photo, name, short bio</li>
+                    <li><strong>Story</strong> — how you got into cooking (or your topic)</li>
+                    <li><strong>Interests</strong> — hobbies, favorites, fun facts</li>
+                    <li><strong>Why this site</strong> — what visitors will find here</li>
+                </ol>
+
+                <h4>Recipe Page Content Outline:</h4>
+                <ol>
+                    <li><strong>Recipe title and image</strong></li>
+                    <li><strong>Prep info</strong> — time, servings, difficulty</li>
+                    <li><strong>Ingredients list</strong></li>
+                    <li><strong>Step-by-step instructions</strong></li>
+                    <li><strong>Tips/notes</strong></li>
+                </ol>
+
+                <h4>Contact Page Content Outline:</h4>
+                <ol>
+                    <li><strong>Introduction</strong> — friendly invitation to reach out</li>
+                    <li><strong>Contact form</strong> — name, email, message, submit button</li>
+                    <li><strong>Alternative contact</strong> — email address, social media links</li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 Where to Get Placeholder Content</h4>
+                    <p>If you don't have real content ready, use realistic placeholders:</p>
+                    <ul>
+                        <li><strong>Text:</strong> Write your own rough draft — even a few sentences per section. Avoid "Lorem ipsum" for key areas because it hides layout problems.</li>
+                        <li><strong>Images:</strong> Use <a href="https://unsplash.com" target="_blank">Unsplash</a> (free, high-quality photos) or <a href="https://picsum.photos" target="_blank">Lorem Picsum</a> (random placeholder images at any size)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="color-palette" class="lesson-section">
+                <h2>Choosing a Color Palette</h2>
+
+                <p>A consistent color palette makes your site look intentional and professional. You don't need many colors — most well-designed sites use <strong>3 to 5 colors</strong>:</p>
+
+                <ol>
+                    <li><strong>Primary color</strong> — your brand color, used for headers, buttons, links. (e.g., a blue, green, or teal)</li>
+                    <li><strong>Accent color</strong> — for highlights, hover states, call-to-action buttons. Should contrast with the primary.</li>
+                    <li><strong>Background</strong> — usually white or very light gray for light mode</li>
+                    <li><strong>Text</strong> — dark gray or near-black (pure black is actually harder to read than dark gray)</li>
+                    <li><strong>Border/muted</strong> — light gray for borders, dividers, subtle backgrounds</li>
+                </ol>
+
+                <h3>Color Palette Tools</h3>
+
+                <ul>
+                    <li><strong><a href="https://coolors.co" target="_blank">Coolors</a></strong> — generates harmonious palettes with one click</li>
+                    <li><strong><a href="https://color.adobe.com" target="_blank">Adobe Color</a></strong> — advanced color wheel with harmony rules</li>
+                    <li><strong><a href="https://www.happyhues.co" target="_blank">Happy Hues</a></strong> — shows complete palettes applied to a real page layout</li>
+                    <li><strong><a href="https://www.realtimecolors.com" target="_blank">Realtime Colors</a></strong> — preview your palette on a live website template</li>
+                </ul>
+
+                <h3>Example Palette</h3>
+
+                <pre><code class="language-css">:root {
+    /* Primary */
+    --color-primary: #1e40af;       /* deep blue */
+    --color-primary-light: #3b82f6; /* lighter blue for hovers */
+
+    /* Accent */
+    --color-accent: #f59e0b;        /* warm amber */
+
+    /* Backgrounds */
+    --color-bg: #ffffff;
+    --color-bg-alt: #f8fafc;        /* light gray for alternating sections */
+
+    /* Text */
+    --color-text: #1e293b;          /* dark slate */
+    --color-text-light: #64748b;    /* muted text for captions, dates */
+
+    /* Borders */
+    --color-border: #e2e8f0;
+
+    /* Feedback */
+    --color-success: #16a34a;
+    --color-error: #dc2626;
+}</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 Accessibility: Check Your Contrast</h4>
+                    <p>Text must have enough contrast against its background to be readable. The WCAG standard requires a <strong>contrast ratio of at least 4.5:1</strong> for normal text and 3:1 for large text. Use <a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM's Contrast Checker</a> to verify your color pairs. Dark text on a light background almost always passes; light text on a colored background often fails.</p>
+                </div>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="typography" class="lesson-section">
+                <h2>Choosing Typography</h2>
+
+                <p>Typography is one of the biggest factors in how "professional" a site looks. The good news: you only need one or two font families.</p>
+
+                <h3>Font Pairing Strategy</h3>
+
+                <ul>
+                    <li><strong>One font for everything</strong> — the simplest approach. Pick a versatile sans-serif like Inter, Open Sans, or system fonts. Use different weights (regular, semibold, bold) to create hierarchy.</li>
+                    <li><strong>Two fonts</strong> — one for headings (can be a serif or decorative sans-serif) and one for body text (a readable sans-serif). Example: Playfair Display for headings + Inter for body.</li>
+                </ul>
+
+                <h3>Loading Web Fonts (Google Fonts)</h3>
+
+                <pre><code class="language-html">&lt;!-- In your &lt;head&gt; — loads Inter from Google Fonts --&gt;
+&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"&gt;</code></pre>
+
+                <pre><code class="language-css">body {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                 "Segoe UI", Roboto, sans-serif;
+}</code></pre>
+
+                <h3>The System Font Stack (Zero Load Time)</h3>
+
+                <p>If you don't want to load external fonts, the system font stack uses each device's native font — it's free, fast, and looks native:</p>
+
+                <pre><code class="language-css">body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 Roboto, Oxygen, Ubuntu, Cantarell,
+                 "Helvetica Neue", sans-serif;
+}</code></pre>
+
+                <h3>Type Scale</h3>
+
+                <p>Define your font sizes as a consistent scale. A common approach is a <strong>major third</strong> scale (1.25x ratio):</p>
+
+                <pre><code class="language-css">:root {
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+body { font-size: var(--font-size-base); line-height: 1.6; }</code></pre>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="style-guide" class="lesson-section">
+                <h2>Building a Style Guide with Custom Properties</h2>
+
+                <p>A <strong>style guide</strong> is a single source of truth for your site's visual decisions. In CSS, custom properties (variables) make this practical — define values once in <code>:root</code> and reference them everywhere.</p>
+
+                <pre><code class="language-css">:root {
+    /* ===========================
+       Colors
+       =========================== */
+    --color-primary: #1e40af;
+    --color-primary-light: #3b82f6;
+    --color-accent: #f59e0b;
+    --color-bg: #ffffff;
+    --color-bg-alt: #f8fafc;
+    --color-text: #1e293b;
+    --color-text-light: #64748b;
+    --color-border: #e2e8f0;
+    --color-success: #16a34a;
+    --color-error: #dc2626;
+
+    /* ===========================
+       Typography
+       =========================== */
+    --font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", Roboto, sans-serif;
+    --font-size-base: 1rem;
+    --line-height: 1.6;
+
+    /* ===========================
+       Spacing
+       =========================== */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+
+    /* ===========================
+       Layout
+       =========================== */
+    --max-width: 1200px;
+    --sidebar-width: 250px;
+    --border-radius: 8px;
+    --border-radius-sm: 4px;
+    --border-radius-lg: 12px;
+
+    /* ===========================
+       Transitions
+       =========================== */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+}</code></pre>
+
+                <p>Now instead of remembering <code>#1e40af</code>, you write <code>var(--color-primary)</code>. If you ever want to change the primary color, you change it in one place and it updates everywhere.</p>
+
+                <h3>Dark Mode with Custom Properties</h3>
+
+                <p>Custom properties make dark mode straightforward — just redefine the color variables:</p>
+
+                <pre><code class="language-css">/* Dark mode overrides */
+[data-theme="dark"] {
+    --color-bg: #0f172a;
+    --color-bg-alt: #1e293b;
+    --color-text: #e2e8f0;
+    --color-text-light: #94a3b8;
+    --color-border: #334155;
+    --color-primary: #60a5fa;
+    --color-primary-light: #93c5fd;
+}</code></pre>
+
+                <p>Because all your styles reference the variables, switching to dark mode means switching the variable values — the rest of your CSS doesn't change at all.</p>
+            </section>
+
+            <!-- Section 9 -->
+            <section id="folder-structure" class="lesson-section">
+                <h2>Project Folder Structure</h2>
+
+                <p>A clean folder structure keeps your project organized as it grows:</p>
+
+                <pre><code>my-website/
+├── css/
+│   └── style.css          ← all your styles
+├── images/
+│   ├── hero.jpg           ← hero/banner images
+│   ├── about-photo.jpg    ← your photo for the About page
+│   └── recipe-pasta.jpg   ← recipe images
+├── js/
+│   └── script.js          ← mobile menu toggle, interactivity
+├── index.html             ← Home page
+├── about.html             ← About page
+├── recipe.html            ← Recipes page
+└── contact.html           ← Contact page</code></pre>
+
+                <h3>Why This Structure?</h3>
+
+                <ul>
+                    <li><strong>HTML files in the root</strong> — so links between pages are simple (<code>href="about.html"</code>)</li>
+                    <li><strong><code>css/</code> folder</strong> — keeps styles separate from content</li>
+                    <li><strong><code>images/</code> folder</strong> — all images in one place with descriptive names</li>
+                    <li><strong><code>js/</code> folder</strong> — JavaScript files (even if you only have one)</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Naming Conventions</h4>
+                    <ul>
+                        <li>Use <strong>lowercase</strong> for all file and folder names</li>
+                        <li>Use <strong>hyphens</strong> to separate words (<code>my-website</code>, not <code>My Website</code> or <code>my_website</code>)</li>
+                        <li>Never use spaces in filenames — they cause problems in URLs</li>
+                        <li>Be descriptive: <code>hero-sunset.jpg</code> is better than <code>IMG_4521.jpg</code></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 10: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Plan Your Website</h3>
+                    <p><strong>Objective:</strong> Produce a complete plan for the website you'll build in the next three lessons.</p>
+
+                    <h4>Step 1: Write Your Project Brief</h4>
+                    <p>In a text file or on paper, answer:</p>
+                    <ol>
+                        <li>What is my site about? (1–2 sentences)</li>
+                        <li>Who is my audience? (1 sentence)</li>
+                        <li>What should visitors do? (1 sentence)</li>
+                    </ol>
+
+                    <h4>Step 2: Create Your Sitemap</h4>
+                    <p>List your pages (4 minimum) and draw how they connect. Use the Mermaid diagram in this lesson as a template, or sketch on paper.</p>
+
+                    <h4>Step 3: Sketch Wireframes</h4>
+                    <p>For your homepage, sketch a desktop layout and a mobile layout. Include: nav bar, hero section, card row, footer. Keep it simple — boxes and labels only.</p>
+
+                    <h4>Step 4: Write Content Outlines</h4>
+                    <p>For each page, list 3–5 sections with a one-line description of what goes in each section.</p>
+
+                    <h4>Step 5: Choose Your Colors &amp; Fonts</h4>
+                    <ol>
+                        <li>Pick a primary color, an accent color, and a text color. Use a tool like Coolors or Happy Hues.</li>
+                        <li>Decide on one or two font families. Google Fonts or the system font stack.</li>
+                        <li>Check your text/background contrast at <a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Contrast Checker</a>.</li>
+                    </ol>
+
+                    <h4>Step 6: Set Up Your Project</h4>
+                    <ol>
+                        <li>Create the folder structure shown above</li>
+                        <li>Create a <code>css/style.css</code> file with your <code>:root</code> custom properties (colors, fonts, spacing)</li>
+                        <li>Add the <code>box-sizing</code> reset and <code>body</code> base styles</li>
+                        <li>Create empty HTML files for each page (just the boilerplate with <code>!</code> + Tab)</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Don't overthink the planning. A few bullet points per page and a rough sketch is enough. The goal is to have direction before you code, not to create a perfect design document. Professional developers refine as they build — the plan just keeps you from wandering aimlessly.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-css">/* css/style.css — starter file with style guide */
+
+/* ===========================
+   Reset & Base
+   =========================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+:root {
+    /* Colors */
+    --color-primary: #1e40af;
+    --color-primary-light: #3b82f6;
+    --color-accent: #f59e0b;
+    --color-bg: #ffffff;
+    --color-bg-alt: #f8fafc;
+    --color-text: #1e293b;
+    --color-text-light: #64748b;
+    --color-border: #e2e8f0;
+    --color-success: #16a34a;
+    --color-error: #dc2626;
+
+    /* Typography */
+    --font-family: "Inter", -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", Roboto, sans-serif;
+
+    /* Spacing */
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+
+    /* Layout */
+    --max-width: 1000px;
+    --border-radius: 8px;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+}
+
+h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); }
+h3 { font-size: clamp(1.125rem, 2.5vw, 1.375rem); }
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: var(--color-primary-light);
+}</code></pre>
+
+                        <pre><code class="language-html">&lt;!-- index.html — starter boilerplate --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Website - Home&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Navigation (same on every page) --&gt;
+    &lt;nav&gt;&lt;/nav&gt;
+
+    &lt;!-- Hero section --&gt;
+    &lt;header&gt;&lt;/header&gt;
+
+    &lt;!-- Main content --&gt;
+    &lt;main&gt;&lt;/main&gt;
+
+    &lt;!-- Footer (same on every page) --&gt;
+    &lt;footer&gt;&lt;/footer&gt;
+
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> Why should you plan before coding?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Planning is valuable at every level — it's not just for beginners.">A) It's only necessary for complex enterprise websites</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Planning gives you direction, consistency, and speed. You know what you're building before you start, so you spend less time guessing and more time making progress.">B) It saves time, prevents blank-page paralysis, and produces a more consistent result</button>
+                            <button class="quiz-option" data-correct="false" data-hint="A plan can be a rough sketch and a few notes — it doesn't need to be a formal document.">C) Because you need a formal 20-page specification before writing any code</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What is a sitemap?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="That's a wireframe, not a sitemap. Sitemaps show pages and their relationships.">A) A detailed drawing of how each page looks</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! A sitemap is a diagram or list showing every page on your site and how they connect. It's the blueprint for your navigation structure.">B) A diagram showing all pages on the site and how they link to each other</button>
+                            <button class="quiz-option" data-correct="false" data-hint="That's a Google Maps integration — a sitemap is about your website's page structure.">C) A map showing the physical location of your web server</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What's the purpose of CSS custom properties in a style guide?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Custom properties don't make pages load faster — they make your code more maintainable.">A) They make the website load faster</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Custom properties let you define colors, fonts, and spacing in one place (:root) and reference them everywhere. If you decide to change your primary color, you change it in one line instead of hunting through your entire stylesheet.">B) Define values once and reference them everywhere — change once, update everywhere</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Custom properties are a standard CSS feature — they work in all modern browsers without any special setup.">C) They're required by web browsers to render CSS</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What is the minimum contrast ratio for normal text (WCAG)?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="2:1 is too low — text would be hard to read for many people.">A) 2:1</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! WCAG AA requires a contrast ratio of at least 4.5:1 for normal-sized text. Large text (18px bold or 24px regular) needs at least 3:1. Always check your color pairs with a contrast checker.">B) 4.5:1</button>
+                            <button class="quiz-option" data-correct="false" data-hint="10:1 would mean almost everything needs to be black on white. The actual requirement is lower.">C) 10:1</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> What's wrong with using spaces in filenames?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="File sizes aren't affected by spaces in names.">A) They make file sizes larger</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Spaces in filenames get converted to %20 in URLs (e.g., 'my page.html' becomes 'my%20page.html'), which is ugly, error-prone, and can cause broken links. Use hyphens instead.">B) They cause problems in URLs and can break links</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Modern operating systems handle spaces fine. The problem is with web URLs and some command-line tools.">C) Operating systems don't support them</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Plan before you code</strong> — even a rough sketch and a few notes saves hours of rework</li>
+                        <li>Start with a <strong>project brief</strong>: purpose, audience, and what visitors should do</li>
+                        <li>Create a <strong>sitemap</strong> listing every page and how they connect</li>
+                        <li>Sketch <strong>wireframes</strong> for desktop and mobile — boxes and labels, nothing fancy</li>
+                        <li><strong>Content first</strong> — decide what you'll say before deciding how it looks</li>
+                        <li>Choose a <strong>color palette</strong> (3–5 colors) and check contrast for accessibility (4.5:1 minimum)</li>
+                        <li>Pick <strong>one or two fonts</strong> — a system font stack is a great zero-cost option</li>
+                        <li>Build a <strong>style guide</strong> with CSS custom properties — define values once, use everywhere</li>
+                        <li>Keep your <strong>folder structure</strong> clean: HTML in root, CSS/JS/images in their own folders</li>
+                        <li>Use <strong>lowercase filenames with hyphens</strong> — no spaces, no uppercase</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← style guide with custom properties + resets
+├── images/            ← placeholder images ready
+├── js/
+│   └── script.js      ← empty, ready for interactivity
+├── index.html         ← boilerplate ready
+├── about.html         ← boilerplate ready
+├── recipe.html        ← boilerplate ready
+└── contact.html       ← boilerplate ready
+
+Planning artifacts (paper, text file, or digital):
+✅ Project brief
+✅ Sitemap
+✅ Wireframes (desktop + mobile)
+✅ Content outlines for each page
+✅ Color palette + typography choices</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Plan in hand, it's time to build. In the next lesson — <strong>Lesson 17: Building the Homepage</strong> — you'll turn your wireframe into real HTML and CSS. You'll build the navigation bar, hero section, feature cards, and footer that will set the pattern for every other page on your site.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_15.html" class="prev-lesson">← Previous: Responsive Design</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_17.html" class="next-lesson">Next: Building the Homepage →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

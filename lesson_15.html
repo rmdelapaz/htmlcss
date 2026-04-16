@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn responsive web design — media queries, fluid layouts, mobile-first thinking, and techniques to make your website look great on every screen size.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 15: Responsive Design - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 3</a></li>
+            <li aria-current="page">Lesson 15: Responsive Design</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📱 Lesson 15: Responsive Design</h1>
+                <p class="lead">Your site looks great on your laptop. But what about on a phone? A tablet? A 4K monitor? <strong>Responsive design</strong> means building pages that adapt to any screen size — rearranging, resizing, and reflowing so the content is always readable and usable. It's not optional; over half of all web traffic comes from mobile devices.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Explain why responsive design matters and what "mobile-first" means</li>
+                        <li>Use the viewport meta tag correctly</li>
+                        <li>Write media queries to apply styles at different screen widths</li>
+                        <li>Choose sensible breakpoints for your layouts</li>
+                        <li>Use fluid units (<code>%</code>, <code>vw</code>, <code>vh</code>, <code>rem</code>, <code>em</code>) instead of fixed pixels</li>
+                        <li>Make images responsive with <code>max-width: 100%</code></li>
+                        <li>Build a mobile-first navigation that adapts to larger screens</li>
+                        <li>Use <code>clamp()</code> for fluid typography</li>
+                        <li>Test responsive layouts using browser DevTools</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60 minutes</p>
+                    <p><strong>Hands-on:</strong> You'll make your project site fully responsive — from phone to desktop.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-responsive" class="toc-link">Why Responsive Design Matters</a></li>
+                        <li><a href="#viewport-meta" class="toc-link">The Viewport Meta Tag</a></li>
+                        <li><a href="#media-queries" class="toc-link">Media Queries</a></li>
+                        <li><a href="#breakpoints" class="toc-link">Choosing Breakpoints</a></li>
+                        <li><a href="#mobile-first" class="toc-link">Mobile-First Design</a></li>
+                        <li><a href="#fluid-units" class="toc-link">Fluid Units — %, vw, vh, rem, em</a></li>
+                        <li><a href="#responsive-images" class="toc-link">Responsive Images</a></li>
+                        <li><a href="#fluid-typography" class="toc-link">Fluid Typography with <code>clamp()</code></a></li>
+                        <li><a href="#responsive-nav" class="toc-link">Responsive Navigation Pattern</a></li>
+                        <li><a href="#testing" class="toc-link">Testing with DevTools</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="why-responsive" class="lesson-section">
+                <h2>Why Responsive Design Matters</h2>
+
+                <p>People visit websites on phones, tablets, laptops, desktops, TVs, and even smartwatches. A fixed-width layout that looks perfect at 1200px will force horizontal scrolling on a phone and waste acres of space on a 4K monitor.</p>
+
+                <p>Responsive design solves this by making your layout <strong>adapt to the available space</strong>. The same HTML renders differently depending on the screen width — content reflows, sidebars stack, font sizes adjust, and images scale.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Phone<br/>~375px"] --> B["Tablet<br/>~768px"] --> C["Laptop<br/>~1024px"] --> D["Desktop<br/>~1440px+"]
+                    style A fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>Three core principles make a site responsive:</p>
+
+                <ol>
+                    <li><strong>Fluid layouts</strong> — use percentages, <code>fr</code>, and <code>auto-fit</code> instead of fixed pixel widths</li>
+                    <li><strong>Flexible media</strong> — images and videos scale to fit their containers</li>
+                    <li><strong>Media queries</strong> — apply different CSS rules at different screen sizes</li>
+                </ol>
+
+                <p>You've actually been using the first two already. The <code>auto-fit + minmax()</code> grid from the last lesson is inherently responsive. Now you'll learn how to handle cases that need explicit breakpoints.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="viewport-meta" class="lesson-section">
+                <h2>The Viewport Meta Tag</h2>
+
+                <p>This line in your <code>&lt;head&gt;</code> is essential for responsive design:</p>
+
+                <pre><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+
+                <p>Without it, mobile browsers pretend the screen is ~980px wide and zoom out to fit, making everything tiny and unreadable. This meta tag tells the browser: "use the actual device width, don't zoom out."</p>
+
+                <p>If you've been using Emmet's <code>!</code> shortcut, this tag is already in your HTML. If not, add it now — nothing else in this lesson works without it.</p>
+
+                <div class="card card-info">
+                    <h4>💡 What Each Part Means</h4>
+                    <ul>
+                        <li><code>width=device-width</code> — set the viewport width to the actual device screen width</li>
+                        <li><code>initial-scale=1.0</code> — start at 100% zoom (no zooming out)</li>
+                    </ul>
+                    <p>Never add <code>maximum-scale=1</code> or <code>user-scalable=no</code> — these prevent users from zooming in, which is an accessibility problem.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="media-queries" class="lesson-section">
+                <h2>Media Queries</h2>
+
+                <p>A <strong>media query</strong> is a CSS block that only applies when certain conditions are true — most commonly, when the screen is at least a certain width.</p>
+
+                <pre><code class="language-css">/* Base styles — apply to all screens */
+.container {
+    padding: 16px;
+}
+
+/* Only applies when the screen is 768px or wider */
+@media (min-width: 768px) {
+    .container {
+        padding: 24px 32px;
+    }
+}</code></pre>
+
+                <p>The styles inside <code>@media (min-width: 768px)</code> only kick in when the browser window is 768 pixels wide or more. On smaller screens, only the base styles apply.</p>
+
+                <h3>Syntax</h3>
+
+                <pre><code class="language-css">@media (condition) {
+    /* CSS rules that only apply when the condition is true */
+}
+
+/* Width-based */
+@media (min-width: 768px) { }    /* 768px and wider */
+@media (max-width: 767px) { }    /* 767px and narrower */
+
+/* Combining conditions */
+@media (min-width: 768px) and (max-width: 1023px) { }  /* tablet only */
+
+/* Orientation */
+@media (orientation: portrait) { }
+@media (orientation: landscape) { }
+
+/* Prefer reduced motion (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: dark) {
+    :root { --color-bg: #0f172a; --color-text: #e2e8f0; }
+}</code></pre>
+
+                <h3>Where to Place Media Queries</h3>
+
+                <p>Put media queries at the <strong>bottom</strong> of your stylesheet (or at least after the base styles they modify). The cascade means later rules override earlier ones at the same specificity — so your media query overrides need to come after the defaults.</p>
+
+                <pre><code class="language-css">/* ===========================
+   Base styles (mobile)
+   =========================== */
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+/* ===========================
+   Tablet and up
+   =========================== */
+@media (min-width: 768px) {
+    .grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+}
+
+/* ===========================
+   Desktop and up
+   =========================== */
+@media (min-width: 1024px) {
+    .grid { grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+}</code></pre>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="breakpoints" class="lesson-section">
+                <h2>Choosing Breakpoints</h2>
+
+                <p>Breakpoints are the screen widths where your layout changes. Don't chase specific devices — devices change every year. Instead, choose breakpoints where <strong>your design breaks</strong>.</p>
+
+                <p>That said, here are commonly used breakpoints that work well as starting points:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Common Breakpoints</caption>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>min-width</th>
+                                <th>Typical Devices</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Small (sm)</td>
+                                <td><code>640px</code></td>
+                                <td>Large phones (landscape)</td>
+                            </tr>
+                            <tr>
+                                <td>Medium (md)</td>
+                                <td><code>768px</code></td>
+                                <td>Tablets (portrait)</td>
+                            </tr>
+                            <tr>
+                                <td>Large (lg)</td>
+                                <td><code>1024px</code></td>
+                                <td>Tablets (landscape), small laptops</td>
+                            </tr>
+                            <tr>
+                                <td>Extra large (xl)</td>
+                                <td><code>1280px</code></td>
+                                <td>Laptops, desktops</td>
+                            </tr>
+                            <tr>
+                                <td>2XL</td>
+                                <td><code>1536px</code></td>
+                                <td>Large desktops, external monitors</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>For most projects, <strong>two or three breakpoints are enough</strong>: one around 768px (tablet) and one around 1024px (desktop). Don't add breakpoints you don't need — every one adds complexity.</p>
+
+                <div class="card card-info">
+                    <h4>💡 The Right Way to Find Breakpoints</h4>
+                    <p>Open your site and slowly drag the browser window narrower. When something looks awkward — text too cramped, a sidebar too narrow to be useful, cards squished to unreadable widths — <em>that's</em> where you need a breakpoint. Let the <strong>content</strong> dictate the breakpoints, not the devices.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="mobile-first" class="lesson-section">
+                <h2>Mobile-First Design</h2>
+
+                <p>"Mobile-first" means writing your base CSS for the <strong>smallest screen</strong>, then using <code>min-width</code> media queries to add complexity for larger screens. The alternative — writing desktop styles first and overriding with <code>max-width</code> queries — is called "desktop-first" and tends to produce more overrides and messier code.</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Mobile-First Approach"] --> B["Base CSS<br/>(single column, stacked, simple)"]
+                    B --> C["@media min-width: 768px<br/>(two columns, sidebar appears)"]
+                    C --> D["@media min-width: 1024px<br/>(three columns, larger fonts)"]
+                    style A fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style B fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style C fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style D fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                </div>
+
+                <h3>Why Mobile-First?</h3>
+
+                <ul>
+                    <li><strong>Less code</strong> — mobile layouts are simpler (single column, stacked elements), so fewer overrides are needed</li>
+                    <li><strong>Progressive enhancement</strong> — you start with the essentials and add features for bigger screens, rather than stripping things away</li>
+                    <li><strong>Performance</strong> — mobile devices download only the base CSS; desktop enhancements load but don't apply until the screen is wide enough</li>
+                    <li><strong>Forces prioritization</strong> — when you design for a small screen first, you decide what actually matters</li>
+                </ul>
+
+                <h3>Mobile-First in Practice</h3>
+
+                <pre><code class="language-css">/* Mobile (base): single column */
+.page-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "header"
+        "main"
+        "sidebar"
+        "footer";
+    gap: 0;
+}
+
+/* Tablet: sidebar appears beside main content */
+@media (min-width: 768px) {
+    .page-grid {
+        grid-template-columns: 220px 1fr;
+        grid-template-areas:
+            "header  header"
+            "sidebar main"
+            "footer  footer";
+    }
+}
+
+/* Desktop: wider sidebar, max-width container */
+@media (min-width: 1024px) {
+    .page-grid {
+        grid-template-columns: 280px 1fr;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}</code></pre>
+
+                <p>Notice the pattern: the base styles are the simplest layout. Each <code>min-width</code> query adds more structure. You never need to "undo" anything.</p>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="fluid-units" class="lesson-section">
+                <h2>Fluid Units — %, vw, vh, rem, em</h2>
+
+                <p>Fixed pixel values create rigid layouts. Fluid units create layouts that scale naturally with the screen or the user's font settings.</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>CSS Units Comparison</caption>
+                        <thead>
+                            <tr>
+                                <th>Unit</th>
+                                <th>Relative To</th>
+                                <th>Best For</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>px</code></td>
+                                <td>Nothing (absolute)</td>
+                                <td>Borders, shadows, small fixed details</td>
+                                <td><code>border: 1px solid</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>%</code></td>
+                                <td>Parent element's size</td>
+                                <td>Widths, max-widths</td>
+                                <td><code>width: 80%</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>vw</code></td>
+                                <td>Viewport width (1vw = 1%)</td>
+                                <td>Full-width sections, hero images</td>
+                                <td><code>width: 100vw</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>vh</code></td>
+                                <td>Viewport height (1vh = 1%)</td>
+                                <td>Full-height sections, hero banners</td>
+                                <td><code>min-height: 100vh</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>rem</code></td>
+                                <td>Root font size (usually 16px)</td>
+                                <td>Font sizes, spacing, padding, margins</td>
+                                <td><code>font-size: 1.25rem</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>em</code></td>
+                                <td>Parent element's font size</td>
+                                <td>Component-relative spacing</td>
+                                <td><code>padding: 0.5em 1em</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3><code>rem</code> — The Go-To Unit</h3>
+
+                <p><code>rem</code> stands for "root em" and is relative to the root element's (<code>&lt;html&gt;</code>) font size, which defaults to 16px in every browser. This makes it predictable and consistent:</p>
+
+                <pre><code class="language-css">/* All of these are based on the root 16px */
+h1 { font-size: 2rem; }      /* 32px */
+h2 { font-size: 1.5rem; }    /* 24px */
+p  { font-size: 1rem; }      /* 16px */
+.small { font-size: 0.875rem; } /* 14px */
+
+/* Spacing with rem scales if the user changes their browser font size */
+.card { padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }</code></pre>
+
+                <p>The big advantage: if a user changes their browser's default font size (for accessibility), everything sized in <code>rem</code> scales proportionally. Pixel-based sizes don't.</p>
+
+                <h3>When to Use Which</h3>
+
+                <ul>
+                    <li><strong><code>rem</code></strong> — your default for font sizes, padding, margins, gaps. Consistent and accessible.</li>
+                    <li><strong><code>%</code></strong> — widths and max-widths (e.g., <code>max-width: 90%</code>)</li>
+                    <li><strong><code>vw/vh</code></strong> — full-screen sections (e.g., <code>min-height: 100vh</code> for a hero)</li>
+                    <li><strong><code>px</code></strong> — borders, box-shadows, and tiny details that shouldn't scale</li>
+                    <li><strong><code>em</code></strong> — spacing that should scale with the element's own font size (less common than <code>rem</code>)</li>
+                </ul>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="responsive-images" class="lesson-section">
+                <h2>Responsive Images</h2>
+
+                <p>Images with fixed pixel widths break responsive layouts — they overflow their containers on small screens. The fix is simple:</p>
+
+                <pre><code class="language-css">img {
+    max-width: 100%;
+    height: auto;
+}</code></pre>
+
+                <p><code>max-width: 100%</code> means "never be wider than your container." <code>height: auto</code> preserves the aspect ratio. These two rules should be in every project's CSS reset.</p>
+
+                <h3>Object-Fit for Cropped Images</h3>
+
+                <p>When images need to fill a specific space (like a gallery thumbnail or a card header), use <code>object-fit</code>:</p>
+
+                <pre><code class="language-css">.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;     /* fills the area, crops if needed */
+}</code></pre>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>object-fit Values</caption>
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Behavior</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>cover</code></td>
+                                <td>Fills the entire area, cropping if needed (most common)</td>
+                            </tr>
+                            <tr>
+                                <td><code>contain</code></td>
+                                <td>Fits inside the area, preserving aspect ratio (may leave empty space)</td>
+                            </tr>
+                            <tr>
+                                <td><code>fill</code></td>
+                                <td>Stretches to fill (distorts the image — usually avoid)</td>
+                            </tr>
+                            <tr>
+                                <td><code>none</code></td>
+                                <td>Original size, no scaling (may overflow)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>The <code>&lt;picture&gt;</code> Element for Art Direction</h3>
+
+                <p>Sometimes you want to serve entirely <em>different</em> images at different screen sizes — a wide landscape shot on desktop but a cropped portrait version on mobile. The <code>&lt;picture&gt;</code> element handles this:</p>
+
+                <pre><code class="language-html">&lt;picture&gt;
+    &lt;source media="(min-width: 768px)" srcset="hero-wide.jpg"&gt;
+    &lt;source media="(min-width: 480px)" srcset="hero-medium.jpg"&gt;
+    &lt;img src="hero-small.jpg" alt="Sunset over the ocean"&gt;
+&lt;/picture&gt;</code></pre>
+
+                <p>The browser picks the first <code>&lt;source&gt;</code> that matches. The <code>&lt;img&gt;</code> is the fallback for browsers that don't support <code>&lt;picture&gt;</code> and for the smallest screens.</p>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="fluid-typography" class="lesson-section">
+                <h2>Fluid Typography with <code>clamp()</code></h2>
+
+                <p>Media queries for font sizes work but create jarring jumps. <code>clamp()</code> creates <strong>smoothly scaling typography</strong> that flows between a minimum and maximum size:</p>
+
+                <pre><code class="language-css">/* clamp(minimum, preferred, maximum) */
+h1 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+}
+
+p {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+}</code></pre>
+
+                <p>Here's how <code>clamp(1.75rem, 4vw, 3rem)</code> works:</p>
+
+                <ul>
+                    <li>The font is <strong>at least</strong> 1.75rem (28px) — it never goes smaller</li>
+                    <li>The font <strong>prefers</strong> to be 4vw (4% of the viewport width) — it scales with the screen</li>
+                    <li>The font is <strong>at most</strong> 3rem (48px) — it never goes larger</li>
+                </ul>
+
+                <p>On a 375px phone, 4vw = 15px, which is below the minimum, so the font stays at 1.75rem. On a 1200px desktop, 4vw = 48px, which matches the maximum, so it caps at 3rem. In between, it scales smoothly.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Phone: 375px<br/>clamp hits minimum<br/>1.75rem (28px)"] --> B["Tablet: 768px<br/>scales with 4vw<br/>~30.7px"] --> C["Desktop: 1200px<br/>clamp hits maximum<br/>3rem (48px)"]
+                    style A fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style B fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 <code>clamp()</code> Works for More Than Fonts</h4>
+                    <p>You can use <code>clamp()</code> for padding, margins, gaps — anything with a size value:</p>
+                    <pre><code class="language-css">.container {
+    padding: clamp(16px, 4vw, 48px);
+    gap: clamp(16px, 2vw, 32px);
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 9 -->
+            <section id="responsive-nav" class="lesson-section">
+                <h2>Responsive Navigation Pattern</h2>
+
+                <p>Navigation is usually the first thing that breaks on small screens. A horizontal nav bar with five links doesn't fit on a 375px screen. The standard solution: show a "hamburger" menu button on mobile that toggles the nav links.</p>
+
+                <h3>The CSS-Only Approach</h3>
+
+                <pre><code class="language-css">/* Mobile: stack nav links vertically, hidden by default */
+.nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* When the menu is toggled open */
+.nav-links.active {
+    display: flex;
+}
+
+/* The hamburger button */
+.mobile-menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+/* Desktop: show nav links, hide the hamburger */
+@media (min-width: 768px) {
+    .nav-links {
+        display: flex;
+        flex-direction: row;
+        gap: 24px;
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+    }
+}</code></pre>
+
+                <h3>The JavaScript Toggle</h3>
+
+                <p>A tiny script handles the toggle (you've seen this if your course project already has a mobile menu):</p>
+
+                <pre><code class="language-html">&lt;script&gt;
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+
+    toggle.addEventListener('click', () =&gt; {
+        const isOpen = navLinks.classList.toggle('active');
+        toggle.setAttribute('aria-expanded', isOpen);
+    });
+&lt;/script&gt;</code></pre>
+
+                <p>This is a standard pattern used on the vast majority of websites. The <code>aria-expanded</code> attribute tells screen readers whether the menu is open or closed.</p>
+            </section>
+
+            <!-- Section 10 -->
+            <section id="testing" class="lesson-section">
+                <h2>Testing with DevTools</h2>
+
+                <p>Every modern browser has a responsive design testing mode. In Chrome and Edge:</p>
+
+                <ol>
+                    <li>Press <kbd>F12</kbd> to open DevTools</li>
+                    <li>Click the <strong>device toggle</strong> button (the phone/tablet icon) in the top-left of the DevTools toolbar — or press <kbd>Ctrl+Shift+M</kbd></li>
+                    <li>The viewport now has drag handles. Resize it to any width, or pick a preset device (iPhone, iPad, Pixel, etc.)</li>
+                    <li>Watch your media queries activate and deactivate as you resize</li>
+                </ol>
+
+                <h3>What to Test For</h3>
+
+                <ul>
+                    <li><strong>Text readability</strong> — can you read body text without zooming? Are headings too large on mobile?</li>
+                    <li><strong>Horizontal overflow</strong> — slowly narrow the viewport. Does anything cause a horizontal scrollbar?</li>
+                    <li><strong>Touch targets</strong> — are buttons and links at least 44×44 pixels for finger tapping?</li>
+                    <li><strong>Navigation</strong> — does the nav collapse to a hamburger menu on mobile? Does it work?</li>
+                    <li><strong>Images</strong> — do they scale down without overflowing?</li>
+                    <li><strong>Tables</strong> — wide tables often break on mobile. Consider wrapping them in a scrollable <code>&lt;div&gt;</code></li>
+                </ul>
+
+                <pre><code class="language-css">/* Make tables horizontally scrollable on small screens */
+.table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 The Scrollbar Test</h4>
+                    <p>The easiest way to spot responsive problems: set the viewport to 375px wide (iPhone SE size) and check for a horizontal scrollbar. If one appears, something is too wide. Common culprits: images without <code>max-width: 100%</code>, fixed-width elements, <code>&lt;pre&gt;</code> code blocks, and wide tables.</p>
+                </div>
+            </section>
+
+            <!-- Section 11: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Make Your Site Responsive</h3>
+                    <p><strong>Objective:</strong> Apply mobile-first responsive design to your project site so it works on phones, tablets, and desktops.</p>
+
+                    <h4>Instructions:</h4>
+                    <ol>
+                        <li>Add the global responsive image reset to your CSS:
+                            <pre><code class="language-css">img { max-width: 100%; height: auto; }</code></pre>
+                        </li>
+                        <li>Convert your page layout to mobile-first:
+                            <ul>
+                                <li>Base styles: single-column grid (<code>grid-template-columns: 1fr</code>)</li>
+                                <li>At <code>768px</code>: add the sidebar column</li>
+                            </ul>
+                        </li>
+                        <li>Make your navigation responsive:
+                            <ul>
+                                <li>Mobile: hamburger button visible, nav links hidden (shown on toggle)</li>
+                                <li>Desktop (768px+): hamburger hidden, nav links displayed as a flex row</li>
+                            </ul>
+                        </li>
+                        <li>Add fluid typography using <code>clamp()</code>:
+                            <ul>
+                                <li><code>h1</code>: <code>clamp(1.75rem, 4vw, 2.5rem)</code></li>
+                                <li><code>h2</code>: <code>clamp(1.375rem, 3vw, 1.75rem)</code></li>
+                            </ul>
+                        </li>
+                        <li>Wrap any <code>&lt;table&gt;</code> in a <code>&lt;div class="table-wrap"&gt;</code> with <code>overflow-x: auto</code></li>
+                        <li>Use DevTools responsive mode to test at 375px, 768px, and 1200px</li>
+                        <li>Check for horizontal scrollbars at every width</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint</summary>
+                        <p>Start with the base mobile styles — everything in a single column. Then add a <code>@media (min-width: 768px)</code> block at the bottom of your stylesheet that introduces the sidebar, switches the nav to horizontal, and increases padding. You only need one or two media queries for a site this size.</p>
+                    </details>
+
+                    <details>
+                        <summary>✅ Example Solution</summary>
+                        <pre><code class="language-css">/* ===========================
+   Responsive Reset
+   =========================== */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===========================
+   Fluid Typography
+   =========================== */
+h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h2 { font-size: clamp(1.375rem, 3vw, 1.75rem); }
+h3 { font-size: clamp(1.125rem, 2.5vw, 1.375rem); }
+
+/* ===========================
+   Mobile Base Layout
+   =========================== */
+.page-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "header"
+        "main"
+        "sidebar"
+        "footer";
+    min-height: 100vh;
+}
+
+/* Navigation — mobile */
+.site-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+}
+
+.nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+.nav-links a {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-toggle {
+    display: block;
+}
+
+/* Container — mobile */
+.container {
+    padding: clamp(16px, 4vw, 48px);
+}
+
+/* Cards — mobile */
+.card-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Tables — scrollable on mobile */
+.table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===========================
+   Tablet and Up (768px)
+   =========================== */
+@media (min-width: 768px) {
+    .page-grid {
+        grid-template-columns: 220px 1fr;
+        grid-template-areas:
+            "header  header"
+            "sidebar main"
+            "footer  footer";
+    }
+
+    /* Navigation — desktop */
+    .nav-links {
+        display: flex;
+        width: auto;
+        flex-direction: row;
+        gap: 24px;
+    }
+
+    .nav-links a {
+        padding: 0;
+        border-top: none;
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+    }
+
+    /* Cards — side by side */
+    .card-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .card-row .card {
+        flex: 1 1 250px;
+    }
+}
+
+/* ===========================
+   Desktop (1024px)
+   =========================== */
+@media (min-width: 1024px) {
+    .page-grid {
+        grid-template-columns: 280px 1fr;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does "mobile-first" mean in responsive design?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Mobile-first is a CSS strategy, not a device priority. It works for all screens.">A) The site only works on mobile devices</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Mobile-first means writing base styles for the smallest screens, then using min-width media queries to add complexity for larger screens. This produces cleaner code with fewer overrides.">B) Base styles target small screens; media queries add styles for larger screens</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Mobile-first uses min-width (adding styles) rather than max-width (overriding styles).">C) You use max-width media queries to remove features on mobile</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What does <code>@media (min-width: 768px) { ... }</code> mean?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="min-width means the styles apply when the screen is at least that wide — not below it.">A) Apply these styles only when the screen is narrower than 768px</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! min-width: 768px means these styles kick in when the viewport is 768 pixels wide or wider. On anything narrower, these rules are ignored.">B) Apply these styles when the screen is 768px wide or wider</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Media queries adjust which CSS rules apply — they don't resize elements directly.">C) Set all elements to a minimum width of 768px</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> How do you make images responsive?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! max-width: 100% prevents the image from exceeding its container's width, and height: auto maintains the original aspect ratio. These two rules should be in every project.">A) <code>img { max-width: 100%; height: auto; }</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="Setting width: 100% forces the image to always fill its container, even if the image is smaller — which could cause pixelation.">B) <code>img { width: 100%; }</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="Fixed pixel dimensions create exactly the problem responsive design is meant to solve.">C) Set the width and height in pixels in the HTML</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What does <code>clamp(1rem, 3vw, 2rem)</code> do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="clamp() creates fluid scaling — it doesn't randomly choose a value.">A) Randomly picks a value between 1rem and 2rem</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! clamp(min, preferred, max) scales the value fluidly. It uses 3vw as the size but never goes below 1rem or above 2rem. The result is smooth scaling between the min and max.">B) Uses 3vw as the preferred size, with 1rem minimum and 2rem maximum</button>
+                            <button class="quiz-option" data-correct="false" data-hint="clamp() needs all three values to work — the minimum, the preferred scaling value, and the maximum.">C) Sets the font size to exactly 3vw on all screen sizes</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> What unit is best for font sizes in a responsive design?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Pixels don't scale when users change their browser's default font size, which is an accessibility issue.">A) <code>px</code> — because it's precise</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! rem is relative to the root font size, so it respects the user's browser settings. If a user increases their default font size for accessibility, rem-based values scale proportionally. Pixels don't.">B) <code>rem</code> — because it scales with the user's font settings</button>
+                            <button class="quiz-option" data-correct="false" data-hint="vw scales with the viewport width, which can make text unreadably tiny on phones or absurdly huge on desktops. Use it inside clamp() for fluid typography, but not alone.">C) <code>vw</code> — because it scales with the screen</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Responsive design</strong> makes your site adapt to any screen size — it's essential, not optional</li>
+                        <li>The <strong>viewport meta tag</strong> (<code>width=device-width, initial-scale=1.0</code>) is required for mobile to work correctly</li>
+                        <li><strong>Media queries</strong> apply CSS rules conditionally based on screen width: <code>@media (min-width: 768px) { }</code></li>
+                        <li><strong>Mobile-first</strong> = base styles for small screens + <code>min-width</code> queries for larger screens. Cleaner code, fewer overrides.</li>
+                        <li>Choose <strong>breakpoints where your design breaks</strong>, not at specific device widths. Two or three is usually enough.</li>
+                        <li>Use <strong>fluid units</strong>: <code>rem</code> for fonts/spacing, <code>%</code> for widths, <code>vw/vh</code> for full-screen sections, <code>px</code> for borders</li>
+                        <li>Make images responsive: <code>img { max-width: 100%; height: auto; }</code></li>
+                        <li><code>clamp(min, preferred, max)</code> creates <strong>fluid typography</strong> that scales smoothly — no jumps</li>
+                        <li>Use <code>object-fit: cover</code> for images that need to fill a specific area</li>
+                        <li>Test with <strong>DevTools responsive mode</strong> (<kbd>Ctrl+Shift+M</kbd>) — check for horizontal scrollbars at every width</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project So Far</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← now fully responsive with media queries
+├── images/
+│   └── sunset.jpg
+├── index.html         ← mobile-first layout
+├── about.html
+├── recipe.html
+└── contact.html</code></pre>
+
+                <h3>🎓 Module 3 Complete!</h3>
+                <p>You've finished all of <strong>CSS Essentials</strong>. You now know how to style colors and fonts, control spacing with the box model, build one-dimensional layouts with Flexbox, create two-dimensional layouts with Grid, and make everything responsive. That's a complete CSS toolkit.</p>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Time to put it all together. In <strong>Module 4: Building Your Website</strong>, you'll plan and build a multi-page website from scratch — homepage, content pages, and all the polish — using everything you've learned. First up: <strong>Lesson 16: Planning Your Site</strong>, where you'll sketch a sitemap, wireframe your pages, and prepare your content before writing a single line of code.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_14.html" class="prev-lesson">← Previous: CSS Grid Basics</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_16.html" class="next-lesson">Next: Planning Your Site →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

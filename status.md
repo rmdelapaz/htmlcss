@@ -12,7 +12,7 @@
    cp ~/projects/course_template/favicon.png ~/projects/htmlcss/
    cp ~/projects/course_template/favicon.ico ~/projects/htmlcss/
    ```
-2. **Build Module 3: CSS Essentials** — continue with Lesson 13 (Layout with Flexbox)
+2. **All 21 lessons complete!** Remaining tasks: favicon creation, browser testing, verify prev/next nav links, deploy to Netlify
 
 ## Key Patterns
 - Nav logo: `HTML &amp; CSS Course`
@@ -40,27 +40,27 @@
 - [x] Lesson 08: Forms & Input
 - [x] Lesson 09: Semantic HTML
 
-### Module 3: CSS Essentials (Lessons 10–15)
+### Module 3: CSS Essentials (Lessons 10–15) ✅ COMPLETE
 - [x] Lesson 10: Introduction to CSS
 - [x] Lesson 11: Colors & Typography
 - [x] Lesson 12: The Box Model
-- [ ] Lesson 13: Layout with Flexbox
-- [ ] Lesson 14: CSS Grid Basics
-- [ ] Lesson 15: Responsive Design
+- [x] Lesson 13: Layout with Flexbox
+- [x] Lesson 14: CSS Grid Basics
+- [x] Lesson 15: Responsive Design
 
-### Module 4: Building Your Website (Lessons 16–19)
-- [ ] Lesson 16: Planning Your Site
-- [ ] Lesson 17: Building the Homepage
-- [ ] Lesson 18: Building Content Pages
-- [ ] Lesson 19: Adding Polish
+### Module 4: Building Your Website (Lessons 16–19) ✅ COMPLETE
+- [x] Lesson 16: Planning Your Site
+- [x] Lesson 17: Building the Homepage
+- [x] Lesson 18: Building Content Pages
+- [x] Lesson 19: Adding Polish
 
-### Module 5: Going Live (Lessons 20–21)
-- [ ] Lesson 20: Testing & Validation
-- [ ] Lesson 21: Publishing to Netlify
+### Module 5: Going Live (Lessons 20–21) ✅ COMPLETE
+- [x] Lesson 20: Testing & Validation
+- [x] Lesson 21: Publishing to Netlify
 
 ## Outstanding Items
 - [ ] Copy favicon.png and favicon.ico from course_template
-- [ ] Create remaining 9 lesson HTML files (lessons 13–21)
+- [x] Create all 21 lesson HTML files
 - [ ] Create course-specific favicon
 - [ ] Browser testing
 - [ ] Deploy to Netlify

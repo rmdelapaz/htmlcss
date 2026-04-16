@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build the About, Recipe, and Contact pages for your multi-page website — reusing shared components and learning new layout patterns like profile sections, recipe cards, and contact forms.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 18: Building Content Pages - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 4</a></li>
+            <li aria-current="page">Lesson 18: Building Content Pages</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>📄 Lesson 18: Building Content Pages</h1>
+                <p class="lead">Your homepage is live — navigation, hero, cards, featured recipe, footer. Now it's time to build the pages those links actually point to. In this lesson, you'll create the <strong>About</strong>, <strong>Recipe</strong>, and <strong>Contact</strong> pages, each with its own layout patterns. You'll reuse the nav and footer from Lesson 17 (copy-paste is correct here), learn new CSS techniques like profile layouts and styled forms, and see how a consistent style guide makes multi-page development surprisingly fast.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Reuse shared components (nav, footer) across multiple pages</li>
+                        <li>Build a profile/about page with an image-and-text layout</li>
+                        <li>Create a recipe page with a card grid and a detailed recipe layout</li>
+                        <li>Build and style an accessible contact form</li>
+                        <li>Use consistent classes and custom properties across all pages</li>
+                        <li>Mark the current page in the navigation with the <code>active</code> class</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60–90 minutes</p>
+                    <p><strong>Prerequisites:</strong> Lesson 17 (Building the Homepage) — you need a working <code>index.html</code> with nav, footer, and a <code>css/style.css</code> with all the styles built so far.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#reusing-components" class="toc-link">Reusing Shared Components</a></li>
+                        <li><a href="#about-html" class="toc-link">About Page — HTML</a></li>
+                        <li><a href="#about-css" class="toc-link">About Page — CSS</a></li>
+                        <li><a href="#recipe-html" class="toc-link">Recipe Page — HTML</a></li>
+                        <li><a href="#recipe-css" class="toc-link">Recipe Page — CSS</a></li>
+                        <li><a href="#contact-html" class="toc-link">Contact Page — HTML</a></li>
+                        <li><a href="#contact-css" class="toc-link">Contact Page — CSS</a></li>
+                        <li><a href="#active-link" class="toc-link">Highlighting the Active Page</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="reusing-components" class="lesson-section">
+                <h2>Reusing Shared Components</h2>
+
+                <p>Every page on your site shares two things: the <strong>navigation bar</strong> and the <strong>footer</strong>. In a production site, you'd use a template engine or a framework to avoid duplicating this code. But for a static HTML site, the correct approach is straightforward: <strong>copy the nav and footer from your homepage into each new page</strong>.</p>
+
+                <h3>The Multi-Page Workflow</h3>
+
+                <div class="mermaid">
+                    graph LR
+                    A["index.html<br/>(Homepage)"] -->|"Copy nav + footer"| B["about.html"]
+                    A -->|"Copy nav + footer"| C["recipe.html"]
+                    A -->|"Copy nav + footer"| D["contact.html"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>For each new page:</p>
+
+                <ol>
+                    <li><strong>Copy</strong> the entire <code>index.html</code> file</li>
+                    <li><strong>Rename</strong> it (<code>about.html</code>, <code>recipe.html</code>, <code>contact.html</code>)</li>
+                    <li><strong>Keep</strong> the <code>&lt;head&gt;</code>, nav, footer, and <code>&lt;script&gt;</code> tags</li>
+                    <li><strong>Replace</strong> the <code>&lt;title&gt;</code> and the content between the nav and footer</li>
+                    <li><strong>Move the <code>active</code> class</strong> to the correct nav link</li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 The Duplication Trade-off</h4>
+                    <p>Yes, copying the nav into four files means updating four files if you add a new page. This is the trade-off of static HTML. For a small 4–6 page site, it's perfectly manageable. When it becomes painful, that's your signal to learn a tool like a static site generator (e.g., Eleventy) or a framework (e.g., React). But don't reach for those tools until plain HTML becomes limiting — you'll understand the tools better when you know what problem they solve.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="about-html" class="lesson-section">
+                <h2>About Page — HTML</h2>
+
+                <p>The About page introduces you to visitors. It typically includes a photo, a short bio, your story, and some personal details. The layout pattern is a <strong>profile section</strong> (image beside text) followed by prose sections.</p>
+
+                <p>Create <code>about.html</code> (or replace the boilerplate). Use the same <code>&lt;head&gt;</code>, nav, and footer from your homepage, but change the <code>&lt;title&gt;</code> and the content:</p>
+
+                <pre><code class="language-html">&lt;!-- about.html — content between nav and footer --&gt;
+
+&lt;main&gt;
+    &lt;section class="page-header"&gt;
+        &lt;div class="container"&gt;
+            &lt;h1&gt;About Me&lt;/h1&gt;
+            &lt;p class="page-subtitle"&gt;The person behind the recipes.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class="profile"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="profile-content"&gt;
+                &lt;div class="profile-image"&gt;
+                    &lt;img src="images/about-photo.jpg"
+                         alt="A smiling person in a kitchen holding a wooden spoon"
+                         width="400" height="400"&gt;
+                &lt;/div&gt;
+                &lt;div class="profile-text"&gt;
+                    &lt;h2&gt;Hi, I'm Alex!&lt;/h2&gt;
+                    &lt;p&gt;I'm a home cook who believes that great food doesn't
+                       need to be complicated. What started as a quarantine
+                       hobby turned into a genuine passion — and this site
+                       is where I share what I've learned along the way.&lt;/p&gt;
+                    &lt;p&gt;My cooking philosophy is simple: use fresh ingredients,
+                       don't skip the garlic, and always taste as you go.
+                       Every recipe on this site has been tested at least
+                       three times in my own kitchen before making it here.&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class="about-story"&gt;
+        &lt;div class="container"&gt;
+            &lt;h2&gt;My Cooking Journey&lt;/h2&gt;
+            &lt;p&gt;I grew up watching my grandmother cook — no recipes,
+               no measuring cups, just instinct and decades of practice.
+               I always admired that but never thought I could learn it
+               myself. Then the world changed, I had time, and I started
+               with scrambled eggs. Really bad scrambled eggs.&lt;/p&gt;
+            &lt;p&gt;Three years and a lot of burnt garlic later, I can
+               confidently say I make a mean pasta, a respectable curry,
+               and the best banana bread my friends have ever tasted
+               (their words, not mine). This site is my way of documenting
+               what I've learned and sharing it with anyone who wants
+               to start their own kitchen journey.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class="about-interests"&gt;
+        &lt;div class="container"&gt;
+            &lt;h2&gt;When I'm Not Cooking&lt;/h2&gt;
+            &lt;div class="interests-grid"&gt;
+                &lt;div class="interest-item"&gt;
+                    &lt;span class="interest-icon"&gt;📚&lt;/span&gt;
+                    &lt;h3&gt;Reading&lt;/h3&gt;
+                    &lt;p&gt;Mostly cookbooks, but also sci-fi and history.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="interest-item"&gt;
+                    &lt;span class="interest-icon"&gt;🌱&lt;/span&gt;
+                    &lt;h3&gt;Gardening&lt;/h3&gt;
+                    &lt;p&gt;Growing herbs on my balcony — basil, mint, rosemary.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="interest-item"&gt;
+                    &lt;span class="interest-icon"&gt;🎵&lt;/span&gt;
+                    &lt;h3&gt;Music&lt;/h3&gt;
+                    &lt;p&gt;Cooking with a good playlist is non-negotiable.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="interest-item"&gt;
+                    &lt;span class="interest-icon"&gt;✈️&lt;/span&gt;
+                    &lt;h3&gt;Travel&lt;/h3&gt;
+                    &lt;p&gt;Finding new flavors in every city I visit.&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+&lt;/main&gt;</code></pre>
+
+                <h3>Structure Breakdown</h3>
+
+                <ul>
+                    <li><strong>Page header</strong> — a simple banner with the page title and subtitle. This replaces the hero section from the homepage.</li>
+                    <li><strong>Profile section</strong> — image and text side by side, using the same Flexbox pattern as the featured recipe in Lesson 17.</li>
+                    <li><strong>Story section</strong> — plain prose paragraphs. Not everything needs a fancy layout — sometimes text is just text.</li>
+                    <li><strong>Interests grid</strong> — small cards showing hobbies. Reuses the card grid pattern from the homepage feature cards.</li>
+                </ul>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="about-css" class="lesson-section">
+                <h2>About Page — CSS</h2>
+
+                <p>Add these styles to your <code>css/style.css</code>. Notice how many existing classes we reuse — the style guide pays off:</p>
+
+                <pre><code class="language-css">/* ===========================
+   Page Header (shared across content pages)
+   =========================== */
+.page-header {
+    background-color: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+    text-align: center;
+}
+
+.page-subtitle {
+    color: var(--color-text-light);
+    font-size: 1.125rem;
+    margin-top: var(--space-sm);
+}
+
+/* ===========================
+   Profile Section (About Page)
+   =========================== */
+.profile {
+    padding: var(--space-2xl) 0;
+}
+
+.profile-content {
+    display: flex;
+    gap: var(--space-2xl);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.profile-image {
+    flex: 0 1 300px;
+}
+
+.profile-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+}
+
+.profile-text {
+    flex: 1 1 400px;
+}
+
+.profile-text h2 {
+    margin-bottom: var(--space-md);
+}
+
+.profile-text p {
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+}
+
+/* ===========================
+   Story Section
+   =========================== */
+.about-story {
+    background-color: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+}
+
+.about-story h2 {
+    margin-bottom: var(--space-lg);
+}
+
+.about-story p {
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
+    max-width: 720px;
+}
+
+/* ===========================
+   Interests Grid
+   =========================== */
+.about-interests {
+    padding: var(--space-2xl) 0;
+}
+
+.about-interests h2 {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.interests-grid {
+    display: flex;
+    gap: var(--space-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.interest-item {
+    flex: 1 1 200px;
+    max-width: 250px;
+    text-align: center;
+    padding: var(--space-lg);
+}
+
+.interest-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: var(--space-sm);
+}
+
+.interest-item h3 {
+    margin-bottom: var(--space-xs);
+    font-size: 1.1rem;
+}
+
+.interest-item p {
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}</code></pre>
+
+                <h3>Key Decisions</h3>
+
+                <ul>
+                    <li><strong><code>border-radius: 50%</code></strong> on the profile image creates a circle crop — a common design pattern for profile photos. The <code>aspect-ratio: 1 / 1</code> ensures the image stays square regardless of the source image's dimensions.</li>
+                    <li><strong><code>flex: 0 1 300px</code></strong> on the image means: don't grow (keep it at 300px max), but shrink if needed, starting at 300px. The text side gets <code>flex: 1 1 400px</code> — it takes up the remaining space.</li>
+                    <li><strong><code>max-width: 720px</code></strong> on story paragraphs keeps lines at a comfortable reading length (roughly 65–80 characters per line).</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Optimal Line Length for Reading</h4>
+                    <p>Research on typography suggests that <strong>45–75 characters per line</strong> is the most comfortable reading width. At a 16px base font, that's roughly 600–750px. This is why we constrain paragraph widths — full-width text on a wide monitor is exhausting to read.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="recipe-html" class="lesson-section">
+                <h2>Recipe Page — HTML</h2>
+
+                <p>The recipe page has two jobs: show a <strong>grid of recipe cards</strong> (so visitors can browse) and present a <strong>detailed recipe</strong> with ingredients, instructions, and tips. We'll build both on the same page.</p>
+
+                <pre><code class="language-html">&lt;!-- recipe.html — content between nav and footer --&gt;
+
+&lt;main&gt;
+    &lt;section class="page-header"&gt;
+        &lt;div class="container"&gt;
+            &lt;h1&gt;Recipes&lt;/h1&gt;
+            &lt;p class="page-subtitle"&gt;Tried-and-true dishes from my kitchen to yours.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Recipe Card Grid --&gt;
+    &lt;section class="recipe-grid-section"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="recipe-card-grid"&gt;
+
+                &lt;article class="recipe-card"&gt;
+                    &lt;img src="images/recipe-pasta.jpg"
+                         alt="Creamy garlic pasta in a bowl"
+                         width="400" height="300"&gt;
+                    &lt;div class="recipe-card-body"&gt;
+                        &lt;h2&gt;Creamy Garlic Pasta&lt;/h2&gt;
+                        &lt;p class="recipe-meta"&gt;⏱ 25 min · 🍽 Serves 4 · Easy&lt;/p&gt;
+                        &lt;p&gt;One-pan pasta that's creamy without the cream.&lt;/p&gt;
+                        &lt;a href="#recipe-detail" class="btn btn-outline"&gt;View Recipe&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/article&gt;
+
+                &lt;article class="recipe-card"&gt;
+                    &lt;img src="images/recipe-salad.jpg"
+                         alt="Fresh Mediterranean salad with feta and olives"
+                         width="400" height="300"&gt;
+                    &lt;div class="recipe-card-body"&gt;
+                        &lt;h2&gt;Mediterranean Salad&lt;/h2&gt;
+                        &lt;p class="recipe-meta"&gt;⏱ 15 min · 🍽 Serves 2 · Easy&lt;/p&gt;
+                        &lt;p&gt;Bright, crunchy, and ready in fifteen minutes.&lt;/p&gt;
+                        &lt;a href="#" class="btn btn-outline"&gt;View Recipe&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/article&gt;
+
+                &lt;article class="recipe-card"&gt;
+                    &lt;img src="images/recipe-soup.jpg"
+                         alt="A bowl of tomato basil soup with crusty bread"
+                         width="400" height="300"&gt;
+                    &lt;div class="recipe-card-body"&gt;
+                        &lt;h2&gt;Tomato Basil Soup&lt;/h2&gt;
+                        &lt;p class="recipe-meta"&gt;⏱ 40 min · 🍽 Serves 6 · Medium&lt;/p&gt;
+                        &lt;p&gt;Comfort in a bowl — perfect for rainy days.&lt;/p&gt;
+                        &lt;a href="#" class="btn btn-outline"&gt;View Recipe&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/article&gt;
+
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;!-- Detailed Recipe --&gt;
+    &lt;section id="recipe-detail" class="recipe-detail"&gt;
+        &lt;div class="container"&gt;
+            &lt;article&gt;
+                &lt;h2&gt;Creamy Garlic Pasta&lt;/h2&gt;
+                &lt;p class="recipe-meta"&gt;⏱ 25 min · 🍽 Serves 4 · Easy · Vegetarian&lt;/p&gt;
+
+                &lt;div class="recipe-layout"&gt;
+                    &lt;div class="recipe-image"&gt;
+                        &lt;img src="images/recipe-pasta.jpg"
+                             alt="Creamy garlic pasta close-up"
+                             width="600" height="400"&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="recipe-info"&gt;
+                        &lt;div class="ingredients"&gt;
+                            &lt;h3&gt;Ingredients&lt;/h3&gt;
+                            &lt;ul&gt;
+                                &lt;li&gt;350g spaghetti or linguine&lt;/li&gt;
+                                &lt;li&gt;4 cloves garlic, minced&lt;/li&gt;
+                                &lt;li&gt;2 tbsp olive oil&lt;/li&gt;
+                                &lt;li&gt;2 tbsp butter&lt;/li&gt;
+                                &lt;li&gt;1 cup reserved pasta water&lt;/li&gt;
+                                &lt;li&gt;¾ cup grated Parmesan cheese&lt;/li&gt;
+                                &lt;li&gt;Salt and black pepper to taste&lt;/li&gt;
+                                &lt;li&gt;Fresh parsley for garnish&lt;/li&gt;
+                            &lt;/ul&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class="instructions"&gt;
+                            &lt;h3&gt;Instructions&lt;/h3&gt;
+                            &lt;ol&gt;
+                                &lt;li&gt;Bring a large pot of salted water to a boil. Cook pasta
+                                   according to package directions until al dente. &lt;strong&gt;Reserve
+                                   1 cup of pasta water&lt;/strong&gt; before draining.&lt;/li&gt;
+                                &lt;li&gt;While pasta cooks, heat olive oil and butter in a large
+                                   skillet over medium heat. Add minced garlic and cook for
+                                   60–90 seconds until fragrant — don't let it brown.&lt;/li&gt;
+                                &lt;li&gt;Add drained pasta to the skillet. Toss to coat in the
+                                   garlic butter.&lt;/li&gt;
+                                &lt;li&gt;Remove from heat. Add Parmesan and ½ cup of the reserved
+                                   pasta water. Toss vigorously — the starch in the water
+                                   creates the creamy sauce.&lt;/li&gt;
+                                &lt;li&gt;Add more pasta water a splash at a time until the sauce
+                                   is silky. Season with salt and pepper.&lt;/li&gt;
+                                &lt;li&gt;Serve immediately, topped with extra Parmesan and fresh
+                                   parsley.&lt;/li&gt;
+                            &lt;/ol&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class="recipe-tips"&gt;
+                    &lt;h3&gt;💡 Tips &amp; Notes&lt;/h3&gt;
+                    &lt;ul&gt;
+                        &lt;li&gt;&lt;strong&gt;Don't skip the pasta water.&lt;/strong&gt; The starch is
+                           what makes the sauce creamy without cream. Reserve it
+                           before draining!&lt;/li&gt;
+                        &lt;li&gt;&lt;strong&gt;Low heat for the garlic.&lt;/strong&gt; Burnt garlic is
+                           bitter. If it starts turning dark, remove the pan from
+                           heat and add the pasta immediately.&lt;/li&gt;
+                        &lt;li&gt;&lt;strong&gt;Toss off the heat.&lt;/strong&gt; Adding Parmesan over
+                           high heat makes it clump. Remove from the burner first,
+                           then toss.&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            &lt;/article&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+&lt;/main&gt;</code></pre>
+
+                <h3>Two Layout Patterns in One Page</h3>
+
+                <p>This page demonstrates two distinct patterns:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    subgraph "Pattern 1: Recipe Card Grid"
+                        A["recipe-card-grid<br/>(Flexbox row, wraps)"]
+                        A1["Card 1<br/>img + body"]
+                        A2["Card 2<br/>img + body"]
+                        A3["Card 3<br/>img + body"]
+                        A --- A1
+                        A --- A2
+                        A --- A3
+                    end
+                    subgraph "Pattern 2: Detailed Recipe"
+                        B["recipe-layout<br/>(Flexbox row, wraps)"]
+                        B1["recipe-image<br/>(left)"]
+                        B2["recipe-info<br/>(right: ingredients + instructions)"]
+                        B --- B1
+                        B --- B2
+                    end
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style A1 fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style A2 fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style A3 fill:#f0fdf4,stroke:#22c55e,stroke-width:1px,color:#1e293b
+                    style B1 fill:#fdf2f8,stroke:#ec4899,stroke-width:1px,color:#1e293b
+                    style B2 fill:#fdf2f8,stroke:#ec4899,stroke-width:1px,color:#1e293b
+                </div>
+
+                <ul>
+                    <li><strong>Recipe card grid</strong> — similar to the homepage feature cards, but with images on top. Each card is an <code>&lt;article&gt;</code> because it's a self-contained, linkable piece of content.</li>
+                    <li><strong>Detailed recipe</strong> — image on the left, ingredients and instructions on the right. On mobile, everything stacks.</li>
+                </ul>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="recipe-css" class="lesson-section">
+                <h2>Recipe Page — CSS</h2>
+
+                <pre><code class="language-css">/* ===========================
+   Recipe Card Grid
+   =========================== */
+.recipe-grid-section {
+    padding: var(--space-2xl) 0;
+}
+
+.recipe-card-grid {
+    display: flex;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.recipe-card {
+    flex: 1 1 300px;
+    max-width: 380px;
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    transition: box-shadow var(--transition-base),
+                transform var(--transition-base);
+}
+
+.recipe-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.recipe-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.recipe-card-body {
+    padding: var(--space-lg);
+}
+
+.recipe-card-body h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+}
+
+.recipe-meta {
+    color: var(--color-text-light);
+    font-size: 0.85rem;
+    margin-bottom: var(--space-sm);
+}
+
+.recipe-card-body p {
+    color: var(--color-text-light);
+    line-height: 1.5;
+    margin-bottom: var(--space-md);
+}
+
+/* ===========================
+   Detailed Recipe
+   =========================== */
+.recipe-detail {
+    background-color: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+}
+
+.recipe-detail h2 {
+    margin-bottom: var(--space-xs);
+}
+
+.recipe-layout {
+    display: flex;
+    gap: var(--space-2xl);
+    margin-top: var(--space-xl);
+    flex-wrap: wrap;
+}
+
+.recipe-image {
+    flex: 1 1 300px;
+}
+
+.recipe-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    object-fit: cover;
+}
+
+.recipe-info {
+    flex: 1 1 400px;
+}
+
+.ingredients {
+    margin-bottom: var(--space-xl);
+}
+
+.ingredients h3,
+.instructions h3 {
+    margin-bottom: var(--space-md);
+    color: var(--color-primary);
+}
+
+.ingredients ul {
+    list-style: none;
+    padding: 0;
+}
+
+.ingredients li {
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+    line-height: 1.5;
+}
+
+.ingredients li:last-child {
+    border-bottom: none;
+}
+
+.instructions ol {
+    padding-left: var(--space-lg);
+}
+
+.instructions li {
+    padding: var(--space-sm) 0;
+    line-height: 1.7;
+    margin-bottom: var(--space-sm);
+}
+
+/* Recipe Tips */
+.recipe-tips {
+    margin-top: var(--space-xl);
+    padding: var(--space-lg);
+    background-color: var(--color-bg);
+    border-radius: var(--border-radius-lg);
+    border-left: 4px solid var(--color-accent);
+}
+
+.recipe-tips h3 {
+    margin-bottom: var(--space-md);
+}
+
+.recipe-tips li {
+    margin-bottom: var(--space-sm);
+    line-height: 1.6;
+}</code></pre>
+
+                <h3>Notable Techniques</h3>
+
+                <ul>
+                    <li><strong><code>overflow: hidden</code></strong> on recipe cards clips the image to the card's rounded corners. Without it, the image corners poke out beyond the <code>border-radius</code>.</li>
+                    <li><strong><code>object-fit: cover</code></strong> with a fixed <code>height: 200px</code> on card images ensures all cards have identical image heights, even if the source images have different aspect ratios. The image is cropped to fill the space.</li>
+                    <li><strong>Border-left accent</strong> on the tips box (<code>border-left: 4px solid var(--color-accent)</code>) is a simple way to make a callout stand out without being as heavy as a full border or background change.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 <code>object-fit</code> Cheat Sheet</h4>
+                    <ul>
+                        <li><strong><code>cover</code></strong> — fills the entire area, cropping if needed (best for cards and backgrounds)</li>
+                        <li><strong><code>contain</code></strong> — fits the entire image inside the area, may leave empty space</li>
+                        <li><strong><code>fill</code></strong> — stretches to fill (distorts the image — usually not what you want)</li>
+                        <li><strong><code>none</code></strong> — keeps original size, may overflow</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="contact-html" class="lesson-section">
+                <h2>Contact Page — HTML</h2>
+
+                <p>The contact page gives visitors a way to reach you. A well-built contact form demonstrates form skills from Lesson 8 and introduces new CSS patterns for styling inputs and handling validation states.</p>
+
+                <pre><code class="language-html">&lt;!-- contact.html — content between nav and footer --&gt;
+
+&lt;main&gt;
+    &lt;section class="page-header"&gt;
+        &lt;div class="container"&gt;
+            &lt;h1&gt;Get in Touch&lt;/h1&gt;
+            &lt;p class="page-subtitle"&gt;Questions, suggestions, or just want to say hello? I'd love to hear from you.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section class="contact-section"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="contact-layout"&gt;
+
+                &lt;!-- Contact Form --&gt;
+                &lt;form class="contact-form" action="#" method="POST"&gt;
+                    &lt;div class="form-group"&gt;
+                        &lt;label for="name"&gt;Name &lt;span class="required"&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="text" id="name" name="name"
+                               placeholder="Your name" required&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="form-group"&gt;
+                        &lt;label for="email"&gt;Email &lt;span class="required"&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;input type="email" id="email" name="email"
+                               placeholder="your@email.com" required&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="form-group"&gt;
+                        &lt;label for="subject"&gt;Subject&lt;/label&gt;
+                        &lt;select id="subject" name="subject"&gt;
+                            &lt;option value=""&gt;Choose a topic...&lt;/option&gt;
+                            &lt;option value="recipe"&gt;Recipe Question&lt;/option&gt;
+                            &lt;option value="suggestion"&gt;Recipe Suggestion&lt;/option&gt;
+                            &lt;option value="feedback"&gt;Site Feedback&lt;/option&gt;
+                            &lt;option value="other"&gt;Other&lt;/option&gt;
+                        &lt;/select&gt;
+                    &lt;/div&gt;
+
+                    &lt;div class="form-group"&gt;
+                        &lt;label for="message"&gt;Message &lt;span class="required"&gt;*&lt;/span&gt;&lt;/label&gt;
+                        &lt;textarea id="message" name="message" rows="6"
+                                  placeholder="What's on your mind?" required&gt;&lt;/textarea&gt;
+                    &lt;/div&gt;
+
+                    &lt;button type="submit" class="btn btn-primary"&gt;Send Message&lt;/button&gt;
+                &lt;/form&gt;
+
+                &lt;!-- Contact Info Sidebar --&gt;
+                &lt;aside class="contact-info"&gt;
+                    &lt;h2&gt;Other Ways to Connect&lt;/h2&gt;
+                    &lt;div class="info-card"&gt;
+                        &lt;h3&gt;📧 Email&lt;/h3&gt;
+                        &lt;p&gt;&lt;a href="mailto:hello@tastybites.com"&gt;hello@tastybites.com&lt;/a&gt;&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="info-card"&gt;
+                        &lt;h3&gt;📱 Social Media&lt;/h3&gt;
+                        &lt;ul class="social-links"&gt;
+                            &lt;li&gt;&lt;a href="#"&gt;Instagram&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="#"&gt;Pinterest&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="#"&gt;YouTube&lt;/a&gt;&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;div class="info-card"&gt;
+                        &lt;h3&gt;⏰ Response Time&lt;/h3&gt;
+                        &lt;p&gt;I try to respond within 24–48 hours. If it's urgent, email is fastest.&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/aside&gt;
+
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+&lt;/main&gt;</code></pre>
+
+                <h3>Form Accessibility Checklist</h3>
+
+                <p>Every form element in this example follows accessibility best practices:</p>
+
+                <ul>
+                    <li><strong>Every input has a <code>&lt;label&gt;</code></strong> — connected with matching <code>for</code>/<code>id</code> attributes. Clicking the label focuses the input.</li>
+                    <li><strong>Required fields are marked</strong> — the red asterisk <em>and</em> the <code>required</code> attribute. Visual + programmatic = accessible.</li>
+                    <li><strong><code>type="email"</code></strong> — triggers email validation and shows the correct keyboard on mobile.</li>
+                    <li><strong>Placeholder text</strong> — provides example input. But notice it's <em>in addition to</em> the label, not a replacement for it. Placeholders disappear when you type, so they're not a substitute for labels.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Where Does the Form Data Go?</h4>
+                    <p>The <code>action="#"</code> means the form doesn't actually submit anywhere yet. For a static HTML site, you need a form backend service to receive submissions. Popular free options include:</p>
+                    <ul>
+                        <li><strong>Formspree</strong> (formspree.io) — free tier, no backend code needed</li>
+                        <li><strong>Netlify Forms</strong> — built in if you deploy on Netlify (which we will in Lesson 21)</li>
+                        <li><strong>Web3Forms</strong> (web3forms.com) — free, just add an access key</li>
+                    </ul>
+                    <p>We'll connect the form to Netlify Forms in Lesson 21.</p>
+                </div>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="contact-css" class="lesson-section">
+                <h2>Contact Page — CSS</h2>
+
+                <pre><code class="language-css">/* ===========================
+   Contact Section
+   =========================== */
+.contact-section {
+    padding: var(--space-2xl) 0;
+}
+
+.contact-layout {
+    display: flex;
+    gap: var(--space-2xl);
+    flex-wrap: wrap;
+}
+
+/* ===========================
+   Contact Form
+   =========================== */
+.contact-form {
+    flex: 2 1 400px;
+}
+
+.form-group {
+    margin-bottom: var(--space-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-text);
+}
+
+.required {
+    color: var(--color-error);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    transition: border-color var(--transition-fast),
+                box-shadow var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Validation states (CSS-only with :invalid and :valid) */
+.form-group input:not(:placeholder-shown):invalid {
+    border-color: var(--color-error);
+}
+
+.form-group input:not(:placeholder-shown):valid {
+    border-color: var(--color-success);
+}
+
+/* ===========================
+   Contact Info Sidebar
+   =========================== */
+.contact-info {
+    flex: 1 1 250px;
+}
+
+.contact-info h2 {
+    margin-bottom: var(--space-lg);
+    font-size: 1.25rem;
+}
+
+.info-card {
+    padding: var(--space-lg);
+    background-color: var(--color-bg-alt);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--space-md);
+}
+
+.info-card h3 {
+    margin-bottom: var(--space-sm);
+    font-size: 1rem;
+}
+
+.info-card p,
+.info-card a {
+    color: var(--color-text-light);
+    line-height: 1.5;
+}
+
+.info-card a:hover {
+    color: var(--color-primary);
+}
+
+.social-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-links li {
+    margin-bottom: var(--space-xs);
+}
+
+.social-links a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.social-links a:hover {
+    text-decoration: underline;
+}</code></pre>
+
+                <h3>The Focus Ring Technique</h3>
+
+                <p>When a user clicks or tabs into an input field, the browser shows a focus indicator. The default one is often ugly or hard to see. Our approach:</p>
+
+                <ol>
+                    <li><strong>Remove the default outline</strong> with <code>outline: none</code></li>
+                    <li><strong>Replace it</strong> with a <code>border-color</code> change and a soft <code>box-shadow</code> glow</li>
+                </ol>
+
+                <pre><code class="language-css">/* The glow effect */
+box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);</code></pre>
+
+                <p>The <code>box-shadow</code> with zero offset and blur but a spread of 3px creates a ring around the input. Using <code>rgba()</code> with 15% opacity makes it subtle — a soft blue halo that says "you're here" without shouting.</p>
+
+                <h3>CSS-Only Validation Feedback</h3>
+
+                <p>The selector <code>input:not(:placeholder-shown):invalid</code> targets inputs that are both invalid <em>and</em> have user-typed content. This prevents red borders on empty required fields before the user has done anything — a much better experience than showing errors immediately.</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Field is empty<br/>(placeholder shown)"] -->|"No border change"| B["Default gray border"]
+                    A -->|"User types"| C["Placeholder hidden"]
+                    C -->|":invalid"| D["Red border<br/>(error)"]
+                    C -->|":valid"| E["Green border<br/>(success)"]
+                    style A fill:#f1f5f9,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style B fill:#f1f5f9,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style D fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                    style E fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="active-link" class="lesson-section">
+                <h2>Highlighting the Active Page</h2>
+
+                <p>Each page should show visitors where they are by highlighting the current page in the nav. In Lesson 17, the homepage nav had <code>class="nav-link active"</code> on the Home link. On each new page, <strong>move that <code>active</code> class to the correct link</strong>.</p>
+
+                <pre><code class="language-html">&lt;!-- index.html --&gt;
+&lt;li&gt;&lt;a href="index.html" class="nav-link active"&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="about.html" class="nav-link"&gt;About&lt;/a&gt;&lt;/li&gt;
+
+&lt;!-- about.html --&gt;
+&lt;li&gt;&lt;a href="index.html" class="nav-link"&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="about.html" class="nav-link active"&gt;About&lt;/a&gt;&lt;/li&gt;
+
+&lt;!-- recipe.html --&gt;
+&lt;li&gt;&lt;a href="index.html" class="nav-link"&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="recipe.html" class="nav-link active"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+
+&lt;!-- contact.html --&gt;
+&lt;li&gt;&lt;a href="index.html" class="nav-link"&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="contact.html" class="nav-link active"&gt;Contact&lt;/a&gt;&lt;/li&gt;</code></pre>
+
+                <p>The CSS from Lesson 17 already handles the styling:</p>
+
+                <pre><code class="language-css">.nav-link.active {
+    color: var(--color-primary);
+    font-weight: 600;
+}</code></pre>
+
+                <p>This is a small detail that makes a big difference in usability. Without it, visitors have to read the page title or URL to know where they are.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Accessibility Bonus: <code>aria-current</code></h4>
+                    <p>For even better accessibility, add <code>aria-current="page"</code> to the active link. Screen readers will announce "Home, current page" instead of just "Home":</p>
+                    <pre><code class="language-html">&lt;a href="index.html" class="nav-link active"
+   aria-current="page"&gt;Home&lt;/a&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 9: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Build All Three Content Pages</h3>
+                    <p><strong>Objective:</strong> Create complete About, Recipe, and Contact pages that share nav/footer with the homepage.</p>
+
+                    <h4>Requirements Checklist</h4>
+                    <ol>
+                        <li><strong>All three pages</strong> have the same nav and footer as the homepage</li>
+                        <li><strong>The <code>active</code> class</strong> is on the correct nav link for each page</li>
+                        <li><strong>Each <code>&lt;title&gt;</code></strong> is unique (e.g., "About - Tasty Bites")</li>
+                        <li><strong>About page</strong> — profile image + text, story section, interests grid</li>
+                        <li><strong>Recipe page</strong> — recipe card grid + one detailed recipe</li>
+                        <li><strong>Contact page</strong> — styled form with labels, required fields, and focus states</li>
+                        <li><strong>All pages responsive</strong> — test at 1200px, 768px, and 375px</li>
+                        <li><strong>All links work</strong> — click every nav link on every page to verify navigation</li>
+                    </ol>
+
+                    <h4>Stretch Goals (Optional)</h4>
+                    <ul>
+                        <li>Add a <strong>timeline</strong> to the About page (vertical line with milestones)</li>
+                        <li>Add a <strong>recipe filter</strong> bar above the cards (just the UI — buttons for categories)</li>
+                        <li>Add <strong>character count</strong> text below the message textarea (CSS-only using <code>counter()</code>, or simple JS)</li>
+                        <li>Add a <strong>"Back to top"</strong> link at the bottom of each page</li>
+                    </ul>
+
+                    <details>
+                        <summary>💡 Hint — Back to Top Link</summary>
+                        <pre><code class="language-html">&lt;!-- At the top of your page (inside &lt;body&gt;) --&gt;
+&lt;div id="top"&gt;&lt;/div&gt;
+
+&lt;!-- Before the footer --&gt;
+&lt;div class="back-to-top"&gt;
+    &lt;a href="#top"&gt;↑ Back to Top&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+                        <pre><code class="language-css">.back-to-top {
+    text-align: center;
+    padding: var(--space-xl) 0;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+    scroll-behavior: smooth;
+}</code></pre>
+                    </details>
+
+                    <details>
+                        <summary>✅ Full Solution: Complete about.html</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;About - Tasty Bites&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+    &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+    &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+          rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;header class="site-header"&gt;
+        &lt;nav class="navbar"&gt;
+            &lt;div class="nav-container"&gt;
+                &lt;a href="index.html" class="nav-logo"&gt;🍴 Tasty Bites&lt;/a&gt;
+                &lt;button class="nav-toggle" aria-label="Toggle navigation"
+                        aria-expanded="false"&gt;☰&lt;/button&gt;
+                &lt;ul class="nav-menu"&gt;
+                    &lt;li&gt;&lt;a href="index.html" class="nav-link"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="about.html" class="nav-link active" aria-current="page"&gt;About&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="recipe.html" class="nav-link"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="contact.html" class="nav-link"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;main&gt;
+        &lt;section class="page-header"&gt;
+            &lt;div class="container"&gt;
+                &lt;h1&gt;About Me&lt;/h1&gt;
+                &lt;p class="page-subtitle"&gt;The person behind the recipes.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class="profile"&gt;
+            &lt;div class="container"&gt;
+                &lt;div class="profile-content"&gt;
+                    &lt;div class="profile-image"&gt;
+                        &lt;img src="images/about-photo.jpg"
+                             alt="A smiling person in a kitchen"
+                             width="400" height="400"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="profile-text"&gt;
+                        &lt;h2&gt;Hi, I'm Alex!&lt;/h2&gt;
+                        &lt;p&gt;I'm a home cook who believes that great food doesn't
+                           need to be complicated. What started as a quarantine
+                           hobby turned into a genuine passion — and this site
+                           is where I share what I've learned along the way.&lt;/p&gt;
+                        &lt;p&gt;My cooking philosophy is simple: use fresh ingredients,
+                           don't skip the garlic, and always taste as you go.&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class="about-story"&gt;
+            &lt;div class="container"&gt;
+                &lt;h2&gt;My Cooking Journey&lt;/h2&gt;
+                &lt;p&gt;I grew up watching my grandmother cook — no recipes,
+                   no measuring cups, just instinct and decades of practice.
+                   Three years and a lot of burnt garlic later, I can
+                   confidently say I make a mean pasta and the best banana
+                   bread my friends have ever tasted.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class="about-interests"&gt;
+            &lt;div class="container"&gt;
+                &lt;h2&gt;When I'm Not Cooking&lt;/h2&gt;
+                &lt;div class="interests-grid"&gt;
+                    &lt;div class="interest-item"&gt;
+                        &lt;span class="interest-icon"&gt;📚&lt;/span&gt;
+                        &lt;h3&gt;Reading&lt;/h3&gt;
+                        &lt;p&gt;Mostly cookbooks, but also sci-fi and history.&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="interest-item"&gt;
+                        &lt;span class="interest-icon"&gt;🌱&lt;/span&gt;
+                        &lt;h3&gt;Gardening&lt;/h3&gt;
+                        &lt;p&gt;Growing herbs on my balcony.&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="interest-item"&gt;
+                        &lt;span class="interest-icon"&gt;🎵&lt;/span&gt;
+                        &lt;h3&gt;Music&lt;/h3&gt;
+                        &lt;p&gt;Cooking with a good playlist is non-negotiable.&lt;/p&gt;
+                    &lt;/div&gt;
+                    &lt;div class="interest-item"&gt;
+                        &lt;span class="interest-icon"&gt;✈️&lt;/span&gt;
+                        &lt;h3&gt;Travel&lt;/h3&gt;
+                        &lt;p&gt;Finding new flavors in every city.&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;footer class="site-footer"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="footer-content"&gt;
+                &lt;div class="footer-info"&gt;
+                    &lt;p class="footer-logo"&gt;🍴 Tasty Bites&lt;/p&gt;
+                    &lt;p&gt;Simple recipes, made with love.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;nav class="footer-nav" aria-label="Footer navigation"&gt;
+                    &lt;h4&gt;Pages&lt;/h4&gt;
+                    &lt;ul&gt;
+                        &lt;li&gt;&lt;a href="index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="recipe.html"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/nav&gt;
+            &lt;/div&gt;
+            &lt;div class="footer-bottom"&gt;
+                &lt;p&gt;&amp;copy; 2026 Tasty Bites. All rights reserved.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/footer&gt;
+
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> Why do we copy-paste the nav and footer into every page instead of using a template?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="HTML actually doesn't have a built-in include system. That's exactly why we copy-paste for static sites.">A) Because HTML requires each page to have its own nav element</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Static HTML files don't have a way to include shared components. Copy-paste is the straightforward approach for small sites. When the duplication becomes painful, that's when tools like static site generators (Eleventy, Hugo) or frameworks (React, Astro) earn their complexity.">B) Static HTML has no include/template system — for small sites, copy-paste is the correct approach until the duplication becomes painful</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Actually, search engines handle duplicate navigation fine. The concern with copy-paste is maintenance, not SEO.">C) Because search engines require unique HTML in every file</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What does <code>object-fit: cover</code> do on recipe card images?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! object-fit: cover scales the image to fill the entire container, cropping any excess. This ensures all card images have the same dimensions even if the source images have different aspect ratios.">A) Scales the image to fill the container, cropping any overflow to maintain aspect ratio</button>
+                            <button class="quiz-option" data-correct="false" data-hint="That's what object-fit: fill does — and it distorts the image. Cover maintains the aspect ratio by cropping instead.">B) Stretches the image to fill the container, distorting it if necessary</button>
+                            <button class="quiz-option" data-correct="false" data-hint="That's object-fit: contain. Cover fills the entire container; contain may leave empty space.">C) Shrinks the image to fit inside the container with empty space around it</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why does <code>input:not(:placeholder-shown):invalid</code> work better than just <code>input:invalid</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both selectors work in all modern browsers. The difference is about user experience, not browser support.">A) Because <code>:invalid</code> doesn't work in all browsers</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! A required field is technically :invalid when empty, so input:invalid would show red borders before the user has typed anything — a frustrating experience. Adding :not(:placeholder-shown) means the validation styling only appears after the user has started typing, which is much friendlier.">B) Because it only shows error styling after the user has typed something — empty required fields don't start with a red border</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The styling actually uses CSS classes and pseudo-classes, not JavaScript. The :not(:placeholder-shown) trick is pure CSS.">C) Because it uses JavaScript to check the field value</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What's the optimal line length for comfortable reading?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="30 characters is very short — roughly 5–6 words per line. That forces too many line breaks and makes reading choppy.">A) 25–30 characters per line</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Typography research shows 45–75 characters per line is the most comfortable reading width. At a 16px base font, that's roughly 600–750px. This is why we use max-width on paragraph containers instead of letting text stretch to full width.">B) 45–75 characters per line</button>
+                            <button class="quiz-option" data-correct="false" data-hint="150+ characters per line is very wide — the reader's eye has to travel too far to find the next line, which causes them to lose their place.">C) 150–200 characters per line</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> Why do we use <code>&lt;article&gt;</code> for recipe cards?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="&lt;article&gt; doesn't add any borders or styling by default. It's a semantic element — its purpose is meaning, not appearance.">A) Because <code>&lt;article&gt;</code> automatically adds a card-style border</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The &lt;article&gt; element represents a self-contained piece of content that could be distributed independently. A recipe card makes sense on its own — it has a title, description, and link. This semantic meaning helps screen readers, search engines, and other tools understand your content structure.">B) Because each card is a self-contained piece of content that makes sense independently</button>
+                            <button class="quiz-option" data-correct="false" data-hint="&lt;div&gt; and &lt;article&gt; can be styled identically. The choice is about semantics — &lt;article&gt; tells browsers and screen readers that this is standalone content.">C) Because <code>&lt;div&gt;</code> can't have images inside it</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Reuse nav and footer</strong> by copying from the homepage — update the <code>active</code> class and <code>&lt;title&gt;</code> for each page</li>
+                        <li>The <strong>page header</strong> pattern (<code>.page-header</code>) replaces the hero section on content pages — simpler, consistent</li>
+                        <li><strong>Profile layouts</strong> use Flexbox with <code>border-radius: 50%</code> for circular images and <code>aspect-ratio: 1 / 1</code> to keep them square</li>
+                        <li><strong>Recipe cards</strong> use <code>overflow: hidden</code> to clip images to rounded corners and <code>object-fit: cover</code> for consistent image heights</li>
+                        <li><strong>Styled forms</strong> need explicit labels (not just placeholders), focus rings (<code>box-shadow</code> glow), and smart validation (<code>:not(:placeholder-shown):invalid</code>)</li>
+                        <li><strong>Every input needs a label</strong> connected with matching <code>for</code>/<code>id</code> attributes</li>
+                        <li>Use <strong><code>aria-current="page"</code></strong> on the active nav link for screen reader accessibility</li>
+                        <li>Constrain <strong>reading width</strong> to 45–75 characters per line for comfortable reading</li>
+                        <li>Form submissions on static sites need a <strong>backend service</strong> — Formspree, Netlify Forms, or Web3Forms</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project After This Lesson</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← + page-header, profile, recipe, contact, form styles
+├── images/
+│   ├── about-photo.jpg
+│   ├── recipe-pasta.jpg
+│   ├── recipe-salad.jpg
+│   └── recipe-soup.jpg
+├── js/
+│   └── script.js      ← mobile menu toggle (works on all pages)
+├── index.html         ← ✅ Homepage
+├── about.html         ← ✅ About page (NEW)
+├── recipe.html        ← ✅ Recipe page (NEW)
+└── contact.html       ← ✅ Contact page (NEW)
+
+All four pages share:
+✅ Same navigation bar (with correct active link)
+✅ Same footer
+✅ Same stylesheet
+✅ Same mobile menu script
+✅ Responsive at all widths</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your site is functional — four complete, responsive pages with working navigation. But there's a difference between <em>functional</em> and <em>polished</em>. In the next lesson — <strong>Lesson 19: Adding Polish</strong> — you'll add the finishing touches: smooth transitions, scroll animations, a dark mode toggle, custom scrollbar styling, loading states, and all the small details that make a site feel professional.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_17.html" class="prev-lesson">← Previous: Building the Homepage</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_19.html" class="next-lesson">Next: Adding Polish →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

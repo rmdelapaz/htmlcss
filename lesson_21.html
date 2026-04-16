@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Deploy your website to the internet for free using Netlify — drag-and-drop deployment, custom subdomains, HTTPS, continuous deployment from GitHub, and connecting a custom domain.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 21: Publishing to Netlify - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 5</a></li>
+            <li aria-current="page">Lesson 21: Publishing to Netlify</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🚀 Lesson 21: Publishing to Netlify</h1>
+                <p class="lead">This is it — the moment your website stops living on your laptop and starts living on the internet. In this lesson, you'll deploy your site to <strong>Netlify</strong>, a free hosting platform that gives you a live URL, HTTPS security, and the ability to update your site by dragging a folder. You'll also learn how to connect to GitHub for automatic deployments, set up a custom subdomain, and enable Netlify Forms so your contact page actually works. When you finish this lesson, you'll have a real, live website you can share with anyone.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Understand how web hosting works and why Netlify is a great choice for static sites</li>
+                        <li>Deploy your site to Netlify using drag-and-drop</li>
+                        <li>Customize your Netlify subdomain (e.g., <code>tasty-bites.netlify.app</code>)</li>
+                        <li>Connect a GitHub repository for continuous deployment</li>
+                        <li>Enable Netlify Forms on your contact page</li>
+                        <li>Understand custom domains and HTTPS</li>
+                        <li>Update your live site after making changes</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 30–45 minutes</p>
+                    <p><strong>Prerequisites:</strong> Lesson 20 (Testing &amp; Validation) — site tested, validated, and ready to publish.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#how-hosting-works" class="toc-link">How Web Hosting Works</a></li>
+                        <li><a href="#why-netlify" class="toc-link">Why Netlify?</a></li>
+                        <li><a href="#deploy-drag" class="toc-link">Deploy with Drag-and-Drop</a></li>
+                        <li><a href="#custom-subdomain" class="toc-link">Customizing Your Subdomain</a></li>
+                        <li><a href="#github-deploy" class="toc-link">Continuous Deployment with GitHub</a></li>
+                        <li><a href="#netlify-forms" class="toc-link">Enabling Netlify Forms</a></li>
+                        <li><a href="#custom-domain" class="toc-link">Custom Domains &amp; HTTPS</a></li>
+                        <li><a href="#updating" class="toc-link">Updating Your Live Site</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="how-hosting-works" class="lesson-section">
+                <h2>How Web Hosting Works</h2>
+
+                <p>When you open a website in your browser, here's what happens:</p>
+
+                <div class="mermaid">
+                    graph LR
+                    A["You type<br/>tastybites.com"] --> B["Browser asks DNS:<br/>'Where is this site?'"]
+                    B --> C["DNS replies with<br/>server IP address"]
+                    C --> D["Browser requests<br/>index.html from server"]
+                    D --> E["Server sends<br/>HTML, CSS, JS, images"]
+                    E --> F["Browser renders<br/>the page"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style F fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>A <strong>web host</strong> is the computer (server) that stores your files and serves them to anyone who visits your URL. Right now, your files are on your laptop — only you can see them. Hosting puts them on a server that's always connected to the internet.</p>
+
+                <h3>Static vs. Dynamic Hosting</h3>
+
+                <ul>
+                    <li><strong>Static hosting</strong> — serves HTML, CSS, JS, and image files exactly as they are. No server-side processing. This is what your site needs. It's fast, cheap (often free), and simple.</li>
+                    <li><strong>Dynamic hosting</strong> — runs server-side code (PHP, Python, Node.js) to generate HTML on the fly. Needed for apps with databases, user accounts, or real-time features. More complex and expensive.</li>
+                </ul>
+
+                <p>Your site is <strong>static</strong> — pure HTML, CSS, and JavaScript. This means you can use free static hosting, which is faster and more reliable than most paid hosting for dynamic sites.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="why-netlify" class="lesson-section">
+                <h2>Why Netlify?</h2>
+
+                <p>There are many static hosting options. Netlify is the best choice for beginners because:</p>
+
+                <ul>
+                    <li><strong>Free tier</strong> — 100GB bandwidth/month, 300 build minutes, custom domains. More than enough for a personal site.</li>
+                    <li><strong>Drag-and-drop deployment</strong> — literally drag your project folder onto the browser. No command line needed.</li>
+                    <li><strong>Automatic HTTPS</strong> — your site gets a free SSL certificate. No configuration required.</li>
+                    <li><strong>Global CDN</strong> — your files are cached on servers worldwide, so the site loads fast for visitors everywhere.</li>
+                    <li><strong>Netlify Forms</strong> — your contact form can receive submissions without any backend code.</li>
+                    <li><strong>GitHub integration</strong> — push to GitHub and your site updates automatically.</li>
+                </ul>
+
+                <h3>Other Static Hosting Options</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Static Hosting Comparison</caption>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Free Tier</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Netlify</strong></td>
+                                <td>100GB bandwidth, forms, custom domains</td>
+                                <td>Static sites, portfolios, small projects (our pick)</td>
+                            </tr>
+                            <tr>
+                                <td>GitHub Pages</td>
+                                <td>1GB storage, 100GB bandwidth</td>
+                                <td>Project documentation, developer portfolios</td>
+                            </tr>
+                            <tr>
+                                <td>Vercel</td>
+                                <td>100GB bandwidth, serverless functions</td>
+                                <td>React/Next.js apps (overkill for static HTML)</td>
+                            </tr>
+                            <tr>
+                                <td>Cloudflare Pages</td>
+                                <td>Unlimited bandwidth</td>
+                                <td>High-traffic sites needing speed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="deploy-drag" class="lesson-section">
+                <h2>Deploy with Drag-and-Drop</h2>
+
+                <p>The fastest way to get your site live. No account setup required for the first deploy — but you'll want to sign up to manage your site afterward.</p>
+
+                <h3>Step 1: Create a Netlify Account</h3>
+
+                <ol>
+                    <li>Go to <strong><a href="https://app.netlify.com/signup" target="_blank">app.netlify.com/signup</a></strong></li>
+                    <li>Sign up with your <strong>GitHub account</strong> (recommended — you'll need this for continuous deployment) or with email</li>
+                    <li>Complete the onboarding</li>
+                </ol>
+
+                <h3>Step 2: Deploy by Drag-and-Drop</h3>
+
+                <ol>
+                    <li>Go to <strong><a href="https://app.netlify.com/drop" target="_blank">app.netlify.com/drop</a></strong> (or click "Add new site" → "Deploy manually" from your dashboard)</li>
+                    <li>Open your file manager and find your project folder (the one containing <code>index.html</code>)</li>
+                    <li><strong>Drag the entire folder</strong> onto the drop area in the browser</li>
+                    <li>Wait 10–30 seconds while Netlify uploads and deploys</li>
+                    <li>Your site is live! Netlify generates a random URL like <code>happy-morse-a1b2c3.netlify.app</code></li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 What to Drag</h4>
+                    <p>Drag the <strong>project folder itself</strong> — the folder that contains <code>index.html</code> at its root. Don't drag individual files or a parent folder. The structure should be:</p>
+                    <pre><code>📁 my-website/          ← drag THIS folder
+├── index.html
+├── about.html
+├── recipe.html
+├── contact.html
+├── 📁 css/
+├── 📁 js/
+└── 📁 images/</code></pre>
+                    <p>If Netlify shows a "Page Not Found" after deploying, it usually means <code>index.html</code> isn't at the root of the folder you dragged.</p>
+                </div>
+
+                <h3>Step 3: Verify Your Site</h3>
+
+                <ol>
+                    <li>Click the generated URL to open your site</li>
+                    <li>Check all four pages — do the links work?</li>
+                    <li>Test the mobile menu on your phone (send yourself the URL)</li>
+                    <li>Check dark mode, scroll animations, and the contact form</li>
+                </ol>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="custom-subdomain" class="lesson-section">
+                <h2>Customizing Your Subdomain</h2>
+
+                <p>The random URL isn't great for sharing. Let's change it to something memorable.</p>
+
+                <ol>
+                    <li>Go to your <strong>Netlify dashboard</strong> → click your site</li>
+                    <li>Click <strong>"Site configuration"</strong> (or "Site settings")</li>
+                    <li>Under <strong>"Site information"</strong>, click <strong>"Change site name"</strong></li>
+                    <li>Enter a name like <code>tasty-bites</code></li>
+                    <li>Your site is now at <strong><code>tasty-bites.netlify.app</code></strong></li>
+                </ol>
+
+                <p>The subdomain must be unique across all of Netlify. If <code>tasty-bites</code> is taken, try variations like <code>tasty-bites-recipes</code> or add your name.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Update Your Open Graph URL</h4>
+                    <p>Remember those <code>og:url</code> and <code>og:image</code> tags from Lesson 19? Now that you have a real URL, update them:</p>
+                    <pre><code class="language-html">&lt;meta property="og:url" content="https://tasty-bites.netlify.app/"&gt;
+&lt;meta property="og:image" content="https://tasty-bites.netlify.app/images/og-image.jpg"&gt;</code></pre>
+                    <p>Then re-deploy to apply the changes.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="github-deploy" class="lesson-section">
+                <h2>Continuous Deployment with GitHub</h2>
+
+                <p>Drag-and-drop works, but it's manual. A better workflow: push your code to GitHub, and Netlify automatically rebuilds and deploys your site. Every <code>git push</code> updates your live site in about 30 seconds.</p>
+
+                <h3>Step 1: Push Your Project to GitHub</h3>
+
+                <p>If you haven't already, create a GitHub repository and push your code:</p>
+
+                <pre><code class="language-html"># In your project folder (terminal/command prompt)
+git init
+git add .
+git commit -m "Initial commit - complete website"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
+git push -u origin main</code></pre>
+
+                <h3>Step 2: Connect Netlify to GitHub</h3>
+
+                <ol>
+                    <li>Go to your <strong>Netlify dashboard</strong></li>
+                    <li>Click <strong>"Add new site"</strong> → <strong>"Import an existing project"</strong></li>
+                    <li>Choose <strong>GitHub</strong> as the Git provider</li>
+                    <li>Authorize Netlify to access your repositories</li>
+                    <li>Select your project repository</li>
+                    <li>Leave build settings at defaults (no build command needed for static HTML)</li>
+                    <li>Click <strong>"Deploy site"</strong></li>
+                </ol>
+
+                <h3>The Continuous Deployment Workflow</h3>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Edit files<br/>locally"] --> B["git add .<br/>git commit<br/>git push"]
+                    B --> C["GitHub receives<br/>the push"]
+                    C --> D["Netlify detects<br/>the change"]
+                    D --> E["Netlify rebuilds<br/>& deploys"]
+                    E --> F["Live site updated<br/>in ~30 seconds"]
+                    style A fill:#f1f5f9,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style B fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style F fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>From now on, your workflow is: edit code → commit → push → site is automatically updated. No more dragging folders.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Don't Know Git Yet?</h4>
+                    <p>If you're not comfortable with Git and GitHub, drag-and-drop deployment is perfectly fine for now. Git is a skill worth learning separately — it's the industry standard for version control and collaboration. But it's not a prerequisite for deploying a static site.</p>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="netlify-forms" class="lesson-section">
+                <h2>Enabling Netlify Forms</h2>
+
+                <p>Remember how the contact form's <code>action="#"</code> didn't actually submit anywhere? Netlify Forms fixes this with one small change — <strong>no backend code, no third-party service, no API keys</strong>.</p>
+
+                <h3>Step 1: Add the Netlify Attribute</h3>
+
+                <p>Open your <code>contact.html</code> and add <code>data-netlify="true"</code> to the <code>&lt;form&gt;</code> tag:</p>
+
+                <pre><code class="language-html">&lt;!-- Before --&gt;
+&lt;form class="contact-form" action="#" method="POST"&gt;
+
+&lt;!-- After --&gt;
+&lt;form class="contact-form" name="contact" method="POST" data-netlify="true"&gt;</code></pre>
+
+                <p>That's it. Seriously. When Netlify deploys your site, it detects the <code>data-netlify="true"</code> attribute, automatically processes the form, and stores submissions in your Netlify dashboard.</p>
+
+                <h3>Step 2: Add a Hidden Bot-Prevention Field</h3>
+
+                <p>To reduce spam, add a honeypot field that bots fill out but humans don't see:</p>
+
+                <pre><code class="language-html">&lt;form class="contact-form" name="contact" method="POST"
+      data-netlify="true" data-netlify-honeypot="bot-field"&gt;
+
+    &lt;!-- Hidden honeypot field — bots fill this, humans don't see it --&gt;
+    &lt;p class="hidden"&gt;
+        &lt;label&gt;Don't fill this out: &lt;input name="bot-field"&gt;&lt;/label&gt;
+    &lt;/p&gt;
+
+    &lt;!-- Rest of your form fields --&gt;
+    ...
+&lt;/form&gt;</code></pre>
+
+                <pre><code class="language-css">/* Hide the honeypot field */
+.hidden {
+    display: none;
+}</code></pre>
+
+                <h3>Step 3: View Submissions</h3>
+
+                <ol>
+                    <li>Go to your Netlify dashboard → your site</li>
+                    <li>Click <strong>"Forms"</strong> in the sidebar</li>
+                    <li>You'll see all form submissions with the sender's name, email, and message</li>
+                    <li>Netlify can also email you a notification for each submission — set this up in Form notifications</li>
+                </ol>
+
+                <h3>Optional: Custom Success Page</h3>
+
+                <p>By default, Netlify shows a generic "form submitted" page. To show your own, add an <code>action</code> attribute pointing to a thank-you page:</p>
+
+                <pre><code class="language-html">&lt;form name="contact" method="POST" data-netlify="true"
+      action="/thank-you.html"&gt;</code></pre>
+
+                <p>Then create a simple <code>thank-you.html</code> page with a message like "Thanks for reaching out! I'll get back to you soon." and a link back to the homepage.</p>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="custom-domain" class="lesson-section">
+                <h2>Custom Domains &amp; HTTPS</h2>
+
+                <p>The <code>.netlify.app</code> subdomain is free and works great. But if you want a professional domain like <code>tastybites.com</code>, here's how it works.</p>
+
+                <h3>How Domain Names Work</h3>
+
+                <div class="mermaid">
+                    graph LR
+                    A["You buy<br/>tastybites.com<br/>from a registrar"] --> B["You point the domain<br/>to Netlify's servers<br/>(DNS settings)"]
+                    B --> C["Netlify serves<br/>your site when someone<br/>visits tastybites.com"]
+                    C --> D["Netlify automatically<br/>adds HTTPS<br/>(free SSL certificate)"]
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <h3>Domain Registrars</h3>
+
+                <p>A <strong>domain registrar</strong> is where you buy and manage domain names. Popular options:</p>
+
+                <ul>
+                    <li><strong><a href="https://www.namecheap.com" target="_blank">Namecheap</a></strong> — affordable, good UI, includes free privacy protection</li>
+                    <li><strong><a href="https://domains.google" target="_blank">Google Domains</a></strong> (now Squarespace Domains) — clean interface, auto-privacy</li>
+                    <li><strong><a href="https://www.cloudflare.com/products/registrar/" target="_blank">Cloudflare Registrar</a></strong> — at-cost pricing (no markup)</li>
+                    <li><strong>Netlify</strong> — you can buy domains directly through Netlify for seamless setup</li>
+                </ul>
+
+                <p>Domains typically cost <strong>$10–15/year</strong> for a <code>.com</code>. You don't need a custom domain to have a working site — the <code>.netlify.app</code> URL is perfectly fine for a personal project or portfolio.</p>
+
+                <h3>Connecting a Custom Domain</h3>
+
+                <ol>
+                    <li>In Netlify: <strong>Site settings</strong> → <strong>Domain management</strong> → <strong>"Add custom domain"</strong></li>
+                    <li>Enter your domain (e.g., <code>tastybites.com</code>)</li>
+                    <li>Netlify gives you DNS records to add at your registrar</li>
+                    <li>At your registrar, update the DNS to point to Netlify</li>
+                    <li>Wait for DNS propagation (can take up to 48 hours, usually under an hour)</li>
+                    <li>Netlify automatically provisions an SSL certificate — your site works on <code>https://</code></li>
+                </ol>
+
+                <h3>What is HTTPS?</h3>
+
+                <p><strong>HTTPS</strong> (the lock icon in the browser) means the connection between the visitor and your server is encrypted. Netlify provides this for free, automatically. Without HTTPS, browsers show a "Not Secure" warning — which scares visitors and hurts SEO. All Netlify sites get HTTPS by default, including custom domains.</p>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="updating" class="lesson-section">
+                <h2>Updating Your Live Site</h2>
+
+                <p>Your site is live — but you'll want to make changes. Here's how, depending on your deployment method:</p>
+
+                <h3>If You Used Drag-and-Drop</h3>
+
+                <ol>
+                    <li>Make your changes locally</li>
+                    <li>Test with Live Server</li>
+                    <li>Go to your Netlify site dashboard → <strong>"Deploys"</strong></li>
+                    <li>Drag your updated project folder onto the deploy area</li>
+                    <li>Netlify replaces the old version with the new one</li>
+                </ol>
+
+                <h3>If You Connected GitHub</h3>
+
+                <ol>
+                    <li>Make your changes locally</li>
+                    <li>Test with Live Server</li>
+                    <li>Commit and push to GitHub:</li>
+                </ol>
+
+                <pre><code class="language-html">git add .
+git commit -m "Update hero section text and fix mobile nav"
+git push</code></pre>
+
+                <p>Netlify detects the push and redeploys automatically. Your live site updates in about 30 seconds.</p>
+
+                <h3>Rollbacks</h3>
+
+                <p>Made a mistake? Netlify keeps every previous deployment. Go to <strong>Deploys</strong>, find the previous working version, and click <strong>"Publish deploy"</strong> to roll back instantly. This is one of Netlify's best features — you can never permanently break your live site.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Deploy Previews</h4>
+                    <p>If you use GitHub integration, Netlify can create a <strong>deploy preview</strong> for every pull request. This gives you a temporary URL to test changes before they go live. Great for teams, but also useful solo — you can review changes on a real URL before merging to main.</p>
+                </div>
+            </section>
+
+            <!-- Section 9: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Deploy Your Website</h3>
+                    <p><strong>Objective:</strong> Get your site live on the internet with a shareable URL.</p>
+
+                    <h4>Step 1: Create a Netlify Account</h4>
+                    <ol>
+                        <li>Sign up at <a href="https://app.netlify.com/signup" target="_blank">app.netlify.com/signup</a></li>
+                        <li>Use your GitHub account if you plan to use continuous deployment</li>
+                    </ol>
+
+                    <h4>Step 2: Deploy Your Site</h4>
+                    <p>Choose one method:</p>
+                    <ul>
+                        <li><strong>Option A (Easy):</strong> Drag-and-drop your project folder at <a href="https://app.netlify.com/drop" target="_blank">app.netlify.com/drop</a></li>
+                        <li><strong>Option B (Better):</strong> Push to GitHub, then import from GitHub in Netlify</li>
+                    </ul>
+
+                    <h4>Step 3: Customize Your URL</h4>
+                    <ol>
+                        <li>Change the random subdomain to something meaningful</li>
+                        <li>Update your <code>og:url</code> and <code>og:image</code> meta tags with the real URL</li>
+                        <li>Redeploy with the updated meta tags</li>
+                    </ol>
+
+                    <h4>Step 4: Enable Netlify Forms</h4>
+                    <ol>
+                        <li>Add <code>data-netlify="true"</code> and <code>name="contact"</code> to your contact form</li>
+                        <li>Add the honeypot field for spam prevention</li>
+                        <li>Deploy and test — submit the form and check the Netlify dashboard</li>
+                    </ol>
+
+                    <h4>Step 5: Final Verification</h4>
+                    <ol>
+                        <li>Open your live URL on your phone</li>
+                        <li>Test all four pages, all links, the mobile menu, and dark mode</li>
+                        <li>Submit the contact form and verify it appears in Netlify</li>
+                        <li>Send the URL to a friend or family member and ask them to try it</li>
+                    </ol>
+
+                    <h4>Step 6: Celebrate 🎉</h4>
+                    <p>You just built and published a real website from scratch. Take a moment to appreciate that.</p>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What type of hosting does a static HTML/CSS/JS site need?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Dynamic hosting runs server-side code. Static HTML sites don't need server-side processing — they just serve files as-is.">A) Dynamic hosting with server-side processing</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Static hosting simply serves your HTML, CSS, JS, and image files as they are — no server-side code needed. It's faster, cheaper (often free), and more secure than dynamic hosting. Netlify, GitHub Pages, and Cloudflare Pages are all static hosting services.">B) Static hosting — it serves files as they are, no server-side code needed</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Dedicated servers are expensive physical machines. A static HTML site can be served from shared infrastructure for free. Dedicated servers are for large-scale dynamic applications.">C) A dedicated server with full root access</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What does <code>data-netlify="true"</code> do on a form?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="CSS styling is controlled by CSS classes and rules, not data attributes. data-netlify is specifically for form processing.">A) It adds Netlify's default CSS styling to the form</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! When Netlify deploys your site, it scans for forms with data-netlify='true'. For those forms, Netlify automatically processes submissions and stores them in your dashboard — no backend code, no API, no third-party service needed.">B) It tells Netlify to automatically process form submissions and store them in your dashboard</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Netlify Forms doesn't require a database. Submissions are stored in Netlify's own dashboard. You don't need to set up or maintain any database.">C) It connects the form to a Netlify database you need to set up separately</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> What is the purpose of the honeypot field?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The honeypot is a hidden field that human users never see or fill in. Spam bots, however, fill in every field they find. If the honeypot has a value, Netlify knows it's a bot submission and ignores it. It's a simple, invisible spam filter.">A) It's a hidden field that catches spam bots — bots fill it in, humans don't see it, and Netlify ignores submissions where it has a value</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Password protection requires a different mechanism (like Netlify's site password feature). The honeypot is specifically for filtering spam form submissions.">B) It adds password protection to the form</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The honeypot doesn't store anything — it's the opposite. When a bot fills it in, the submission is discarded. It's a trap for bots, not a storage mechanism.">C) It stores extra metadata about the submission</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What happens when you push to GitHub with Netlify connected?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="You don't need to manually deploy after pushing. The whole point of continuous deployment is that it's automatic.">A) Nothing — you still need to manually deploy from the Netlify dashboard</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! This is continuous deployment. Netlify watches your GitHub repository for changes. When you push, it automatically pulls the new code, rebuilds, and deploys — usually in about 30 seconds. Your live site updates without any manual steps.">B) Netlify automatically detects the change, rebuilds, and deploys your updated site in about 30 seconds</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Netlify doesn't email for approval — it deploys automatically. However, you can configure deploy previews for pull requests if you want a review step before merging to the main branch.">C) Netlify sends you an email asking you to approve the deployment</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> Why does Netlify provide HTTPS automatically?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="HTTPS doesn't directly affect speed (it can actually add a tiny bit of overhead). Its primary purpose is security — encrypting the connection between the visitor and the server.">A) It makes the site load faster</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! HTTPS encrypts the connection so data can't be intercepted. Without it, browsers display 'Not Secure' warnings that scare visitors. Search engines also rank HTTPS sites higher. Netlify provides free SSL certificates via Let's Encrypt, automatically — you don't need to configure anything.">B) It encrypts the connection for security — without it, browsers show a 'Not Secure' warning and search engines rank the site lower</button>
+                            <button class="quiz-option" data-correct="false" data-hint="HTTPS is important for all websites, not just e-commerce. Browsers warn about all non-HTTPS sites, and search engines penalize them regardless of whether they handle payments.">C) It's only important for sites that accept credit cards</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Course Complete — Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Static hosting</strong> serves files as-is — it's free, fast, and perfect for HTML/CSS/JS sites</li>
+                        <li><strong>Netlify</strong> offers drag-and-drop deployment, automatic HTTPS, global CDN, and forms — all free</li>
+                        <li><strong>Drag-and-drop</strong> is the fastest way to deploy — just drag your project folder</li>
+                        <li><strong>Customize your subdomain</strong> at Site settings → Change site name</li>
+                        <li><strong>GitHub + Netlify</strong> enables continuous deployment — push to GitHub, site updates automatically</li>
+                        <li><strong>Netlify Forms</strong> needs just <code>data-netlify="true"</code> and a <code>name</code> attribute — no backend required</li>
+                        <li>A <strong>honeypot field</strong> is a simple, invisible spam filter for forms</li>
+                        <li><strong>Custom domains</strong> cost ~$10–15/year but aren't required — <code>.netlify.app</code> is perfectly professional</li>
+                        <li><strong>HTTPS</strong> is automatic on Netlify — encrypted connections, no "Not Secure" warnings</li>
+                        <li>Netlify keeps <strong>every deployment</strong> — you can roll back to any previous version instantly</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Completed Project</h3>
+                <pre><code>my-website/                         🌐 LIVE at yoursite.netlify.app
+├── css/
+│   └── style.css                   ← all styles: base, nav, hero, cards,
+│                                      forms, dark mode, animations, responsive
+├── images/
+│   ├── favicon-32.png              ← browser tab icon
+│   ├── og-image.jpg                ← social sharing preview
+│   ├── about-photo.jpg
+│   ├── recipe-pasta.jpg
+│   ├── recipe-salad.jpg
+│   └── recipe-soup.jpg
+├── js/
+│   └── script.js                   ← mobile menu, dark mode, scroll
+│                                      animations, back-to-top
+├── index.html                      ← Homepage
+├── about.html                      ← About page
+├── recipe.html                     ← Recipe page
+├── contact.html                    ← Contact page (Netlify Forms)
+└── thank-you.html                  ← Form success page (optional)
+
+✅ Validated HTML &amp; CSS
+✅ Lighthouse scores 80+/90+/90+/90+
+✅ Responsive from 375px to 1920px
+✅ Accessible (keyboard, screen reader, contrast)
+✅ Dark mode with persistence
+✅ Smooth transitions &amp; scroll animations
+✅ prefers-reduced-motion respected
+✅ Working contact form
+✅ LIVE ON THE INTERNET</code></pre>
+
+                <div class="card card-success" style="margin-top: var(--space-xl);">
+                    <h3>🎓 What You've Accomplished</h3>
+                    <p>You started this course knowing nothing (or close to it) about web development. Over 21 lessons, you learned:</p>
+                    <ul>
+                        <li>What HTML and CSS are and how browsers turn code into web pages</li>
+                        <li>Every fundamental HTML element — text, links, images, lists, tables, forms, semantic elements</li>
+                        <li>CSS from the basics through advanced layout — selectors, the box model, Flexbox, Grid, responsive design</li>
+                        <li>How to plan a website before writing code</li>
+                        <li>How to build a multi-page site with shared components and consistent styling</li>
+                        <li>Professional polish — transitions, dark mode, scroll animations, accessibility</li>
+                        <li>How to test, validate, and debug your work</li>
+                        <li>How to publish a site to the internet for the world to see</li>
+                    </ul>
+                    <p><strong>You built a real website from scratch and published it. That's not a trivial thing.</strong></p>
+                </div>
+
+                <h3>🚀 Where to Go from Here</h3>
+
+                <p>This course gave you a strong foundation. Here are paths to keep growing:</p>
+
+                <ul>
+                    <li><strong>JavaScript</strong> — add real interactivity: image carousels, form validation, dynamic content, API calls. This is the natural next step.</li>
+                    <li><strong>CSS Frameworks</strong> — try <a href="https://tailwindcss.com" target="_blank">Tailwind CSS</a> or <a href="https://getbootstrap.com" target="_blank">Bootstrap</a> to build faster with pre-made utility classes and components.</li>
+                    <li><strong>Static Site Generators</strong> — <a href="https://www.11ty.dev" target="_blank">Eleventy</a> or <a href="https://gohugo.io" target="_blank">Hugo</a> solve the copy-paste problem for multi-page sites with templates and markdown.</li>
+                    <li><strong>Git &amp; GitHub</strong> — learn version control to track changes, collaborate, and unlock the full power of continuous deployment.</li>
+                    <li><strong>React or Vue</strong> — component-based frameworks for building complex, interactive web applications.</li>
+                    <li><strong>Build more sites</strong> — the best way to improve is to build. A portfolio, a blog, a project for someone else. Every site you build makes you faster and better.</li>
+                </ul>
+
+                <p>Congratulations on completing the course. Your website is live. Go share it. 🎉</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_20.html" class="prev-lesson">← Previous: Testing &amp; Validation</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <span class="next-lesson" style="opacity: 0.5; cursor: default;">Course Complete! 🎓</span>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

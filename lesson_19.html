@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Add the finishing touches that make a website feel professional — smooth transitions, hover effects, dark mode, scroll animations, favicon, and accessibility refinements.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 19: Adding Polish - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 4</a></li>
+            <li aria-current="page">Lesson 19: Adding Polish</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>✨ Lesson 19: Adding Polish</h1>
+                <p class="lead">Your site works. All four pages are built, responsive, and linked together. But there's a gap between <em>works</em> and <em>feels great</em>. The difference lives in the details — smooth transitions, thoughtful hover states, dark mode support, a favicon in the browser tab, and subtle animations that make the experience feel alive. In this lesson, you'll add the polish that turns a student project into something you'd be proud to show anyone.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Add smooth transitions to links, buttons, and cards</li>
+                        <li>Create scroll-triggered animations with CSS and a touch of JavaScript</li>
+                        <li>Implement a dark mode toggle that remembers the user's preference</li>
+                        <li>Add a favicon and Open Graph meta tags for sharing</li>
+                        <li>Improve accessibility with a skip-to-content link and focus-visible styles</li>
+                        <li>Add smooth scrolling, a back-to-top button, and loading state for images</li>
+                        <li>Understand the <code>prefers-reduced-motion</code> media query</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45–60 minutes</p>
+                    <p><strong>Prerequisites:</strong> Lesson 18 (Building Content Pages) — all four pages complete.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#transitions" class="toc-link">Smooth Transitions</a></li>
+                        <li><a href="#hover-effects" class="toc-link">Hover &amp; Focus Effects</a></li>
+                        <li><a href="#scroll-animations" class="toc-link">Scroll-Triggered Animations</a></li>
+                        <li><a href="#dark-mode" class="toc-link">Dark Mode Toggle</a></li>
+                        <li><a href="#favicon-meta" class="toc-link">Favicon &amp; Social Sharing Meta Tags</a></li>
+                        <li><a href="#smooth-scroll" class="toc-link">Smooth Scrolling &amp; Back to Top</a></li>
+                        <li><a href="#accessibility-polish" class="toc-link">Accessibility Polish</a></li>
+                        <li><a href="#reduced-motion" class="toc-link">Respecting <code>prefers-reduced-motion</code></a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="transitions" class="lesson-section">
+                <h2>Smooth Transitions</h2>
+
+                <p>Without transitions, CSS property changes happen instantly — a button turns blue on hover in zero milliseconds. That feels jarring and mechanical. Transitions add easing so changes happen <em>over time</em>, making interactions feel natural and intentional.</p>
+
+                <h3>The <code>transition</code> Shorthand</h3>
+
+                <pre><code class="language-css">/* transition: property duration timing-function delay; */
+.btn {
+    transition: background-color 250ms ease, color 250ms ease;
+}
+
+/* Or transition everything (simpler, slightly less performant) */
+.card {
+    transition: all 300ms ease;
+}</code></pre>
+
+                <h3>Timing Functions Explained</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Common CSS Timing Functions</caption>
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Behavior</th>
+                                <th>Best For</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>ease</code></td>
+                                <td>Starts slow, speeds up, ends slow</td>
+                                <td>General purpose — the default</td>
+                            </tr>
+                            <tr>
+                                <td><code>ease-in</code></td>
+                                <td>Starts slow, speeds up</td>
+                                <td>Elements leaving the screen</td>
+                            </tr>
+                            <tr>
+                                <td><code>ease-out</code></td>
+                                <td>Starts fast, slows down</td>
+                                <td>Elements entering the screen</td>
+                            </tr>
+                            <tr>
+                                <td><code>ease-in-out</code></td>
+                                <td>Slow on both ends</td>
+                                <td>Toggles, expand/collapse</td>
+                            </tr>
+                            <tr>
+                                <td><code>linear</code></td>
+                                <td>Constant speed</td>
+                                <td>Progress bars, loading spinners</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>What to Transition (and What Not To)</h3>
+
+                <p>Browsers can animate some properties cheaply and others expensively:</p>
+
+                <ul>
+                    <li><strong>Cheap (GPU-accelerated):</strong> <code>transform</code>, <code>opacity</code> — use these whenever possible</li>
+                    <li><strong>Moderate:</strong> <code>background-color</code>, <code>color</code>, <code>border-color</code>, <code>box-shadow</code> — fine for interactive elements</li>
+                    <li><strong>Expensive (triggers layout):</strong> <code>width</code>, <code>height</code>, <code>padding</code>, <code>margin</code>, <code>top</code>/<code>left</code> — avoid animating these</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Rule of Thumb</h4>
+                    <p>If you want to move something, use <code>transform: translate()</code> instead of changing <code>top</code>/<code>left</code>. If you want to resize something, use <code>transform: scale()</code> instead of changing <code>width</code>/<code>height</code>. These run on the GPU and won't cause jank.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="hover-effects" class="lesson-section">
+                <h2>Hover &amp; Focus Effects</h2>
+
+                <p>Well-crafted hover effects tell users "this is interactive" before they click. Let's enhance the elements you've already built.</p>
+
+                <h3>Enhanced Button Hover</h3>
+
+                <pre><code class="language-css">.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    transition: background-color 250ms ease,
+                transform 150ms ease,
+                box-shadow 250ms ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: none;
+}</code></pre>
+
+                <p>The subtle lift on hover (<code>translateY(-1px)</code>) and snap-back on click (<code>:active</code>) creates a tactile button feel — like pressing a physical key.</p>
+
+                <h3>Card Hover Enhancement</h3>
+
+                <pre><code class="language-css">.card,
+.recipe-card {
+    transition: transform 300ms ease,
+                box-shadow 300ms ease;
+}
+
+.card:hover,
+.recipe-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}</code></pre>
+
+                <h3>Link Underline Animation</h3>
+
+                <p>Instead of the default underline appearing instantly, you can animate it from left to right:</p>
+
+                <pre><code class="language-css">.content-link {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-primary);
+}
+
+.content-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+    transition: width 300ms ease;
+}
+
+.content-link:hover::after {
+    width: 100%;
+}</code></pre>
+
+                <p>This uses a pseudo-element (<code>::after</code>) as the underline. At rest, its width is 0. On hover, it grows to 100% — a clean, animated underline.</p>
+
+                <h3>Image Hover Zoom</h3>
+
+                <pre><code class="language-css">.recipe-card img {
+    transition: transform 400ms ease;
+}
+
+.recipe-card:hover img {
+    transform: scale(1.05);
+}
+
+/* The card's overflow: hidden clips the zoomed image */</code></pre>
+
+                <p>The <code>overflow: hidden</code> you set on recipe cards in Lesson 18 does double duty here — it clips the image as it scales, creating a smooth zoom-within-frame effect.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="scroll-animations" class="lesson-section">
+                <h2>Scroll-Triggered Animations</h2>
+
+                <p>Scroll animations make content feel like it's arriving as the user discovers it, rather than sitting there fully loaded. The key is subtlety — a gentle fade-in is professional; a spinning, bouncing, flashing entrance is a 2005 PowerPoint.</p>
+
+                <h3>Step 1: CSS for the Animation</h3>
+
+                <pre><code class="language-css">/* Elements start invisible and slightly below */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 600ms ease-out,
+                transform 600ms ease-out;
+}
+
+/* When JavaScript adds .visible, they animate in */
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger children for a cascading effect */
+.fade-in:nth-child(2) { transition-delay: 100ms; }
+.fade-in:nth-child(3) { transition-delay: 200ms; }
+.fade-in:nth-child(4) { transition-delay: 300ms; }</code></pre>
+
+                <h3>Step 2: HTML — Add the Class</h3>
+
+                <p>Add <code>class="fade-in"</code> to elements you want to animate. Cards are a great candidate:</p>
+
+                <pre><code class="language-html">&lt;div class="card-grid"&gt;
+    &lt;article class="card fade-in"&gt;...&lt;/article&gt;
+    &lt;article class="card fade-in"&gt;...&lt;/article&gt;
+    &lt;article class="card fade-in"&gt;...&lt;/article&gt;
+&lt;/div&gt;</code></pre>
+
+                <h3>Step 3: JavaScript — Intersection Observer</h3>
+
+                <p>Add this to your <code>js/script.js</code> file:</p>
+
+                <pre><code class="language-js">// Scroll-triggered fade-in animations
+const fadeElements = document.querySelectorAll('.fade-in');
+
+if (fadeElements.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);  // animate once only
+            }
+        });
+    }, {
+        threshold: 0.1,      // trigger when 10% visible
+        rootMargin: '0px 0px -50px 0px'  // slightly before fully in view
+    });
+
+    fadeElements.forEach(el => observer.observe(el));
+}</code></pre>
+
+                <h3>How Intersection Observer Works</h3>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Page loads<br/>Cards have .fade-in<br/>(invisible, shifted down)"]
+                    B["User scrolls down"]
+                    C{"Card enters viewport?<br/>(10% visible)"}
+                    D["Observer adds .visible<br/>→ opacity: 1, translateY(0)<br/>→ Card fades in smoothly"]
+                    E["Observer stops watching<br/>(unobserve)"]
+                    A --> B --> C
+                    C -->|Yes| D --> E
+                    C -->|No| B
+                    style A fill:#f1f5f9,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style C fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style E fill:#eff6ff,stroke:#3b82f6,stroke-width:1px,color:#1e293b
+                </div>
+
+                <p>Intersection Observer is the modern replacement for scroll event listeners. It's more performant because the browser handles the observation natively instead of firing JavaScript on every pixel of scroll.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Why <code>unobserve</code>?</h4>
+                    <p>Calling <code>observer.unobserve(entry.target)</code> after the animation means each element only animates once — when it first scrolls into view. Without it, elements would fade in and out every time they enter and leave the viewport, which is distracting.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="dark-mode" class="lesson-section">
+                <h2>Dark Mode Toggle</h2>
+
+                <p>Dark mode isn't just an aesthetic choice — it reduces eye strain in low light, saves battery on OLED screens, and many users strongly prefer it. Since you built your styles with CSS custom properties, adding dark mode is straightforward: <strong>redefine the variables</strong>.</p>
+
+                <h3>Step 1: Dark Mode CSS</h3>
+
+                <p>Add this to your <code>css/style.css</code>:</p>
+
+                <pre><code class="language-css">/* ===========================
+   Dark Mode
+   =========================== */
+[data-theme="dark"] {
+    --color-primary: #60a5fa;
+    --color-primary-light: #93c5fd;
+    --color-accent: #fbbf24;
+    --color-bg: #0f172a;
+    --color-bg-alt: #1e293b;
+    --color-text: #e2e8f0;
+    --color-text-light: #94a3b8;
+    --color-border: #334155;
+    --color-success: #4ade80;
+    --color-error: #f87171;
+}
+
+/* Dark mode adjustments for specific elements */
+[data-theme="dark"] .navbar {
+    background-color: var(--color-bg);
+    border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .site-footer {
+    background-color: #020617;
+}
+
+[data-theme="dark"] img {
+    filter: brightness(0.9);
+}</code></pre>
+
+                <p>Because every style references custom properties, changing the variable values cascades through your entire site. The <code>[data-theme="dark"]</code> selector targets the <code>data-theme</code> attribute on the <code>&lt;html&gt;</code> element.</p>
+
+                <h3>Step 2: The Toggle Button</h3>
+
+                <p>Add a theme toggle button to your navigation (on every page):</p>
+
+                <pre><code class="language-html">&lt;!-- Inside .nav-menu, after the last &lt;li&gt; --&gt;
+&lt;li&gt;
+    &lt;button class="theme-toggle" aria-label="Toggle dark mode"&gt;
+        🌙
+    &lt;/button&gt;
+&lt;/li&gt;</code></pre>
+
+                <pre><code class="language-css">/* Theme toggle button styling */
+.theme-toggle {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+    line-height: 1;
+}
+
+.theme-toggle:hover {
+    border-color: var(--color-primary);
+}</code></pre>
+
+                <h3>Step 3: The JavaScript</h3>
+
+                <p>Add this to your <code>js/script.js</code>:</p>
+
+                <pre><code class="language-js">// Dark mode toggle with localStorage persistence
+const themeToggle = document.querySelector('.theme-toggle');
+
+if (themeToggle) {
+    // Check for saved preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+    ).matches;
+
+    // Apply saved theme, or fall back to system preference
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    } else if (prefersDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    // Update button icon to match current theme
+    function updateIcon() {
+        const isDark = document.documentElement.getAttribute('data-theme')
+                       === 'dark';
+        themeToggle.textContent = isDark ? '☀️' : '🌙';
+    }
+    updateIcon();
+
+    // Toggle on click
+    themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        updateIcon();
+    });
+}</code></pre>
+
+                <h3>How the Theme System Works</h3>
+
+                <div class="mermaid">
+                    graph TD
+                    A["Page loads"] --> B{"Saved theme in<br/>localStorage?"}
+                    B -->|Yes| C["Apply saved theme"]
+                    B -->|No| D{"System prefers dark?<br/>(prefers-color-scheme)"}
+                    D -->|Yes| E["Apply dark theme"]
+                    D -->|No| F["Keep light theme<br/>(default)"]
+                    G["User clicks toggle"] --> H["Switch theme"]
+                    H --> I["Save to localStorage"]
+                    I --> J["Next page load<br/>→ reads localStorage<br/>→ applies theme instantly"]
+                    style A fill:#f1f5f9,stroke:#64748b,stroke-width:1px,color:#1e293b
+                    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style D fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style H fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style I fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>The key feature is <strong><code>localStorage</code></strong> — it saves the user's choice so it persists across page loads and sessions. Without it, the theme would reset to light every time they navigate or refresh.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Preventing the Flash</h4>
+                    <p>You might notice a brief flash of the light theme before dark mode kicks in. To prevent this, add a tiny inline script in the <code>&lt;head&gt;</code> of every page (before the stylesheet loads):</p>
+                    <pre><code class="language-html">&lt;script&gt;
+    const t = localStorage.getItem('theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.setAttribute('data-theme', 'dark');
+&lt;/script&gt;</code></pre>
+                    <p>This runs before the page renders, so the correct theme is applied from the first frame.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="favicon-meta" class="lesson-section">
+                <h2>Favicon &amp; Social Sharing Meta Tags</h2>
+
+                <h3>Adding a Favicon</h3>
+
+                <p>A <strong>favicon</strong> is the small icon in the browser tab. Without one, browsers show a generic page icon — an instant tell that a site is unfinished.</p>
+
+                <pre><code class="language-html">&lt;!-- In &lt;head&gt; on every page --&gt;
+&lt;link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png"&gt;
+&lt;link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png"&gt;
+&lt;link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png"&gt;</code></pre>
+
+                <h3>Where to Get a Favicon</h3>
+
+                <ul>
+                    <li><strong><a href="https://favicon.io" target="_blank">favicon.io</a></strong> — generate from text, emoji, or image. Downloads a complete package with all sizes.</li>
+                    <li><strong><a href="https://realfavicongenerator.net" target="_blank">realfavicongenerator.net</a></strong> — upload your logo, get every size and platform variant.</li>
+                    <li><strong>Quick approach</strong> — use an emoji favicon with a single line (works in modern browsers):</li>
+                </ul>
+
+                <pre><code class="language-html">&lt;link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;🍴&lt;/text&gt;&lt;/svg&gt;"&gt;</code></pre>
+
+                <h3>Open Graph Meta Tags</h3>
+
+                <p>When someone shares your site on social media, these tags control how the preview card looks:</p>
+
+                <pre><code class="language-html">&lt;!-- In &lt;head&gt; on every page --&gt;
+&lt;meta property="og:title" content="Tasty Bites - Simple Recipes, Made with Love"&gt;
+&lt;meta property="og:description" content="A collection of tried-and-true recipes — easy enough for weeknights, impressive enough for guests."&gt;
+&lt;meta property="og:image" content="https://yoursite.netlify.app/images/og-image.jpg"&gt;
+&lt;meta property="og:url" content="https://yoursite.netlify.app/"&gt;
+&lt;meta property="og:type" content="website"&gt;</code></pre>
+
+                <p>The <code>og:image</code> is the most impactful tag — it controls the large image shown in social media preview cards. Create an image at <strong>1200 × 630 pixels</strong> for best results across all platforms.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Test Your Social Cards</h4>
+                    <p>After deploying, test how your previews look:</p>
+                    <ul>
+                        <li><strong>Twitter:</strong> <a href="https://cards-dev.twitter.com/validator" target="_blank">cards-dev.twitter.com/validator</a></li>
+                        <li><strong>Facebook:</strong> <a href="https://developers.facebook.com/tools/debug/" target="_blank">developers.facebook.com/tools/debug</a></li>
+                        <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/post-inspector/" target="_blank">linkedin.com/post-inspector</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="smooth-scroll" class="lesson-section">
+                <h2>Smooth Scrolling &amp; Back to Top</h2>
+
+                <h3>Smooth Scrolling</h3>
+
+                <p>One line of CSS turns all anchor link jumps into smooth scrolls:</p>
+
+                <pre><code class="language-css">html {
+    scroll-behavior: smooth;
+}</code></pre>
+
+                <p>Now when a visitor clicks an anchor link like <code>href="#recipe-detail"</code>, the page glides to that section instead of jumping instantly.</p>
+
+                <h3>Back to Top Button</h3>
+
+                <p>Add this just before the closing <code>&lt;/body&gt;</code> tag on each page:</p>
+
+                <pre><code class="language-html">&lt;button class="back-to-top" aria-label="Back to top"&gt;↑&lt;/button&gt;</code></pre>
+
+                <pre><code class="language-css">/* ===========================
+   Back to Top Button
+   =========================== */
+.back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 300ms ease, visibility 300ms ease,
+                background-color 250ms ease;
+    z-index: 99;
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.back-to-top:hover {
+    background-color: var(--color-primary-light);
+}</code></pre>
+
+                <pre><code class="language-js">// Back to top button
+const backToTop = document.querySelector('.back-to-top');
+
+if (backToTop) {
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+            backToTop.classList.add('show');
+        } else {
+            backToTop.classList.remove('show');
+        }
+    });
+
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}</code></pre>
+
+                <p>The button is invisible by default and fades in when the user scrolls past 500px. The <code>visibility: hidden</code> combined with <code>opacity: 0</code> ensures screen readers can't reach it when it's hidden. The 44×44px size meets the WCAG minimum touch target size.</p>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="accessibility-polish" class="lesson-section">
+                <h2>Accessibility Polish</h2>
+
+                <p>Accessibility isn't an afterthought — but there are a few finishing touches that make a meaningful difference.</p>
+
+                <h3>Skip to Content Link</h3>
+
+                <p>Keyboard users and screen reader users shouldn't have to tab through your entire nav on every page. A "skip to content" link lets them jump straight to the main content:</p>
+
+                <pre><code class="language-html">&lt;!-- Very first element inside &lt;body&gt; --&gt;
+&lt;a href="#main-content" class="skip-link"&gt;Skip to main content&lt;/a&gt;
+
+&lt;!-- Your nav goes here --&gt;
+
+&lt;main id="main-content"&gt;
+    &lt;!-- Page content --&gt;
+&lt;/main&gt;</code></pre>
+
+                <pre><code class="language-css">/* Hidden by default, visible on focus (keyboard Tab) */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: var(--space-md);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    z-index: 1000;
+    text-decoration: none;
+    transition: top 200ms ease;
+}
+
+.skip-link:focus {
+    top: var(--space-md);
+}</code></pre>
+
+                <p>The link is positioned off-screen. When a keyboard user presses <kbd>Tab</kbd>, it slides into view at the top of the page. Pressing <kbd>Enter</kbd> jumps to <code>#main-content</code>. Sighted mouse users never see it.</p>
+
+                <h3>Focus-Visible Styles</h3>
+
+                <p>The <code>:focus-visible</code> pseudo-class applies focus styles only when the user is navigating with a keyboard — not when clicking with a mouse. This gives keyboard users the visual cues they need without adding focus rings to mouse interactions:</p>
+
+                <pre><code class="language-css">/* Remove default outline for mouse users */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Strong focus ring for keyboard users */
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: var(--border-radius-sm);
+}</code></pre>
+
+                <h3>Readable Focus Order</h3>
+
+                <p>Check that tabbing through your page follows a logical order: skip link → logo → nav links → main content → footer links. If elements are reached in a confusing order, your HTML structure probably needs adjusting — CSS shouldn't change the tab order (avoid <code>tabindex</code> values greater than 0).</p>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="reduced-motion" class="lesson-section">
+                <h2>Respecting <code>prefers-reduced-motion</code></h2>
+
+                <p>Some users have motion sensitivity — vestibular disorders, migraines, or simply a preference for less movement. Operating systems provide a "reduce motion" setting, and CSS can detect it:</p>
+
+                <pre><code class="language-css">/* Disable non-essential animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .fade-in {
+        opacity: 1;
+        transform: none;
+    }
+}</code></pre>
+
+                <p>This media query zeroes out all animations and transitions for users who have "reduce motion" enabled in their operating system settings. The <code>!important</code> declarations are warranted here — this is a user preference that should override all styling.</p>
+
+                <div class="card card-info">
+                    <h4>💡 How to Test Reduced Motion</h4>
+                    <ul>
+                        <li><strong>macOS:</strong> System Settings → Accessibility → Display → Reduce motion</li>
+                        <li><strong>Windows:</strong> Settings → Accessibility → Visual effects → Animation effects (off)</li>
+                        <li><strong>Chrome DevTools:</strong> Open the Rendering panel (<kbd>Ctrl+Shift+P</kbd> → "Show Rendering") → "Emulate CSS media feature prefers-reduced-motion"</li>
+                    </ul>
+                </div>
+
+                <p>Respecting motion preferences isn't just polite — it's a WCAG 2.1 Level AA requirement (criterion 2.3.3). If your site has essential animations (like a step-by-step walkthrough), provide an alternative; if the animations are decorative (like the card fade-in), disabling them is the right choice.</p>
+            </section>
+
+            <!-- Section 9: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Polish Your Website</h3>
+                    <p><strong>Objective:</strong> Add all the polish features to your multi-page site.</p>
+
+                    <h4>Requirements Checklist</h4>
+                    <ol>
+                        <li><strong>Transitions</strong> — all buttons, cards, and nav links have smooth hover transitions</li>
+                        <li><strong>Scroll animations</strong> — cards and feature sections fade in on scroll with Intersection Observer</li>
+                        <li><strong>Dark mode toggle</strong> — works on all pages, persists with localStorage, respects system preference</li>
+                        <li><strong>Favicon</strong> — visible in the browser tab</li>
+                        <li><strong>Open Graph tags</strong> — at least <code>og:title</code>, <code>og:description</code>, and <code>og:image</code> on the homepage</li>
+                        <li><strong>Smooth scrolling</strong> — <code>scroll-behavior: smooth</code> on the <code>html</code> element</li>
+                        <li><strong>Back to top button</strong> — appears after scrolling 500px, smooth-scrolls to top</li>
+                        <li><strong>Skip to content link</strong> — visible only on keyboard focus</li>
+                        <li><strong>Focus-visible styles</strong> — keyboard users see focus rings, mouse users don't</li>
+                        <li><strong>Reduced motion</strong> — all animations disabled when system preference is set</li>
+                    </ol>
+
+                    <h4>Testing Checklist</h4>
+                    <ul>
+                        <li>Tab through every page with the keyboard — is the focus order logical?</li>
+                        <li>Toggle dark mode and navigate between pages — does the theme persist?</li>
+                        <li>Resize to mobile — does the dark mode toggle work in the hamburger menu?</li>
+                        <li>Enable "reduce motion" in your OS — do animations stop?</li>
+                        <li>Check the browser tab — does the favicon appear?</li>
+                    </ul>
+
+                    <details>
+                        <summary>💡 Hint — Adding Dark Mode Toggle to Mobile Nav</summary>
+                        <p>The toggle button is inside the <code>&lt;ul class="nav-menu"&gt;</code>, so it's automatically included when the mobile menu opens. Style it for mobile context:</p>
+                        <pre><code class="language-css">@media (max-width: 768px) {
+    .theme-toggle {
+        width: 100%;
+        text-align: center;
+        margin-top: var(--space-sm);
+        padding: var(--space-sm);
+    }
+}</code></pre>
+                    </details>
+
+                    <details>
+                        <summary>💡 Hint — Flash Prevention Script Placement</summary>
+                        <pre><code class="language-html">&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;!-- Theme flash prevention — BEFORE stylesheet --&gt;
+    &lt;script&gt;
+        const t = localStorage.getItem('theme');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+            document.documentElement.setAttribute('data-theme', 'dark');
+    &lt;/script&gt;
+    &lt;title&gt;Home - Tasty Bites&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+    ...
+&lt;/head&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> Which CSS properties are cheapest (GPU-accelerated) to animate?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Width and height trigger layout recalculation — they're among the most expensive properties to animate.">A) <code>width</code> and <code>height</code></button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! transform and opacity run on the GPU compositor layer. They don't trigger layout or paint, making them the most performant properties to animate. This is why we use translateY() instead of changing top/bottom, and scale() instead of changing width/height.">B) <code>transform</code> and <code>opacity</code></button>
+                            <button class="quiz-option" data-correct="false" data-hint="Padding and margin change the element's box, which triggers layout recalculation for the element and its neighbors — expensive!">C) <code>padding</code> and <code>margin</code></button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What does <code>IntersectionObserver</code> do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="That's what a MutationObserver does. IntersectionObserver watches for visibility changes in the viewport.">A) Watches for changes to an element's HTML content</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! IntersectionObserver watches for when elements enter or leave the visible viewport. It's much more efficient than listening to scroll events because the browser handles the observation natively. It's perfect for triggering animations, lazy loading images, and infinite scroll.">B) Watches for when elements enter or leave the visible viewport area</button>
+                            <button class="quiz-option" data-correct="false" data-hint="That's what a ResizeObserver does. IntersectionObserver specifically tracks visibility relative to the viewport or a scroll container.">C) Watches for when an element's size changes</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why do we use <code>localStorage</code> for the dark mode preference?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="localStorage has nothing to do with page speed. Its purpose is to store data that persists across page loads and sessions.">A) It makes the page load faster</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! localStorage persists data across page loads, tabs, and browser sessions. Without it, the theme would reset to the default every time the user navigates or refreshes. The script in &lt;head&gt; reads it before the page renders, preventing a flash of the wrong theme.">B) It remembers the user's choice across page loads and sessions so the theme persists</button>
+                            <button class="quiz-option" data-correct="false" data-hint="localStorage is purely a browser-side feature. It doesn't communicate with any server — the data stays in the user's browser.">C) It sends the preference to the server so all devices sync</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What does <code>prefers-reduced-motion: reduce</code> detect?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Network speed is detected with other techniques (like navigator.connection). prefers-reduced-motion is about accessibility, not performance.">A) Whether the user has a slow internet connection</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! prefers-reduced-motion: reduce detects whether the user has enabled the 'reduce motion' setting in their operating system. This may be due to vestibular disorders, migraines, or personal preference. Respecting this setting is a WCAG 2.1 AA requirement.">B) Whether the user has enabled 'reduce motion' in their operating system settings</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The browser handles this media query natively — no JavaScript needed. It's a CSS media feature just like prefers-color-scheme.">C) Whether the user's browser supports CSS animations</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> Why is the skip-to-content link positioned off-screen instead of using <code>display: none</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! display: none removes the element from the accessibility tree entirely — screen readers can't see it, and keyboard users can't Tab to it. Positioning off-screen keeps it in the Tab order and accessible to screen readers while hiding it visually. When it receives focus, we move it on-screen.">A) Because <code>display: none</code> removes the element from the accessibility tree — screen readers and keyboard users can't reach it</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Both display: none and off-screen positioning can be animated. The reason is about accessibility, not animation.">B) Because off-screen positioning allows animation while <code>display: none</code> doesn't</button>
+                            <button class="quiz-option" data-correct="false" data-hint="display: none works in all modern browsers. The issue isn't browser support — it's that display: none makes elements completely inaccessible to assistive technology.">C) Because <code>display: none</code> doesn't work in all browsers</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Transitions</strong> make interactions feel natural — prefer animating <code>transform</code> and <code>opacity</code> (GPU-accelerated) over layout properties</li>
+                        <li><strong>Hover effects</strong> should be subtle: a small lift (<code>translateY</code>), a shadow, or a color shift — not a fireworks show</li>
+                        <li><strong>Intersection Observer</strong> triggers animations when elements scroll into view — more efficient than scroll event listeners</li>
+                        <li><strong>Dark mode</strong> works by redefining CSS custom property values under <code>[data-theme="dark"]</code></li>
+                        <li>Use <strong><code>localStorage</code></strong> to persist the theme choice, and a <code>&lt;head&gt;</code> script to prevent the flash of wrong theme</li>
+                        <li>A <strong>favicon</strong> and <strong>Open Graph tags</strong> make your site look professional in browser tabs and social media shares</li>
+                        <li><strong>Smooth scrolling</strong> is one CSS line: <code>scroll-behavior: smooth</code></li>
+                        <li>A <strong>skip-to-content link</strong> and <strong>focus-visible styles</strong> dramatically improve keyboard navigation</li>
+                        <li>Always respect <strong><code>prefers-reduced-motion</code></strong> — disable decorative animations for users who need it (WCAG 2.1 AA)</li>
+                        <li>The back-to-top button should be <strong>at least 44×44px</strong> (WCAG minimum touch target)</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project After This Lesson</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← + transitions, dark mode, scroll animations,
+│                          skip link, focus styles, back-to-top,
+│                          reduced motion media query
+├── images/
+│   ├── favicon-32.png     ← browser tab icon
+│   ├── favicon-16.png
+│   ├── apple-touch-icon.png
+│   ├── og-image.jpg       ← social sharing preview (1200×630)
+│   └── (other images)
+├── js/
+│   └── script.js      ← + dark mode toggle, scroll animations,
+│                          back-to-top button, Intersection Observer
+├── index.html         ← ✅ + favicon, OG tags, skip link, dark toggle,
+│                          back-to-top, flash prevention script
+├── about.html         ← ✅ + same polish as homepage
+├── recipe.html        ← ✅ + same polish as homepage
+└── contact.html       ← ✅ + same polish as homepage
+
+All four pages now include:
+✅ Smooth transitions on interactive elements
+✅ Scroll-triggered fade-in animations
+✅ Dark mode with localStorage persistence
+✅ Favicon in browser tab
+✅ Skip-to-content link
+✅ Focus-visible keyboard styles
+✅ Back-to-top button
+✅ prefers-reduced-motion respected</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your site looks and feels professional. But before you share it with the world, you need to make sure it actually <em>works</em> correctly — across browsers, screen sizes, and accessibility tools. In the next lesson — <strong>Lesson 20: Testing &amp; Validation</strong> — you'll learn how to validate your HTML and CSS, test in multiple browsers, run a Lighthouse audit, check accessibility with screen readers, and fix the issues that testing reveals.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_18.html" class="prev-lesson">← Previous: Building Content Pages</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_20.html" class="next-lesson">Next: Testing &amp; Validation →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

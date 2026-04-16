@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Build a complete homepage from scratch — navigation bar, hero section, feature cards, and footer — using semantic HTML and modern CSS.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 17: Building the Homepage - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 4</a></li>
+            <li aria-current="page">Lesson 17: Building the Homepage</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🏠 Lesson 17: Building the Homepage</h1>
+                <p class="lead">You've planned your site — purpose, sitemap, wireframes, style guide, folder structure. Now it's time to <strong>build</strong>. In this lesson, you'll create a complete homepage from scratch: a navigation bar that works on every page, a hero section that greets visitors, feature cards that guide them deeper into your site, and a footer that ties it all together. Every component you build here becomes a reusable pattern for the rest of your pages.</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Set up a homepage with proper HTML boilerplate and linked stylesheets</li>
+                        <li>Build a responsive navigation bar with a logo, links, and mobile hamburger menu</li>
+                        <li>Create a hero section with a heading, tagline, and call-to-action button</li>
+                        <li>Build a row of feature cards using Flexbox</li>
+                        <li>Construct a reusable footer with links and copyright info</li>
+                        <li>Apply your style guide colors, fonts, and spacing with CSS custom properties</li>
+                        <li>Make the entire page responsive from desktop to mobile</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 60–90 minutes</p>
+                    <p><strong>Prerequisites:</strong> Lesson 16 (Planning Your Site) — you should have a project folder set up with a <code>css/style.css</code> file containing your style guide custom properties.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#blueprint" class="toc-link">The Homepage Blueprint</a></li>
+                        <li><a href="#boilerplate" class="toc-link">HTML Boilerplate &amp; Page Structure</a></li>
+                        <li><a href="#nav" class="toc-link">Building the Navigation Bar</a></li>
+                        <li><a href="#hero" class="toc-link">Creating the Hero Section</a></li>
+                        <li><a href="#cards" class="toc-link">Feature Cards with Flexbox</a></li>
+                        <li><a href="#featured" class="toc-link">Featured Recipe Preview</a></li>
+                        <li><a href="#footer" class="toc-link">Building the Footer</a></li>
+                        <li><a href="#responsive" class="toc-link">Making It Responsive</a></li>
+                        <li><a href="#mobile-menu" class="toc-link">Adding the Mobile Menu Toggle</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="blueprint" class="lesson-section">
+                <h2>The Homepage Blueprint</h2>
+
+                <p>Before writing a single line of code, let's revisit the wireframe from Lesson 16. Your homepage has four major sections stacked vertically:</p>
+
+                <div class="mermaid">
+                    graph TD
+                    A["🧭 Navigation Bar<br/>Logo + Links + Hamburger"]
+                    B["🎬 Hero Section<br/>Welcome heading + tagline + CTA button"]
+                    C["🃏 Feature Cards<br/>3 cards: About · Recipes · Contact"]
+                    D["⭐ Featured Recipe<br/>Image + title + description + link"]
+                    E["📋 Footer<br/>Copyright + links"]
+                    A --> B --> C --> D --> E
+                    style A fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style D fill:#fdf2f8,stroke:#ec4899,stroke-width:2px,color:#1e293b
+                    style E fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>We'll build each section one at a time — writing the HTML first, then styling it immediately so you can see progress with every save. This <strong>"build and style as you go"</strong> approach keeps you motivated and makes debugging much easier than writing all the HTML first and all the CSS later.</p>
+
+                <div class="card card-info">
+                    <h4>💡 Work in Small Cycles</h4>
+                    <p>Professional developers work in tight feedback loops: write a small chunk of code, save, check the browser, adjust. If you write 200 lines before checking, you'll have 200 lines to debug. Write 10, check, adjust — repeat.</p>
+                </div>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="boilerplate" class="lesson-section">
+                <h2>HTML Boilerplate &amp; Page Structure</h2>
+
+                <p>Open your project's <code>index.html</code> file (the one you created in Lesson 16). If it's still empty, start with this boilerplate:</p>
+
+                <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Home - Tasty Bites&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+    &lt;!-- Google Font (optional — remove if using system fonts) --&gt;
+    &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+    &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+          rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!-- Navigation --&gt;
+    &lt;header class="site-header"&gt;
+        &lt;nav&gt;&lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;!-- Hero --&gt;
+    &lt;section class="hero"&gt;&lt;/section&gt;
+
+    &lt;!-- Main Content --&gt;
+    &lt;main&gt;
+        &lt;!-- Feature Cards --&gt;
+        &lt;section class="features"&gt;&lt;/section&gt;
+
+        &lt;!-- Featured Recipe --&gt;
+        &lt;section class="featured-recipe"&gt;&lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;!-- Footer --&gt;
+    &lt;footer class="site-footer"&gt;&lt;/footer&gt;
+
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                <h3>What's Happening Here</h3>
+
+                <ul>
+                    <li><strong><code>&lt;header class="site-header"&gt;</code></strong> — wraps the navigation. We use <code>&lt;header&gt;</code> because the nav is the page's top-level introductory content.</li>
+                    <li><strong><code>&lt;section class="hero"&gt;</code></strong> — the big welcome area. It's outside <code>&lt;main&gt;</code> because it's a page-level landmark, not the primary article content.</li>
+                    <li><strong><code>&lt;main&gt;</code></strong> — contains the primary content: feature cards and featured recipe.</li>
+                    <li><strong><code>&lt;footer class="site-footer"&gt;</code></strong> — closing info shared across all pages.</li>
+                </ul>
+
+                <p>Save the file and open it with Live Server (<kbd>Ctrl+Shift+P</kbd> → "Live Server: Open"). You should see a blank white page — that's correct. We'll fill in each section next.</p>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="nav" class="lesson-section">
+                <h2>Building the Navigation Bar</h2>
+
+                <p>The navigation bar is the most important shared component on your site. It appears on every page, so getting it right here means you can copy it to every other page later.</p>
+
+                <h3>Step 1: The HTML</h3>
+
+                <p>Replace the empty <code>&lt;nav&gt;</code> inside the header:</p>
+
+                <pre><code class="language-html">&lt;header class="site-header"&gt;
+    &lt;nav class="navbar"&gt;
+        &lt;div class="nav-container"&gt;
+            &lt;a href="index.html" class="nav-logo"&gt;🍴 Tasty Bites&lt;/a&gt;
+
+            &lt;button class="nav-toggle" aria-label="Toggle navigation"
+                    aria-expanded="false"&gt;
+                ☰
+            &lt;/button&gt;
+
+            &lt;ul class="nav-menu"&gt;
+                &lt;li&gt;&lt;a href="index.html" class="nav-link active"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="about.html" class="nav-link"&gt;About&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="recipe.html" class="nav-link"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="contact.html" class="nav-link"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+&lt;/header&gt;</code></pre>
+
+                <h3>Breaking It Down</h3>
+
+                <ul>
+                    <li><strong><code>&lt;nav class="navbar"&gt;</code></strong> — the semantic <code>&lt;nav&gt;</code> element tells screen readers "this is navigation."</li>
+                    <li><strong><code>&lt;div class="nav-container"&gt;</code></strong> — centers the nav content and sets a max-width, just like a page container.</li>
+                    <li><strong><code>&lt;a class="nav-logo"&gt;</code></strong> — the site name acts as a link back to the homepage. The emoji is optional flair.</li>
+                    <li><strong><code>&lt;button class="nav-toggle"&gt;</code></strong> — the hamburger menu button for mobile. It's hidden on desktop and shown on small screens. The <code>aria-label</code> and <code>aria-expanded</code> attributes keep it accessible.</li>
+                    <li><strong><code>&lt;ul class="nav-menu"&gt;</code></strong> — an unordered list of links. The <code>active</code> class marks the current page.</li>
+                </ul>
+
+                <h3>Step 2: The CSS</h3>
+
+                <p>Add this to your <code>css/style.css</code> file, after the base styles from Lesson 16:</p>
+
+                <pre><code class="language-css">/* ===========================
+   Navigation Bar
+   =========================== */
+.navbar {
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+
+.nav-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.nav-logo:hover {
+    color: var(--color-primary-light);
+    text-decoration: none;
+}
+
+.nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--space-md);
+}
+
+.nav-link {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--border-radius-sm);
+    transition: color var(--transition-fast),
+                background-color var(--transition-fast);
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-bg-alt);
+    text-decoration: none;
+}
+
+.nav-link.active {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Hamburger button — hidden on desktop */
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: var(--space-sm);
+    color: var(--color-text);
+}</code></pre>
+
+                <p>Save both files and check the browser. You should see a clean navigation bar pinned to the top of the page — logo on the left, links on the right, the hamburger button invisible (for now).</p>
+
+                <div class="card card-info">
+                    <h4>💡 Why <code>position: sticky</code>?</h4>
+                    <p>Sticky positioning keeps the nav visible as visitors scroll. It behaves like <code>relative</code> until the user scrolls past it, then it sticks to the top like <code>fixed</code>. The <code>z-index: 100</code> ensures it stays above other content.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="hero" class="lesson-section">
+                <h2>Creating the Hero Section</h2>
+
+                <p>The hero section is the first thing visitors see below the nav. Its job is to communicate three things instantly: <em>what this site is</em>, <em>who it's for</em>, and <em>what to do next</em>.</p>
+
+                <h3>Step 1: The HTML</h3>
+
+                <p>Replace the empty hero section:</p>
+
+                <pre><code class="language-html">&lt;section class="hero"&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;Simple Recipes,&lt;br&gt;Made with Love&lt;/h1&gt;
+        &lt;p class="hero-tagline"&gt;
+            A collection of my favorite recipes — easy enough for
+            weeknights, impressive enough for guests.
+        &lt;/p&gt;
+        &lt;a href="recipe.html" class="btn btn-primary"&gt;Browse Recipes&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+
+                <h3>Why an <code>&lt;a&gt;</code> Instead of a <code>&lt;button&gt;</code>?</h3>
+
+                <p>The call-to-action (CTA) takes visitors to another page, so it's a link styled as a button. Use <code>&lt;a&gt;</code> for navigation and <code>&lt;button&gt;</code> for actions (form submit, toggle, open modal). Styling them to look the same is fine — the <em>semantic</em> difference matters for accessibility and SEO.</p>
+
+                <h3>Step 2: The CSS</h3>
+
+                <pre><code class="language-css">/* ===========================
+   Hero Section
+   =========================== */
+.hero {
+    background-color: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.2;
+    margin-bottom: var(--space-md);
+    color: var(--color-text);
+}
+
+.hero-tagline {
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    color: var(--color-text-light);
+    max-width: 600px;
+    margin: 0 auto var(--space-xl);
+    line-height: 1.6;
+}
+
+/* ===========================
+   Buttons (reusable)
+   =========================== */
+.btn {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-xl);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: background-color var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-light);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-outline:hover {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    text-decoration: none;
+}</code></pre>
+
+                <p>Check the browser. You should see a centered hero section with a large heading, a muted tagline, and a blue call-to-action button. The <code>clamp()</code> values make the text scale smoothly between mobile and desktop sizes — no media query needed for font sizes.</p>
+
+                <div class="card card-info">
+                    <h4>💡 The Power of <code>clamp()</code></h4>
+                    <p><code>clamp(min, preferred, max)</code> sets a value that scales with the viewport but never goes below the minimum or above the maximum. It's the modern CSS way to handle responsive typography without media queries. You learned about it in Lesson 15 — now you're using it for real.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="cards" class="lesson-section">
+                <h2>Feature Cards with Flexbox</h2>
+
+                <p>Feature cards are a common homepage pattern — a row of 2–4 boxes that summarize what visitors will find on your site and link them there. We'll build three cards: About, Recipes, and Contact.</p>
+
+                <h3>Step 1: The HTML</h3>
+
+                <p>Replace the empty features section inside <code>&lt;main&gt;</code>:</p>
+
+                <pre><code class="language-html">&lt;section class="features"&gt;
+    &lt;div class="container"&gt;
+        &lt;h2&gt;What You'll Find Here&lt;/h2&gt;
+        &lt;div class="card-grid"&gt;
+
+            &lt;article class="card"&gt;
+                &lt;div class="card-icon"&gt;👋&lt;/div&gt;
+                &lt;h3&gt;About Me&lt;/h3&gt;
+                &lt;p&gt;Learn about the person behind the recipes —
+                   my cooking journey, favorite flavors, and kitchen
+                   philosophy.&lt;/p&gt;
+                &lt;a href="about.html" class="btn btn-outline"&gt;Read More&lt;/a&gt;
+            &lt;/article&gt;
+
+            &lt;article class="card"&gt;
+                &lt;div class="card-icon"&gt;🍳&lt;/div&gt;
+                &lt;h3&gt;Recipes&lt;/h3&gt;
+                &lt;p&gt;Browse tried-and-true recipes with clear
+                   ingredients, step-by-step instructions, and tips
+                   from real experience.&lt;/p&gt;
+                &lt;a href="recipe.html" class="btn btn-outline"&gt;Explore&lt;/a&gt;
+            &lt;/article&gt;
+
+            &lt;article class="card"&gt;
+                &lt;div class="card-icon"&gt;✉️&lt;/div&gt;
+                &lt;h3&gt;Get in Touch&lt;/h3&gt;
+                &lt;p&gt;Have a question, a suggestion, or just want
+                   to say hello? Drop me a message — I'd love to
+                   hear from you.&lt;/p&gt;
+                &lt;a href="contact.html" class="btn btn-outline"&gt;Contact&lt;/a&gt;
+            &lt;/article&gt;
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+
+                <h3>Breaking It Down</h3>
+
+                <ul>
+                    <li><strong><code>&lt;article class="card"&gt;</code></strong> — each card is a self-contained piece of content. <code>&lt;article&gt;</code> is semantically appropriate because each card makes sense on its own.</li>
+                    <li><strong><code>&lt;div class="card-grid"&gt;</code></strong> — a wrapper for the Flexbox layout. This isn't semantic content, so a plain <code>&lt;div&gt;</code> is correct.</li>
+                    <li><strong><code>&lt;div class="card-icon"&gt;</code></strong> — emoji icons add personality. You could replace these with SVG icons or images later.</li>
+                </ul>
+
+                <h3>Step 2: The CSS</h3>
+
+                <pre><code class="language-css">/* ===========================
+   Features Section
+   =========================== */
+.features {
+    padding: var(--space-2xl) 0;
+}
+
+.features h2 {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+/* ===========================
+   Card Grid (Flexbox)
+   =========================== */
+.card-grid {
+    display: flex;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    flex: 1 1 280px;         /* grow, shrink, min 280px */
+    max-width: 360px;
+    transition: box-shadow var(--transition-base),
+                transform var(--transition-base);
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--space-md);
+}
+
+.card h3 {
+    margin-bottom: var(--space-sm);
+}
+
+.card p {
+    color: var(--color-text-light);
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}
+
+.card .btn {
+    margin-top: auto;
+}</code></pre>
+
+                <h3>How the Flexbox Layout Works</h3>
+
+                <div class="mermaid">
+                    graph LR
+                    subgraph "flex: 1 1 280px"
+                        A["Card 1<br/>min 280px<br/>grows to fill"]
+                        B["Card 2<br/>min 280px<br/>grows to fill"]
+                        C["Card 3<br/>min 280px<br/>grows to fill"]
+                    end
+                    style A fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style B fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style C fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>The magic is in <code>flex: 1 1 280px</code>:</p>
+
+                <ul>
+                    <li><strong><code>1</code></strong> (flex-grow) — cards grow to fill available space equally</li>
+                    <li><strong><code>1</code></strong> (flex-shrink) — cards can shrink if needed</li>
+                    <li><strong><code>280px</code></strong> (flex-basis) — each card wants to be at least 280px wide</li>
+                </ul>
+
+                <p>Combined with <code>flex-wrap: wrap</code>, this means: on wide screens, all three cards sit in one row. On narrow screens (where three 280px cards won't fit), they wrap to two cards + one, or stack to a single column — <strong>with zero media queries</strong>.</p>
+
+                <p>The <code>max-width: 360px</code> prevents cards from stretching too wide on very large screens.</p>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="featured" class="lesson-section">
+                <h2>Featured Recipe Preview</h2>
+
+                <p>A featured recipe section gives the homepage more visual interest and shows visitors what kind of content they'll find. This is a horizontal layout: image on one side, text on the other.</p>
+
+                <h3>Step 1: The HTML</h3>
+
+                <p>Replace the empty featured-recipe section:</p>
+
+                <pre><code class="language-html">&lt;section class="featured-recipe"&gt;
+    &lt;div class="container"&gt;
+        &lt;h2&gt;Featured Recipe&lt;/h2&gt;
+        &lt;div class="featured-content"&gt;
+            &lt;div class="featured-image"&gt;
+                &lt;img src="images/recipe-pasta.jpg"
+                     alt="A bowl of creamy garlic pasta topped with fresh herbs"
+                     width="600" height="400"&gt;
+            &lt;/div&gt;
+            &lt;div class="featured-text"&gt;
+                &lt;h3&gt;Creamy Garlic Pasta&lt;/h3&gt;
+                &lt;p class="featured-meta"&gt;⏱ 25 min · 🍽 Serves 4 · Easy&lt;/p&gt;
+                &lt;p&gt;This one-pan pasta is my most-requested recipe. Creamy
+                   without cream, packed with garlic, and ready in under
+                   30 minutes. It's the ultimate weeknight dinner.&lt;/p&gt;
+                &lt;a href="recipe.html" class="btn btn-primary"&gt;View Recipe&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+
+                <div class="card card-info">
+                    <h4>💡 No Image Yet? Use a Placeholder</h4>
+                    <p>If you don't have a recipe photo ready, use a placeholder image service:</p>
+                    <pre><code class="language-html">&lt;img src="https://picsum.photos/600/400"
+     alt="Placeholder food image"
+     width="600" height="400"&gt;</code></pre>
+                    <p>Or download a free food photo from <a href="https://unsplash.com/s/photos/pasta" target="_blank">Unsplash</a> and save it in your <code>images/</code> folder.</p>
+                </div>
+
+                <h3>Step 2: The CSS</h3>
+
+                <pre><code class="language-css">/* ===========================
+   Featured Recipe
+   =========================== */
+.featured-recipe {
+    background-color: var(--color-bg-alt);
+    padding: var(--space-2xl) 0;
+}
+
+.featured-recipe h2 {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.featured-content {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.featured-image {
+    flex: 1 1 300px;
+}
+
+.featured-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    object-fit: cover;
+}
+
+.featured-text {
+    flex: 1 1 300px;
+}
+
+.featured-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+}
+
+.featured-meta {
+    color: var(--color-text-light);
+    font-size: 0.875rem;
+    margin-bottom: var(--space-md);
+}
+
+.featured-text p {
+    margin-bottom: var(--space-lg);
+    line-height: 1.6;
+}</code></pre>
+
+                <p>This layout uses the same <code>flex: 1 1 300px</code> trick as the cards. On desktop, the image and text sit side by side. On mobile, they stack vertically — image on top, text below — because both items want at least 300px and the screen isn't wide enough for both.</p>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="footer" class="lesson-section">
+                <h2>Building the Footer</h2>
+
+                <p>The footer appears at the bottom of every page. It's a good place for copyright info, secondary navigation links, and social media links.</p>
+
+                <h3>Step 1: The HTML</h3>
+
+                <pre><code class="language-html">&lt;footer class="site-footer"&gt;
+    &lt;div class="container"&gt;
+        &lt;div class="footer-content"&gt;
+            &lt;div class="footer-info"&gt;
+                &lt;p class="footer-logo"&gt;🍴 Tasty Bites&lt;/p&gt;
+                &lt;p&gt;Simple recipes, made with love.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;nav class="footer-nav" aria-label="Footer navigation"&gt;
+                &lt;h4&gt;Pages&lt;/h4&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;&lt;a href="index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="recipe.html"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/nav&gt;
+        &lt;/div&gt;
+        &lt;div class="footer-bottom"&gt;
+            &lt;p&gt;&amp;copy; 2026 Tasty Bites. All rights reserved.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/footer&gt;</code></pre>
+
+                <h3>Step 2: The CSS</h3>
+
+                <pre><code class="language-css">/* ===========================
+   Footer
+   =========================== */
+.site-footer {
+    background-color: var(--color-text);
+    color: var(--color-bg-alt);
+    padding: var(--space-2xl) 0 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
+}
+
+.footer-nav h4 {
+    margin-bottom: var(--space-sm);
+    font-size: 1rem;
+}
+
+.footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-nav li {
+    margin-bottom: var(--space-xs);
+}
+
+.footer-nav a {
+    color: var(--color-bg-alt);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.footer-nav a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: var(--space-lg) 0;
+    font-size: 0.875rem;
+    opacity: 0.6;
+}</code></pre>
+
+                <p>The footer uses a dark background (your text color) with light text — a common pattern that visually separates it from the main content. The <code>opacity</code> on links creates a subtle hierarchy: links lighten on hover to feel interactive.</p>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="responsive" class="lesson-section">
+                <h2>Making It Responsive</h2>
+
+                <p>Thanks to Flexbox's <code>flex-wrap</code> and <code>clamp()</code> typography, most of the page is already responsive. But we still need media queries for two things: showing the hamburger menu on mobile and fine-tuning spacing.</p>
+
+                <h3>Mobile Styles</h3>
+
+                <p>Add this at the <strong>bottom</strong> of your <code>css/style.css</code>:</p>
+
+                <pre><code class="language-css">/* ===========================
+   Responsive — Mobile (768px and below)
+   =========================== */
+@media (max-width: 768px) {
+
+    /* Show hamburger, hide nav links */
+    .nav-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background-color: var(--color-bg);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--space-md);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu.open {
+        display: flex;
+    }
+
+    .nav-link {
+        padding: var(--space-md);
+        border-radius: var(--border-radius-sm);
+    }
+
+    .nav-link:hover {
+        background-color: var(--color-bg-alt);
+    }
+
+    /* Hero spacing */
+    .hero {
+        padding: var(--space-xl) 0;
+    }
+
+    /* Featured recipe stacks vertically automatically
+       via flex-wrap — just adjust spacing */
+    .featured-content {
+        text-align: center;
+    }
+
+    /* Footer stacks */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}</code></pre>
+
+                <h3>How the Mobile Nav Works</h3>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Screen ≤ 768px"] --> B["Hamburger ☰<br/>appears"]
+                    B --> C{"User taps ☰"}
+                    C -->|"JS adds .open"| D["Nav menu<br/>slides down"]
+                    C -->|"Tap again"| E["Nav menu<br/>hides"]
+                    style A fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style B fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+                    style D fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                    style E fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>On screens 768px and narrower, the nav links are hidden (<code>display: none</code>) and the hamburger button appears. When the user taps the hamburger, JavaScript toggles the <code>open</code> class, which sets the menu to <code>display: flex</code> in a vertical column. We'll add that JavaScript next.</p>
+            </section>
+
+            <!-- Section 9 -->
+            <section id="mobile-menu" class="lesson-section">
+                <h2>Adding the Mobile Menu Toggle</h2>
+
+                <p>The CSS hides and shows the menu — but we need JavaScript to toggle the <code>open</code> class when the hamburger is clicked. This is your first taste of adding interactivity.</p>
+
+                <h3>The JavaScript</h3>
+
+                <p>Open (or create) <code>js/script.js</code> and add:</p>
+
+                <pre><code class="language-html">&lt;script&gt;
+// Mobile navigation toggle
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+
+if (navToggle &amp;&amp; navMenu) {
+    navToggle.addEventListener('click', () =&gt; {
+        const isOpen = navMenu.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+        navToggle.textContent = isOpen ? '✕' : '☰';
+    });
+
+    // Close menu when a link is clicked
+    navMenu.querySelectorAll('.nav-link').forEach(link =&gt; {
+        link.addEventListener('click', () =&gt; {
+            navMenu.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.textContent = '☰';
+        });
+    });
+}
+&lt;/script&gt;</code></pre>
+
+                <p>Since this goes in your <code>js/script.js</code> file (not inside <code>&lt;script&gt;</code> tags), just use the JavaScript content without the surrounding HTML tags:</p>
+
+                <pre><code class="language-js">// Mobile navigation toggle
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+
+if (navToggle && navMenu) {
+    navToggle.addEventListener('click', () => {
+        const isOpen = navMenu.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', isOpen);
+        navToggle.textContent = isOpen ? '✕' : '☰';
+    });
+
+    // Close menu when a link is clicked
+    navMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.textContent = '☰';
+        });
+    });
+}</code></pre>
+
+                <h3>What This Does</h3>
+
+                <ol>
+                    <li><strong>Finds the toggle button and menu</strong> using <code>querySelector</code></li>
+                    <li><strong>Listens for clicks</strong> on the hamburger button</li>
+                    <li><strong>Toggles the <code>open</code> class</strong> — <code>classList.toggle()</code> adds the class if it's missing, removes it if it's there, and returns <code>true</code> or <code>false</code></li>
+                    <li><strong>Updates <code>aria-expanded</code></strong> so screen readers know the menu state</li>
+                    <li><strong>Swaps the icon</strong> — ☰ when closed, ✕ when open</li>
+                    <li><strong>Closes the menu</strong> when any nav link is clicked (useful for same-page links)</li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 Why the <code>if</code> Guard?</h4>
+                    <p>The <code>if (navToggle && navMenu)</code> check prevents errors if the script runs on a page that doesn't have these elements. It's a defensive programming habit — always check that an element exists before attaching event listeners to it.</p>
+                </div>
+
+                <p>Test it: resize your browser to a narrow width (or use DevTools responsive mode, <kbd>Ctrl+Shift+M</kbd>). The hamburger should appear, and clicking it should reveal and hide the nav links.</p>
+            </section>
+
+            <!-- Section 10: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Build Your Homepage</h3>
+                    <p><strong>Objective:</strong> Build a complete, responsive homepage with all five components.</p>
+
+                    <h4>Requirements Checklist</h4>
+                    <ol>
+                        <li><strong>Navigation bar</strong> — logo, 4 page links, hamburger toggle on mobile</li>
+                        <li><strong>Hero section</strong> — heading, tagline, CTA button</li>
+                        <li><strong>Feature cards</strong> — 3 cards in a Flexbox row that wraps on small screens</li>
+                        <li><strong>Featured content section</strong> — side-by-side image + text layout</li>
+                        <li><strong>Footer</strong> — site info, secondary nav, copyright</li>
+                        <li><strong>Responsive</strong> — test at 1200px, 768px, and 375px widths</li>
+                        <li><strong>Custom properties</strong> — all colors, fonts, and spacing use your style guide variables</li>
+                    </ol>
+
+                    <h4>Stretch Goals (Optional)</h4>
+                    <ul>
+                        <li>Add a <strong>background image or gradient</strong> to the hero section</li>
+                        <li>Add <strong>hover animations</strong> to the cards (scale up, shadow, color change)</li>
+                        <li>Add a <strong>second featured recipe</strong> with the image on the opposite side</li>
+                        <li>Add <strong>social media icons</strong> to the footer (use Unicode characters or emoji for now)</li>
+                    </ul>
+
+                    <details>
+                        <summary>💡 Hint — Hero Background Gradient</summary>
+                        <pre><code class="language-css">/* Subtle gradient hero background */
+.hero {
+    background: linear-gradient(
+        135deg,
+        var(--color-bg-alt) 0%,
+        #dbeafe 100%    /* light blue tint */
+    );
+}</code></pre>
+                    </details>
+
+                    <details>
+                        <summary>💡 Hint — Card Hover Animation</summary>
+                        <pre><code class="language-css">.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}</code></pre>
+                    </details>
+
+                    <details>
+                        <summary>✅ Full Solution: Complete index.html</summary>
+                        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Home - Tasty Bites&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt;
+    &lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;
+    &lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+          rel="stylesheet"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;header class="site-header"&gt;
+        &lt;nav class="navbar"&gt;
+            &lt;div class="nav-container"&gt;
+                &lt;a href="index.html" class="nav-logo"&gt;🍴 Tasty Bites&lt;/a&gt;
+                &lt;button class="nav-toggle" aria-label="Toggle navigation"
+                        aria-expanded="false"&gt;☰&lt;/button&gt;
+                &lt;ul class="nav-menu"&gt;
+                    &lt;li&gt;&lt;a href="index.html" class="nav-link active"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="about.html" class="nav-link"&gt;About&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="recipe.html" class="nav-link"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="contact.html" class="nav-link"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+
+    &lt;section class="hero"&gt;
+        &lt;div class="container"&gt;
+            &lt;h1&gt;Simple Recipes,&lt;br&gt;Made with Love&lt;/h1&gt;
+            &lt;p class="hero-tagline"&gt;
+                A collection of my favorite recipes — easy enough for
+                weeknights, impressive enough for guests.
+            &lt;/p&gt;
+            &lt;a href="recipe.html" class="btn btn-primary"&gt;Browse Recipes&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;main&gt;
+        &lt;section class="features"&gt;
+            &lt;div class="container"&gt;
+                &lt;h2&gt;What You'll Find Here&lt;/h2&gt;
+                &lt;div class="card-grid"&gt;
+                    &lt;article class="card"&gt;
+                        &lt;div class="card-icon"&gt;👋&lt;/div&gt;
+                        &lt;h3&gt;About Me&lt;/h3&gt;
+                        &lt;p&gt;Learn about the person behind the recipes —
+                           my cooking journey, favorite flavors, and kitchen
+                           philosophy.&lt;/p&gt;
+                        &lt;a href="about.html" class="btn btn-outline"&gt;Read More&lt;/a&gt;
+                    &lt;/article&gt;
+                    &lt;article class="card"&gt;
+                        &lt;div class="card-icon"&gt;🍳&lt;/div&gt;
+                        &lt;h3&gt;Recipes&lt;/h3&gt;
+                        &lt;p&gt;Browse tried-and-true recipes with clear
+                           ingredients, step-by-step instructions, and tips
+                           from real experience.&lt;/p&gt;
+                        &lt;a href="recipe.html" class="btn btn-outline"&gt;Explore&lt;/a&gt;
+                    &lt;/article&gt;
+                    &lt;article class="card"&gt;
+                        &lt;div class="card-icon"&gt;✉️&lt;/div&gt;
+                        &lt;h3&gt;Get in Touch&lt;/h3&gt;
+                        &lt;p&gt;Have a question, a suggestion, or just want
+                           to say hello? Drop me a message — I'd love to
+                           hear from you.&lt;/p&gt;
+                        &lt;a href="contact.html" class="btn btn-outline"&gt;Contact&lt;/a&gt;
+                    &lt;/article&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section class="featured-recipe"&gt;
+            &lt;div class="container"&gt;
+                &lt;h2&gt;Featured Recipe&lt;/h2&gt;
+                &lt;div class="featured-content"&gt;
+                    &lt;div class="featured-image"&gt;
+                        &lt;img src="images/recipe-pasta.jpg"
+                             alt="A bowl of creamy garlic pasta topped with fresh herbs"
+                             width="600" height="400"&gt;
+                    &lt;/div&gt;
+                    &lt;div class="featured-text"&gt;
+                        &lt;h3&gt;Creamy Garlic Pasta&lt;/h3&gt;
+                        &lt;p class="featured-meta"&gt;⏱ 25 min · 🍽 Serves 4 · Easy&lt;/p&gt;
+                        &lt;p&gt;This one-pan pasta is my most-requested recipe. Creamy
+                           without cream, packed with garlic, and ready in under
+                           30 minutes. It's the ultimate weeknight dinner.&lt;/p&gt;
+                        &lt;a href="recipe.html" class="btn btn-primary"&gt;View Recipe&lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/section&gt;
+    &lt;/main&gt;
+
+    &lt;footer class="site-footer"&gt;
+        &lt;div class="container"&gt;
+            &lt;div class="footer-content"&gt;
+                &lt;div class="footer-info"&gt;
+                    &lt;p class="footer-logo"&gt;🍴 Tasty Bites&lt;/p&gt;
+                    &lt;p&gt;Simple recipes, made with love.&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;nav class="footer-nav" aria-label="Footer navigation"&gt;
+                    &lt;h4&gt;Pages&lt;/h4&gt;
+                    &lt;ul&gt;
+                        &lt;li&gt;&lt;a href="index.html"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="about.html"&gt;About&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="recipe.html"&gt;Recipes&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href="contact.html"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/nav&gt;
+            &lt;/div&gt;
+            &lt;div class="footer-bottom"&gt;
+                &lt;p&gt;&amp;copy; 2026 Tasty Bites. All rights reserved.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/footer&gt;
+
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> Why is the hero section's CTA an <code>&lt;a&gt;</code> tag instead of a <code>&lt;button&gt;</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Both &lt;a&gt; and &lt;button&gt; can be styled identically. The choice is about semantics, not appearance.">A) Because <code>&lt;button&gt;</code> can't be styled to look like a button</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The CTA navigates to another page (recipe.html), so it's semantically a link. Use &lt;a&gt; for navigation and &lt;button&gt; for actions like form submission or toggling UI. You can style them to look identical.">B) Because it navigates to another page — links are for navigation, buttons are for actions</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Buttons work perfectly in hero sections. The question is whether the element triggers navigation or an action.">C) Because buttons don't work inside hero sections</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What does <code>flex: 1 1 280px</code> mean?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The three values in the flex shorthand are grow, shrink, and basis — not width, height, and margin.">A) Set width to 1px, height to 1px, and margin to 280px</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! flex: 1 1 280px means: grow equally (1), shrink if needed (1), and start at 280px wide (basis). Combined with flex-wrap, items fill the row or wrap to the next line when 280px doesn't fit.">B) Grow equally (1), shrink if needed (1), and start at 280px wide</button>
+                            <button class="quiz-option" data-correct="false" data-hint="flex-basis is the starting size, not a fixed width. Items can grow larger or shrink smaller depending on available space.">C) Set a fixed width of 280px and never change</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why do we use <code>position: sticky</code> on the navbar?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Sticky positioning keeps the nav in the normal document flow until it reaches the top of the viewport, then it 'sticks' there as the user scrolls. Unlike position: fixed, it doesn't overlap content and participates in the normal layout.">A) It keeps the nav at the top of the viewport when scrolling, without removing it from the document flow</button>
+                            <button class="quiz-option" data-correct="false" data-hint="position: sticky doesn't add animation. It controls how the element behaves during scrolling. For animation, you'd use CSS transitions or animations.">B) It makes the nav animate when the page loads</button>
+                            <button class="quiz-option" data-correct="false" data-hint="position: sticky doesn't prevent overlap by itself. z-index handles layering. Sticky controls when the element becomes fixed during scrolling.">C) It prevents the nav from overlapping other content</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What does <code>classList.toggle('open')</code> do?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="toggle() is smarter than that — it checks whether the class is already there and does the opposite.">A) It always adds the class 'open' to the element</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! toggle() checks if the class exists. If it does, it removes it and returns false. If it doesn't, it adds it and returns true. This makes it perfect for show/hide toggles like the mobile menu.">B) It adds the class if missing, removes it if present, and returns true/false</button>
+                            <button class="quiz-option" data-correct="false" data-hint="toggle() doesn't create new elements. It only adds or removes a CSS class from an existing element's class list.">C) It creates a new element with the class 'open'</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> Why do we put the mobile menu styles inside <code>@media (max-width: 768px)</code>?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The hamburger menu should only appear on small screens. On desktop, the full nav links are visible — no hamburger needed.">A) Because the hamburger menu should appear on all screen sizes</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The media query targets only screens 768px and narrower (phones and small tablets). On those screens, the full nav links are hidden and replaced with the hamburger toggle. On wider screens, the desktop layout with visible links is used.">B) Because the hamburger menu and stacked nav should only appear on small screens</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Media queries don't affect performance — they just conditionally apply styles. The CSS is always downloaded; the media query controls which rules are active.">C) Because it makes the page load faster on mobile devices</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Build and style in small cycles</strong> — write a section of HTML, style it, check the browser, move on</li>
+                        <li>A <strong>sticky navigation bar</strong> uses <code>position: sticky</code>, Flexbox for layout, and a hamburger toggle for mobile</li>
+                        <li>The <strong>hero section</strong> communicates your site's purpose instantly with a heading, tagline, and call-to-action</li>
+                        <li>Use <code>&lt;a&gt;</code> for CTAs that <strong>navigate</strong> and <code>&lt;button&gt;</code> for CTAs that perform <strong>actions</strong></li>
+                        <li><strong>Feature cards</strong> with <code>flex: 1 1 280px</code> and <code>flex-wrap</code> create a responsive grid with zero media queries</li>
+                        <li>The <strong>featured recipe section</strong> uses the same flex-wrap trick for a side-by-side layout that stacks on mobile</li>
+                        <li>The <strong>footer</strong> uses a dark background for visual separation and includes secondary navigation</li>
+                        <li><strong>One media query</strong> at 768px handles the mobile nav toggle and minor spacing adjustments</li>
+                        <li><strong><code>classList.toggle()</code></strong> is the cleanest way to show/hide elements with JavaScript</li>
+                        <li>Always use <strong><code>aria-expanded</code></strong> on toggle buttons so screen readers know the state</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project After This Lesson</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← base styles + nav + hero + cards + featured + footer + responsive
+├── images/
+│   └── recipe-pasta.jpg   ← featured recipe image (or placeholder)
+├── js/
+│   └── script.js      ← mobile menu toggle
+├── index.html         ← ✅ COMPLETE — nav, hero, cards, featured, footer
+├── about.html         ← boilerplate (next lesson)
+├── recipe.html        ← boilerplate (next lesson)
+└── contact.html       ← boilerplate (next lesson)</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your homepage is built and responsive. In the next lesson — <strong>Lesson 18: Building Content Pages</strong> — you'll build the About, Recipe, and Contact pages. You'll reuse the nav and footer you just created, learn new layout patterns (profile sections, recipe cards, contact forms), and see how a consistent style guide makes multi-page development fast and enjoyable.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_16.html" class="prev-lesson">← Previous: Planning Your Site</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_18.html" class="next-lesson">Next: Building Content Pages →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>

@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn how to test and validate your website before publishing — HTML validation, CSS validation, browser testing, Lighthouse audits, accessibility checks, and fixing common issues.">
+    <meta name="author" content="Ray De La Paz">
+    <title>Lesson 20: Testing &amp; Validation - HTML &amp; CSS Course</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        window.__mermaid = mermaid;
+        const isDark = localStorage.getItem('theme') === 'dark' ||
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: isDark ? 'dark' : 'default',
+            themeVariables: isDark
+                ? { primaryColor: '#334155', primaryTextColor: '#e2e8f0', primaryBorderColor: '#6366f1', lineColor: '#94a3b8', secondaryColor: '#1e293b', tertiaryColor: '#0f172a' }
+                : { primaryColor: '#eff6ff', primaryTextColor: '#1e293b', primaryBorderColor: '#3b82f6', lineColor: '#64748b', secondaryColor: '#f8fafc', tertiaryColor: '#f1f5f9' }
+        });
+    </script>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="progress-indicator" role="progressbar" aria-label="Page scroll progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HTML &amp; CSS Course</a>
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#modules">All Modules</a>
+                <span class="nav-divider"></span>
+                <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+                <a href="https://rays-home.netlify.app/contact">Contact</a>
+                <button id="theme-toggle" aria-label="Toggle dark/light mode">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#modules">Module 5</a></li>
+            <li aria-current="page">Lesson 20: Testing &amp; Validation</li>
+        </ul>
+    </nav>
+
+    <main id="main-content">
+        <div class="container">
+            <header>
+                <h1>🧪 Lesson 20: Testing &amp; Validation</h1>
+                <p class="lead">Your site is built and polished — but how do you know it actually works? Not just on your laptop, in your favorite browser, at your screen size. What about someone on a phone? On Firefox? Using a screen reader? With slow internet? Testing answers these questions. In this lesson, you'll validate your code, audit performance and accessibility, test across browsers and devices, and fix the issues that testing reveals. This is the step that separates "it works for me" from "it works for everyone."</p>
+
+                <div class="card card-info">
+                    <h2>🎯 Learning Objectives</h2>
+                    <p>By the end of this lesson, you will be able to:</p>
+                    <ul>
+                        <li>Validate HTML using the W3C Markup Validation Service</li>
+                        <li>Validate CSS using the W3C CSS Validation Service</li>
+                        <li>Run a Lighthouse audit and interpret the scores</li>
+                        <li>Test your site in multiple browsers and screen sizes</li>
+                        <li>Check accessibility with automated tools and manual keyboard testing</li>
+                        <li>Identify and fix the most common HTML/CSS errors</li>
+                        <li>Create a pre-launch checklist for any future project</li>
+                    </ul>
+                    <p><strong>Estimated Time:</strong> 45–60 minutes</p>
+                    <p><strong>Prerequisites:</strong> Lesson 19 (Adding Polish) — all four pages complete with polish features.</p>
+                </div>
+            </header>
+
+            <details class="card toc-card" open>
+                <summary>
+                    <h2 style="display: inline; margin: 0;">📑 In This Lesson</h2>
+                </summary>
+                <nav aria-label="Table of Contents">
+                    <ol>
+                        <li><a href="#why-test" class="toc-link">Why Testing Matters</a></li>
+                        <li><a href="#html-validation" class="toc-link">HTML Validation</a></li>
+                        <li><a href="#css-validation" class="toc-link">CSS Validation</a></li>
+                        <li><a href="#lighthouse" class="toc-link">Lighthouse Audits</a></li>
+                        <li><a href="#browser-testing" class="toc-link">Cross-Browser Testing</a></li>
+                        <li><a href="#responsive-testing" class="toc-link">Responsive Testing</a></li>
+                        <li><a href="#accessibility-testing" class="toc-link">Accessibility Testing</a></li>
+                        <li><a href="#common-fixes" class="toc-link">Common Issues &amp; Fixes</a></li>
+                        <li><a href="#pre-launch" class="toc-link">Pre-Launch Checklist</a></li>
+                        <li><a href="#exercise" class="toc-link">Hands-on Exercise</a></li>
+                        <li><a href="#summary" class="toc-link">Summary</a></li>
+                    </ol>
+                </nav>
+            </details>
+
+            <!-- Section 1 -->
+            <section id="why-test" class="lesson-section">
+                <h2>Why Testing Matters</h2>
+
+                <p>You've been checking your site in the browser as you built it — that's informal testing, and it's a good habit. But it has blind spots. You've only tested in one browser, at one screen size, with your eyes. Formal testing covers the gaps:</p>
+
+                <ul>
+                    <li><strong>Validation</strong> catches typos and structural errors in your HTML and CSS that browsers silently forgive but that can cause unpredictable behavior.</li>
+                    <li><strong>Lighthouse</strong> measures performance, accessibility, SEO, and best practices — things you can't evaluate by just looking at a page.</li>
+                    <li><strong>Cross-browser testing</strong> reveals rendering differences between Chrome, Firefox, Safari, and Edge.</li>
+                    <li><strong>Accessibility testing</strong> ensures your site works for people who navigate with keyboards, screen readers, or assistive devices.</li>
+                </ul>
+
+                <div class="mermaid">
+                    graph LR
+                    A["Your Site"] --> B["HTML Validation"]
+                    A --> C["CSS Validation"]
+                    A --> D["Lighthouse Audit"]
+                    A --> E["Browser Testing"]
+                    A --> F["Accessibility Testing"]
+                    B --> G["✅ Ready to Publish"]
+                    C --> G
+                    D --> G
+                    E --> G
+                    F --> G
+                    style A fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#1e293b
+                    style G fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#1e293b
+                </div>
+
+                <p>Think of testing as a safety net, not a punishment. Every bug you catch now is a bug your visitors never encounter.</p>
+            </section>
+
+            <!-- Section 2 -->
+            <section id="html-validation" class="lesson-section">
+                <h2>HTML Validation</h2>
+
+                <p>The <strong>W3C Markup Validation Service</strong> checks your HTML against the official specification. It catches errors that browsers ignore — like unclosed tags, duplicate IDs, or missing required attributes — that can cause subtle layout problems or accessibility issues.</p>
+
+                <h3>How to Validate</h3>
+
+                <ol>
+                    <li>Open <strong><a href="https://validator.w3.org/" target="_blank">validator.w3.org</a></strong></li>
+                    <li>Choose the <strong>"Validate by Direct Input"</strong> tab</li>
+                    <li>Copy-paste your entire HTML file into the text box</li>
+                    <li>Click <strong>"Check"</strong></li>
+                    <li>Review the results — fix errors (red), consider warnings (yellow)</li>
+                </ol>
+
+                <p>Repeat for every HTML file in your project. Yes, all four.</p>
+
+                <h3>Common HTML Errors and Fixes</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Frequent HTML Validation Errors</caption>
+                        <thead>
+                            <tr>
+                                <th>Error</th>
+                                <th>What It Means</th>
+                                <th>Fix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>End tag for "div" omitted</code></td>
+                                <td>A <code>&lt;div&gt;</code> was opened but never closed</td>
+                                <td>Find the unclosed <code>&lt;div&gt;</code> and add <code>&lt;/div&gt;</code>. Use VS Code's bracket matching (<kbd>Ctrl+Shift+\</kbd>) to find the partner.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Duplicate ID "name"</code></td>
+                                <td>Two elements have the same <code>id</code> attribute</td>
+                                <td>IDs must be unique per page. Rename one of them.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Element "li" not allowed as child of "div"</code></td>
+                                <td>A <code>&lt;li&gt;</code> is outside a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code></td>
+                                <td>Wrap list items in their proper parent element.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Attribute "alt" required on "img"</code></td>
+                                <td>An image is missing alternative text</td>
+                                <td>Add <code>alt="description"</code> to every <code>&lt;img&gt;</code>. Use <code>alt=""</code> (empty) for purely decorative images.</td>
+                            </tr>
+                            <tr>
+                                <td><code>The "for" attribute value must refer to an ID</code></td>
+                                <td>A <code>&lt;label for="x"&gt;</code> doesn't match any element's <code>id</code></td>
+                                <td>Make sure the <code>for</code> and <code>id</code> values match exactly, including case.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Stray end tag "div"</code></td>
+                                <td>An extra closing <code>&lt;/div&gt;</code> with no matching opening tag</td>
+                                <td>Delete the extra closing tag. Count your opening and closing tags — they should match.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 VS Code Helps You Catch Errors Early</h4>
+                    <p>Install the <strong>HTMLHint</strong> or <strong>W3C Web Validator</strong> VS Code extension to see validation errors in real time as you type, without leaving your editor. Squiggly red underlines in your code mean something needs attention.</p>
+                </div>
+            </section>
+
+            <!-- Section 3 -->
+            <section id="css-validation" class="lesson-section">
+                <h2>CSS Validation</h2>
+
+                <p>The <strong>W3C CSS Validation Service</strong> checks your stylesheet for syntax errors, unknown properties, and incorrect values.</p>
+
+                <h3>How to Validate</h3>
+
+                <ol>
+                    <li>Open <strong><a href="https://jigsaw.w3.org/css-validator/" target="_blank">jigsaw.w3.org/css-validator</a></strong></li>
+                    <li>Choose <strong>"By direct input"</strong></li>
+                    <li>Paste your <code>style.css</code> content</li>
+                    <li>Click <strong>"Check"</strong></li>
+                </ol>
+
+                <h3>Common CSS Errors and Fixes</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Frequent CSS Validation Errors</caption>
+                        <thead>
+                            <tr>
+                                <th>Error</th>
+                                <th>What It Means</th>
+                                <th>Fix</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Property "colour" doesn't exist</code></td>
+                                <td>Typo in a property name</td>
+                                <td>Check spelling. CSS uses American English: <code>color</code>, not <code>colour</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Value error: "20 px" is not valid</code></td>
+                                <td>Space between number and unit</td>
+                                <td>Remove the space: <code>20px</code>, not <code>20 px</code>. Exception: <code>0</code> needs no unit.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Missing semicolon</code></td>
+                                <td>A declaration is missing its ending <code>;</code></td>
+                                <td>Add the semicolon. The last declaration in a block doesn't technically need one, but always include it.</td>
+                            </tr>
+                            <tr>
+                                <td><code>Unknown pseudo-element "::placeholder-shown"</code></td>
+                                <td>The validator may not recognize newer CSS features</td>
+                                <td>If the feature works in browsers, the warning is safe to ignore. The validator can lag behind the spec.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card card-info">
+                    <h4>💡 Warnings vs. Errors</h4>
+                    <p><strong>Errors</strong> are things that are definitely wrong — typos, invalid syntax, missing values. Always fix these. <strong>Warnings</strong> are suggestions or things the validator can't fully check — like custom properties (<code>var(--color-primary)</code>) or newer features. Warnings are usually safe to acknowledge and move on.</p>
+                </div>
+            </section>
+
+            <!-- Section 4 -->
+            <section id="lighthouse" class="lesson-section">
+                <h2>Lighthouse Audits</h2>
+
+                <p><strong>Lighthouse</strong> is a free tool built into Chrome DevTools that audits your page across four categories: Performance, Accessibility, Best Practices, and SEO. It gives each category a score from 0–100 and tells you exactly what to fix.</p>
+
+                <h3>How to Run a Lighthouse Audit</h3>
+
+                <ol>
+                    <li>Open your site in Chrome (use Live Server)</li>
+                    <li>Open DevTools (<kbd>F12</kbd> or <kbd>Ctrl+Shift+I</kbd>)</li>
+                    <li>Click the <strong>Lighthouse</strong> tab (you may need to click <code>»</code> to find it)</li>
+                    <li>Select categories: <strong>Performance</strong>, <strong>Accessibility</strong>, <strong>Best Practices</strong>, <strong>SEO</strong></li>
+                    <li>Choose <strong>Mobile</strong> device (the stricter test)</li>
+                    <li>Click <strong>"Analyze page load"</strong></li>
+                    <li>Wait about 30 seconds for the results</li>
+                </ol>
+
+                <h3>Understanding the Scores</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Lighthouse Score Ranges</caption>
+                        <thead>
+                            <tr>
+                                <th>Score</th>
+                                <th>Rating</th>
+                                <th>What It Means</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>90–100</td>
+                                <td>🟢 Good</td>
+                                <td>Your page performs well in this category</td>
+                            </tr>
+                            <tr>
+                                <td>50–89</td>
+                                <td>🟠 Needs improvement</td>
+                                <td>There are opportunities to improve</td>
+                            </tr>
+                            <tr>
+                                <td>0–49</td>
+                                <td>🔴 Poor</td>
+                                <td>Significant issues need attention</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Common Lighthouse Fixes</h3>
+
+                <ul>
+                    <li><strong>"Image elements do not have explicit width and height"</strong> — add <code>width</code> and <code>height</code> attributes to every <code>&lt;img&gt;</code> tag. This prevents layout shifts as images load.</li>
+                    <li><strong>"Links do not have discernible names"</strong> — add text content or <code>aria-label</code> to links that only contain icons or images.</li>
+                    <li><strong>"Background and foreground colors do not have sufficient contrast"</strong> — your text color is too similar to its background. Use a contrast checker to fix.</li>
+                    <li><strong>"Document does not have a meta description"</strong> — add <code>&lt;meta name="description" content="..."&gt;</code> to the <code>&lt;head&gt;</code> of every page.</li>
+                    <li><strong>"Properly size images"</strong> — don't serve a 4000px-wide image for a 400px card. Resize images to match their display size.</li>
+                </ul>
+
+                <div class="card card-info">
+                    <h4>💡 Don't Chase Perfection</h4>
+                    <p>A perfect 100 in every category is nice for bragging rights but not required. For a first project, aim for: <strong>Performance 80+</strong>, <strong>Accessibility 90+</strong>, <strong>Best Practices 90+</strong>, <strong>SEO 90+</strong>. Accessibility is the most important — a low accessibility score means some visitors literally can't use your site.</p>
+                </div>
+            </section>
+
+            <!-- Section 5 -->
+            <section id="browser-testing" class="lesson-section">
+                <h2>Cross-Browser Testing</h2>
+
+                <p>Different browsers render CSS slightly differently. A layout that looks perfect in Chrome might have spacing issues in Safari or font rendering differences in Firefox. Testing across browsers catches these inconsistencies.</p>
+
+                <h3>Which Browsers to Test</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Browser Testing Priority</caption>
+                        <thead>
+                            <tr>
+                                <th>Priority</th>
+                                <th>Browser</th>
+                                <th>Why</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>🔴 Must test</td>
+                                <td>Chrome (Desktop + Mobile)</td>
+                                <td>~65% of global web traffic</td>
+                            </tr>
+                            <tr>
+                                <td>🔴 Must test</td>
+                                <td>Safari (iOS)</td>
+                                <td>~25% of mobile traffic; unique rendering engine</td>
+                            </tr>
+                            <tr>
+                                <td>🟠 Should test</td>
+                                <td>Firefox</td>
+                                <td>Different engine; great DevTools; ~3% traffic</td>
+                            </tr>
+                            <tr>
+                                <td>🟢 Nice to test</td>
+                                <td>Edge</td>
+                                <td>Chromium-based; usually matches Chrome</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>How to Test Without Owning Every Device</h3>
+
+                <ul>
+                    <li><strong>Chrome DevTools Device Mode</strong> — <kbd>Ctrl+Shift+M</kbd> simulates different screen sizes and devices. Not a true browser test, but catches responsive issues.</li>
+                    <li><strong>Firefox</strong> — free to install on any OS. Open your site with Live Server and test.</li>
+                    <li><strong>Safari (if you have a Mac or iPhone)</strong> — test on an actual iOS device if possible. Safari on iOS has the most rendering quirks.</li>
+                    <li><strong><a href="https://www.browserstack.com" target="_blank">BrowserStack</a></strong> — paid service with a free trial. Test on real browsers and devices in the cloud.</li>
+                    <li><strong>Ask friends and family</strong> — the best testing is real people on real devices. Send them your Netlify link (coming in Lesson 21) and ask them to check it on their phones.</li>
+                </ul>
+
+                <h3>What to Look For</h3>
+
+                <ul>
+                    <li><strong>Layout</strong> — do cards stay in rows? Does the nav collapse correctly? Does the footer sit at the bottom?</li>
+                    <li><strong>Typography</strong> — do fonts load? Is text readable? Are line lengths comfortable?</li>
+                    <li><strong>Interactions</strong> — do hover effects work? Does the mobile menu toggle? Does dark mode apply?</li>
+                    <li><strong>Images</strong> — do they load? Are they the right size? Do rounded corners display correctly?</li>
+                    <li><strong>Forms</strong> — do inputs focus correctly? Does validation feedback show? Can you submit?</li>
+                </ul>
+            </section>
+
+            <!-- Section 6 -->
+            <section id="responsive-testing" class="lesson-section">
+                <h2>Responsive Testing</h2>
+
+                <p>Testing at specific breakpoints isn't enough — real devices have unpredictable screen widths. Test by <strong>slowly dragging</strong> the browser window from wide to narrow and watching for layout breaks.</p>
+
+                <h3>Key Widths to Check</h3>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Common Device Widths</caption>
+                        <thead>
+                            <tr>
+                                <th>Width</th>
+                                <th>Device</th>
+                                <th>What to Check</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>375px</td>
+                                <td>iPhone SE / small phones</td>
+                                <td>Single-column layout, hamburger menu, readable text</td>
+                            </tr>
+                            <tr>
+                                <td>390px</td>
+                                <td>iPhone 14 / modern phones</td>
+                                <td>Same as above with slightly more space</td>
+                            </tr>
+                            <tr>
+                                <td>768px</td>
+                                <td>iPad / tablets (portrait)</td>
+                                <td>Breakpoint boundary — nav should switch, cards may be 2-across</td>
+                            </tr>
+                            <tr>
+                                <td>1024px</td>
+                                <td>iPad landscape / small laptops</td>
+                                <td>Desktop layout should be active, cards 3-across</td>
+                            </tr>
+                            <tr>
+                                <td>1440px</td>
+                                <td>Standard desktop</td>
+                                <td>Content should be centered with comfortable margins</td>
+                            </tr>
+                            <tr>
+                                <td>1920px+</td>
+                                <td>Large/ultrawide monitors</td>
+                                <td>Content shouldn't stretch to full width — <code>max-width</code> keeps it readable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>The Drag Test</h3>
+
+                <ol>
+                    <li>Open your site in the browser</li>
+                    <li>Grab the right edge of the browser window</li>
+                    <li>Slowly drag it narrower, watching for anything that breaks</li>
+                    <li>Note the exact width where issues appear (DevTools shows the width in the top-right of the viewport when resizing)</li>
+                    <li>Fix the issue with a media query or by adjusting your Flexbox/Grid values</li>
+                </ol>
+
+                <div class="card card-info">
+                    <h4>💡 Common Responsive Issues</h4>
+                    <ul>
+                        <li><strong>Horizontal scrollbar appears</strong> — something is wider than the viewport. Check for fixed-width elements, images without <code>max-width: 100%</code>, or padding causing overflow.</li>
+                        <li><strong>Text overflows its container</strong> — long words or URLs can break out. Fix with <code>overflow-wrap: break-word</code>.</li>
+                        <li><strong>Touch targets too small</strong> — buttons and links on mobile should be at least 44×44px. Increase padding if needed.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 7 -->
+            <section id="accessibility-testing" class="lesson-section">
+                <h2>Accessibility Testing</h2>
+
+                <p>Automated tools catch about 30–50% of accessibility issues. The rest require manual testing. A complete accessibility check includes both.</p>
+
+                <h3>Automated Testing</h3>
+
+                <p>Lighthouse's accessibility audit is a good start. For deeper analysis, install the <strong>axe DevTools</strong> browser extension (free):</p>
+
+                <ol>
+                    <li>Install the <a href="https://www.deque.com/axe/devtools/" target="_blank">axe DevTools</a> extension for Chrome</li>
+                    <li>Open DevTools → find the <strong>axe</strong> tab</li>
+                    <li>Click <strong>"Scan ALL of my page"</strong></li>
+                    <li>Review the results — each issue includes a description, severity, and how to fix it</li>
+                </ol>
+
+                <h3>Manual Keyboard Testing</h3>
+
+                <p>Put your mouse aside and navigate your entire site using only the keyboard:</p>
+
+                <div class="table-wrap">
+                    <table>
+                        <caption>Keyboard Navigation Quick Reference</caption>
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><kbd>Tab</kbd></td>
+                                <td>Move to the next interactive element</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Shift+Tab</kbd></td>
+                                <td>Move to the previous interactive element</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Enter</kbd></td>
+                                <td>Activate a link or button</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Space</kbd></td>
+                                <td>Activate a button, check a checkbox, scroll down</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Escape</kbd></td>
+                                <td>Close a dialog or dropdown</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Arrow keys</kbd></td>
+                                <td>Navigate within menus, radio groups, selects</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Keyboard Testing Checklist</h3>
+
+                <ul>
+                    <li>Can you see where focus is at all times? (The focus ring should be clearly visible)</li>
+                    <li>Does the skip-to-content link appear when you first press Tab?</li>
+                    <li>Can you navigate all menu items and links?</li>
+                    <li>Can you open and close the mobile menu with the keyboard?</li>
+                    <li>Can you fill out and submit the contact form?</li>
+                    <li>Does focus ever get "trapped" somewhere you can't escape?</li>
+                    <li>Is the tab order logical (top to bottom, left to right)?</li>
+                </ul>
+
+                <h3>Screen Reader Quick Test</h3>
+
+                <p>Every operating system has a free screen reader built in:</p>
+
+                <ul>
+                    <li><strong>Windows:</strong> <strong>Narrator</strong> (press <kbd>Win+Ctrl+Enter</kbd>) or download free <a href="https://www.nvaccess.org/" target="_blank">NVDA</a></li>
+                    <li><strong>macOS:</strong> <strong>VoiceOver</strong> (press <kbd>Cmd+F5</kbd>)</li>
+                    <li><strong>ChromeOS:</strong> <strong>ChromeVox</strong> (<kbd>Ctrl+Alt+Z</kbd>)</li>
+                </ul>
+
+                <p>You don't need to become a screen reader expert. Just navigate your homepage and listen: does it make sense? Are images described? Are links and buttons labeled? Can you understand the page structure? Five minutes of screen reader testing reveals issues no automated tool can catch.</p>
+            </section>
+
+            <!-- Section 8 -->
+            <section id="common-fixes" class="lesson-section">
+                <h2>Common Issues &amp; Fixes</h2>
+
+                <p>Here are the issues that come up most often when testing a first website project:</p>
+
+                <h3>Performance Issues</h3>
+
+                <ul>
+                    <li><strong>Images too large</strong> — a 4MB photo from your camera should be resized to the maximum display size (usually 600–1200px wide) and compressed. Use <a href="https://squoosh.app" target="_blank">Squoosh</a> (free, browser-based) to compress without visible quality loss. Aim for under 200KB per image.</li>
+                    <li><strong>No image dimensions</strong> — always set <code>width</code> and <code>height</code> attributes on <code>&lt;img&gt;</code> tags. This reserves space in the layout before the image loads, preventing Cumulative Layout Shift (CLS).</li>
+                    <li><strong>Render-blocking CSS</strong> — for a small site with one stylesheet, this is fine. On larger sites, critical CSS goes inline and the rest loads asynchronously.</li>
+                </ul>
+
+                <h3>Accessibility Issues</h3>
+
+                <ul>
+                    <li><strong>Missing alt text</strong> — every <code>&lt;img&gt;</code> needs an <code>alt</code> attribute. For informative images, describe what's shown. For decorative images, use <code>alt=""</code> (empty string).</li>
+                    <li><strong>Low contrast text</strong> — use <a href="https://webaim.org/resources/contrastchecker/" target="_blank">WebAIM Contrast Checker</a>. Your light-mode text should have at least 4.5:1 contrast; check dark mode separately.</li>
+                    <li><strong>Missing form labels</strong> — every input needs a <code>&lt;label&gt;</code>. If you can't use a visible label, use <code>aria-label</code>.</li>
+                    <li><strong>Missing language attribute</strong> — the <code>&lt;html lang="en"&gt;</code> attribute tells screen readers which language to use for pronunciation.</li>
+                </ul>
+
+                <h3>SEO Issues</h3>
+
+                <ul>
+                    <li><strong>Missing or duplicate titles</strong> — every page needs a unique <code>&lt;title&gt;</code> tag. Format: "Page Name - Site Name".</li>
+                    <li><strong>Missing meta description</strong> — write a unique 150–160 character description for each page.</li>
+                    <li><strong>Missing heading hierarchy</strong> — one <code>&lt;h1&gt;</code> per page, followed by <code>&lt;h2&gt;</code>s, then <code>&lt;h3&gt;</code>s. Don't skip levels (no <code>&lt;h1&gt;</code> followed directly by <code>&lt;h4&gt;</code>).</li>
+                </ul>
+
+                <h3>Cross-Browser Issues</h3>
+
+                <ul>
+                    <li><strong>Flexbox gap not supported</strong> — <code>gap</code> in Flexbox works in all modern browsers now, but very old browsers don't support it. If you need to support older browsers, use margins instead.</li>
+                    <li><strong>Smooth scrolling in Safari</strong> — <code>scroll-behavior: smooth</code> works in Safari 15.4+ but not in older versions. This is a progressive enhancement — older browsers just jump instead of scrolling.</li>
+                    <li><strong>Custom property fallbacks</strong> — if you need to support very old browsers, provide a fallback before the custom property: <code>color: #1e40af; color: var(--color-primary);</code></li>
+                </ul>
+            </section>
+
+            <!-- Section 9 -->
+            <section id="pre-launch" class="lesson-section">
+                <h2>Pre-Launch Checklist</h2>
+
+                <p>Use this checklist before publishing any website. It covers the essentials and is designed to be copied and reused for future projects.</p>
+
+                <h3>✅ Content</h3>
+                <ul>
+                    <li>All placeholder text replaced with real content</li>
+                    <li>No "Lorem ipsum" or "TODO" remaining</li>
+                    <li>Spelling and grammar checked</li>
+                    <li>All links work (no broken links or <code>href="#"</code> on live links)</li>
+                    <li>Contact information is correct</li>
+                    <li>Copyright year is current</li>
+                </ul>
+
+                <h3>✅ Technical</h3>
+                <ul>
+                    <li>HTML validates (W3C validator, no errors)</li>
+                    <li>CSS validates (no critical errors)</li>
+                    <li>All pages have unique <code>&lt;title&gt;</code> tags</li>
+                    <li>All pages have <code>&lt;meta name="description"&gt;</code></li>
+                    <li>All pages have <code>&lt;meta name="viewport"&gt;</code></li>
+                    <li>Favicon displays in the browser tab</li>
+                    <li>Open Graph tags set for social sharing</li>
+                    <li>All JavaScript works without console errors (check with <kbd>F12</kbd> → Console)</li>
+                </ul>
+
+                <h3>✅ Images</h3>
+                <ul>
+                    <li>All images have <code>alt</code> attributes</li>
+                    <li>Images are optimized (compressed, correct dimensions)</li>
+                    <li>Images have <code>width</code> and <code>height</code> attributes</li>
+                    <li>No broken image links</li>
+                </ul>
+
+                <h3>✅ Responsive</h3>
+                <ul>
+                    <li>Tested at 375px, 768px, 1024px, 1440px widths</li>
+                    <li>No horizontal scrollbar at any width</li>
+                    <li>Mobile menu opens and closes correctly</li>
+                    <li>Text is readable without zooming on mobile</li>
+                    <li>Touch targets are at least 44×44px</li>
+                </ul>
+
+                <h3>✅ Accessibility</h3>
+                <ul>
+                    <li>Lighthouse Accessibility score 90+</li>
+                    <li>Keyboard navigation works on all pages</li>
+                    <li>Focus indicators visible on all interactive elements</li>
+                    <li>Skip-to-content link works</li>
+                    <li>Color contrast passes WCAG AA (4.5:1 for text)</li>
+                    <li>Dark mode doesn't break contrast or readability</li>
+                    <li><code>prefers-reduced-motion</code> disables animations</li>
+                </ul>
+
+                <h3>✅ Performance</h3>
+                <ul>
+                    <li>Lighthouse Performance score 80+</li>
+                    <li>Page loads in under 3 seconds on a mobile connection</li>
+                    <li>No layout shifts as the page loads</li>
+                </ul>
+            </section>
+
+            <!-- Section 10: Exercise -->
+            <section id="exercise" class="lesson-section">
+                <h2>Hands-on Exercise</h2>
+
+                <div class="card card-info">
+                    <h3>🏋️ Exercise: Test and Fix Your Website</h3>
+                    <p><strong>Objective:</strong> Run every type of test on your site and fix the issues you find.</p>
+
+                    <h4>Step 1: Validate HTML (all 4 pages)</h4>
+                    <ol>
+                        <li>Open <a href="https://validator.w3.org/#validate_by_input" target="_blank">validator.w3.org</a></li>
+                        <li>Validate each page by direct input</li>
+                        <li>Fix all errors. Write down how many errors you found and fixed.</li>
+                    </ol>
+
+                    <h4>Step 2: Validate CSS</h4>
+                    <ol>
+                        <li>Open <a href="https://jigsaw.w3.org/css-validator/#validate_by_input" target="_blank">jigsaw.w3.org/css-validator</a></li>
+                        <li>Validate your <code>style.css</code></li>
+                        <li>Fix errors. Note any warnings about custom properties — those are expected.</li>
+                    </ol>
+
+                    <h4>Step 3: Run Lighthouse</h4>
+                    <ol>
+                        <li>Open each page in Chrome with Live Server</li>
+                        <li>Run a Lighthouse audit (mobile mode, all categories)</li>
+                        <li>Record your scores. Fix any issues that bring Accessibility below 90.</li>
+                    </ol>
+
+                    <h4>Step 4: Keyboard Test</h4>
+                    <ol>
+                        <li>Start at the top of your homepage</li>
+                        <li>Press Tab repeatedly through the entire page</li>
+                        <li>Verify: skip link appears, focus is visible, all links/buttons reachable, form works</li>
+                        <li>Repeat on the contact page (form testing is critical)</li>
+                    </ol>
+
+                    <h4>Step 5: Cross-Browser Test</h4>
+                    <ol>
+                        <li>Open your site in Firefox (or another browser you have)</li>
+                        <li>Check layout, typography, hover effects, dark mode</li>
+                        <li>Note any differences from Chrome</li>
+                    </ol>
+
+                    <h4>Step 6: Responsive Drag Test</h4>
+                    <ol>
+                        <li>Slowly resize from 1440px to 320px</li>
+                        <li>Fix any layout breaks you discover</li>
+                    </ol>
+
+                    <details>
+                        <summary>💡 Hint — Quick Fixes for Common Lighthouse Issues</summary>
+                        <pre><code class="language-html">&lt;!-- Fix: "Document does not have a meta description" --&gt;
+&lt;meta name="description"
+      content="Simple recipes made with love — easy weeknight dinners and crowd-pleasing dishes."&gt;
+
+&lt;!-- Fix: "Image elements do not have explicit width and height" --&gt;
+&lt;img src="images/hero.jpg" alt="..." width="600" height="400"&gt;
+
+&lt;!-- Fix: "Links do not have discernible names" --&gt;
+&lt;a href="/" aria-label="Go to homepage"&gt;
+    &lt;img src="logo.png" alt=""&gt;
+&lt;/a&gt;</code></pre>
+                    </details>
+                </div>
+
+                <div class="card quiz-container">
+                    <h3>🎯 Quick Quiz</h3>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 1:</strong> What does the W3C HTML validator check?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="The validator checks code structure, not visual appearance. You need a browser for visual testing.">A) Whether the site looks good in all browsers</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! The W3C validator checks your HTML against the official specification — unclosed tags, invalid nesting, missing required attributes, duplicate IDs, and other structural errors. It doesn't judge how the page looks or performs.">B) Whether the HTML code follows the official specification — structural errors, invalid nesting, missing attributes</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Performance and speed are measured by Lighthouse, not the HTML validator. The validator only checks code correctness.">C) Whether the site loads fast enough for users</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 2:</strong> What Lighthouse Accessibility score should you aim for?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="50 is in the 'poor' range. A score that low means some visitors may not be able to use your site at all.">A) 50+ is fine for a first project</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Accessibility is the most important Lighthouse category because a low score means real people can't use your site. Aim for 90+ and fix any issues. Performance can be 80+ for a first project — accessibility should be higher.">B) 90+ — accessibility is the most important category because it affects real people's ability to use your site</button>
+                            <button class="quiz-option" data-correct="false" data-hint="While 100 is great, Lighthouse scores can vary slightly between runs. 90+ is the practical target — focus on fixing real issues rather than chasing a perfect number.">C) Exactly 100 — anything less is unacceptable</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 3:</strong> Why should you add <code>width</code> and <code>height</code> attributes to images?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Width and height attributes don't change how fast the image data downloads. They affect how space is allocated in the layout.">A) They make images load faster</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! When the browser knows the image dimensions before loading, it can reserve the correct amount of space in the layout. Without these attributes, content jumps around as images load — this is called Cumulative Layout Shift (CLS), and it's frustrating for users trying to read or click.">B) They reserve space in the layout before the image loads, preventing content from jumping around (layout shift)</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The actual dimensions are controlled by CSS (max-width, object-fit, etc.). The HTML attributes tell the browser the image's aspect ratio for space reservation.">C) They override CSS sizing and set the exact display dimensions</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 4:</strong> What percentage of accessibility issues do automated tools typically catch?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="false" data-hint="Automated tools are helpful but limited. Many accessibility issues — like confusing navigation flow, unclear labels, or poor screen reader experience — require human judgment.">A) Nearly 100% — they catch everything</button>
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! Automated tools catch 30–50% of accessibility issues — things like missing alt text, low contrast, and missing labels. The rest requires manual testing: keyboard navigation, screen reader testing, logical focus order, and whether the content actually makes sense to a non-visual user.">B) 30–50% — the rest requires manual testing</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Automated tools are better than 5% — they reliably catch many common issues. But they miss the nuanced, context-dependent problems that manual testing reveals.">C) About 5% — they're basically useless</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p><strong>Question 5:</strong> What causes a horizontal scrollbar to appear on mobile?</p>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-correct="true" data-explanation="Correct! A horizontal scrollbar means something is wider than the viewport. Common causes: elements with fixed pixel widths, images without max-width: 100%, padding or borders causing box-model overflow, or elements positioned outside the viewport. The fix is usually adding max-width: 100% to images and overflow-x: hidden to the body (as a last resort).">A) An element is wider than the viewport — fixed widths, images without max-width, or padding causing overflow</button>
+                            <button class="quiz-option" data-correct="false" data-hint="The viewport meta tag controls zooming and initial scale, not horizontal overflow. Overflow is caused by elements that are wider than the screen.">B) The viewport meta tag is set incorrectly</button>
+                            <button class="quiz-option" data-correct="false" data-hint="Having too many elements doesn't cause horizontal overflow. The issue is about width — one element that's too wide is enough to create a scrollbar.">C) Too many HTML elements on the page</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section id="summary" class="lesson-section">
+                <h2>Summary</h2>
+
+                <div class="card card-success">
+                    <h3>🎉 Key Takeaways</h3>
+                    <ul>
+                        <li><strong>Validate HTML</strong> at <a href="https://validator.w3.org/" target="_blank">validator.w3.org</a> — fix all errors, note warnings</li>
+                        <li><strong>Validate CSS</strong> at <a href="https://jigsaw.w3.org/css-validator/" target="_blank">jigsaw.w3.org/css-validator</a> — custom property warnings are expected</li>
+                        <li><strong>Lighthouse</strong> audits four categories — aim for Performance 80+, Accessibility 90+, Best Practices 90+, SEO 90+</li>
+                        <li>Add <code>width</code>/<code>height</code> to images, meta descriptions to pages, and <code>alt</code> text to all images</li>
+                        <li><strong>Cross-browser test</strong> in at least Chrome and one other browser (Firefox or Safari)</li>
+                        <li><strong>Responsive drag test</strong> — slowly resize and watch for breaks, don't just check specific widths</li>
+                        <li>Automated accessibility tools catch <strong>30–50%</strong> of issues — manual keyboard and screen reader testing catches the rest</li>
+                        <li>Use the <strong>pre-launch checklist</strong> for every project — content, technical, images, responsive, accessibility, performance</li>
+                        <li>Compress images with <a href="https://squoosh.app" target="_blank">Squoosh</a> — aim for under 200KB per image</li>
+                        <li>Every bug you catch in testing is a bug your visitors never encounter</li>
+                    </ul>
+                </div>
+
+                <h3>📁 Your Project After This Lesson</h3>
+                <pre><code>my-website/
+├── css/
+│   └── style.css      ← validated, errors fixed
+├── images/
+│   └── (all optimized, all have alt text)
+├── js/
+│   └── script.js      ← no console errors
+├── index.html         ← ✅ validated, meta description, unique title
+├── about.html         ← ✅ validated, meta description, unique title
+├── recipe.html        ← ✅ validated, meta description, unique title
+└── contact.html       ← ✅ validated, meta description, unique title
+
+Testing Results:
+✅ HTML validates (0 errors on all pages)
+✅ CSS validates (0 errors, some expected warnings)
+✅ Lighthouse: Performance 80+ / Accessibility 90+ / Best Practices 90+ / SEO 90+
+✅ Keyboard navigation works on all pages
+✅ Tested in Chrome + one other browser
+✅ Responsive from 375px to 1920px
+✅ Pre-launch checklist complete</code></pre>
+
+                <h3>🚀 What's Next?</h3>
+                <p>Your site is tested, validated, and ready for the world. In the final lesson — <strong>Lesson 21: Publishing to Netlify</strong> — you'll deploy your site to the internet for free. You'll learn about hosting, domain names, continuous deployment, and how to share your creation with anyone, anywhere. This is the finish line.</p>
+            </section>
+
+            <nav class="lesson-nav" aria-label="Lesson Navigation">
+                <a href="lesson_19.html" class="prev-lesson">← Previous: Adding Polish</a>
+                <a href="index.html" class="home-link">🏠 Course Home</a>
+                <a href="lesson_21.html" class="next-lesson">Next: Publishing to Netlify →</a>
+            </nav>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Ray De La Paz / PetalFawnStudio. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="https://rays-home.netlify.app/">Ray's House of Fun</a>
+            <a href="https://rays-home.netlify.app/contact">Contact</a>
+            <a href="#" id="print-button">Print Page</a>
+        </div>
+        <p><small>Press <kbd>?</kbd> for keyboard shortcuts</small></p>
+    </footer>
+
+    <script src="js/clipboard.js"></script>
+    <script src="js/course-enhancements.js"></script>
+</body>
+</html>
