@@ -5,13 +5,13 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initThemeToggle();        // must run first — sets data-theme
-    initProgressIndicator();
+    // initProgressIndicator();
     initSmoothScrolling();
     initCodeCopyButtons();
     initInteractiveTOC();
     initSearchFunctionality();
     initKeyboardShortcuts();
-    initLessonProgress();
+    // initLessonProgress();
     initQuizInteractivity();
     initMobileMenu();
     initAccessibilityFeatures();
@@ -82,12 +82,9 @@ function reinitMermaid(theme) {
     try { mermaid.run(); } catch (_) { /* diagram may not exist on this page */ }
 }
 
-/* ===========================
-   Progress Indicator
-   =========================== */
-
+/*
 function initProgressIndicator() {
-    const bar = document.querySelector('.progress-bar');
+    const bar = document.querySelector('.progress-indicator .progress-bar');
     if (!bar) return;
 
     const update = () => {
@@ -99,6 +96,7 @@ function initProgressIndicator() {
     window.addEventListener('scroll', throttle(update, 50));
     update();
 }
+*/
 
 /* ===========================
    Smooth Scrolling
@@ -275,6 +273,7 @@ function showShortcutsModal() {
    Lesson Progress
    =========================== */
 
+/*
 function initLessonProgress() {
     const page = window.location.pathname.split('/').pop().replace('.html', '') || 'index';
     const progress = JSON.parse(localStorage.getItem('lessonProgress') || '{}');
@@ -320,6 +319,7 @@ function updateProgressIndicators(progress) {
             <p>${done} of ${total} lessons completed (${pct}%)</p>`;
     }
 }
+*/
 
 /* ===========================
    Quiz
@@ -427,4 +427,4 @@ function throttle(fn, ms) {
 }
 
 // Expose for other scripts
-window.courseEnhancements = { debounce, throttle, applyTheme, reinitMermaid, updateProgressIndicators };
+window.courseEnhancements = { debounce, throttle, applyTheme, reinitMermaid };

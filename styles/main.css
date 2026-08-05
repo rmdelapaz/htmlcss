@@ -644,10 +644,10 @@ label { display: block; margin-bottom: var(--spacing-xs); font-weight: 600; }
 }
 
 /* ===========================
-   Progress Indicator
+   Progress Indicator (REMOVED)
    =========================== */
 
-.progress-indicator {
+/* .progress-indicator {
     position: fixed;
     top: 0;
     left: 0;
@@ -661,7 +661,7 @@ label { display: block; margin-bottom: var(--spacing-xs); font-weight: 600; }
     background: var(--primary-gradient);
     width: 0;
     transition: width 0.3s ease;
-}
+} */
 
 /* Skip to main content */
 .skip-to-main {
@@ -956,10 +956,10 @@ svg .svg-bg { fill: var(--card-bg); }
 .shortcuts-content dd { margin: 0; }
 
 /* ===========================
-   Progress bar (index page)
+   Progress bar (index page - REMOVED)
    =========================== */
 
-.progress-bar-container {
+/* .progress-bar-container {
     width: 100%;
     height: 8px;
     background: var(--border-color);
@@ -972,7 +972,7 @@ svg .svg-bg { fill: var(--card-bg); }
     background: var(--primary-gradient);
     border-radius: 4px;
     transition: width 0.5s ease;
-}
+} */
 
 /* Lesson link visited checkmark */
 .lesson-link { text-decoration: none; }

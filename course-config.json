@@ -28,7 +28,7 @@
 
   "navigation": {
     "showBreadcrumbs": true,
-    "showProgressBar": true,
+    "showProgressBar": false,
     "showLessonNav": true,
     "showSearch": true,
     "showThemeToggle": true,
@@ -101,7 +101,7 @@
   "features": {
     "codeHighlighting": true,
     "copyCodeButton": true,
-    "progressTracking": true,
+    "progressTracking": false,
     "offlineSupport": false,
     "responsiveDesign": true,
     "accessibility": true,
