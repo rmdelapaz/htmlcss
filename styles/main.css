@@ -754,34 +754,61 @@ label { display: block; margin-bottom: var(--spacing-xs); font-weight: 600; }
    Sticky Table of Contents
    =========================== */
 
-.toc-card {
-    position: sticky;
-    top: 70px;
-    z-index: 100;
-    background: var(--card-bg);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--spacing-xl);
-    transition: background-color 0.3s ease;
+/* ---- Collapsed state: floating action button (upper-left, below nav) ---- */
+.toc-card:not([open]) {
+    position: fixed;
+    top: 76px;
+    left: var(--spacing-lg);
+    right: auto;
+    bottom: auto;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    z-index: 95;
+    overflow: hidden;
 }
-.toc-card summary {
-    cursor: pointer;
-    font-weight: 700;
-    padding: var(--spacing-sm) var(--spacing-md);
-    user-select: none;
+.toc-card:not([open]):hover {
+    transform: scale(1.08);
+    background: var(--primary-hover);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
-.toc-card nav {
-    padding: 0 var(--spacing-md) var(--spacing-md);
+.toc-card:not([open]) summary {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    justify-content: center;
+    color: white;
+}
+.toc-card:not([open]) .toc-icon { font-size: 1.25rem; color: white; }
+
+/* Keep label/chevron for screen readers but hide them visually in FAB mode */
+.toc-card:not([open]) .toc-label,
+.toc-card:not([open]) .toc-chevron {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
-.toc-link {
-    color: var(--text-color);
-    text-decoration: none;
-    transition: color 0.2s;
-}
-.toc-link:hover { color: var(--primary-color); }
-.toc-link.active {
-    color: var(--primary-color);
-    font-weight: 600;
+/* On small screens, hug the left edge a little tighter */
+@media (max-width: 767px) {
+    .toc-card:not([open]) {
+        top: 68px;
+        left: var(--spacing-md);
+        width: 40px;
+        height: 40px;
+    }
+    .toc-card:not([open]) .toc-icon { font-size: 1.1rem; }
 }
 
 /* ===========================
