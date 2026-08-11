@@ -70,7 +70,7 @@ function reinitMermaid(theme) {
     });
 
     // Re-render all diagrams
-    document.querySelectorAll('.mermaid').forEach(el => {
+    document.querySelectorAll('.mermaid').forEach((el, i) => {
         // Preserve the original source
         if (!el.dataset.src) {
             // Raw <br> in authored markup becomes a <br> DOM node that textContent drops,
@@ -80,10 +80,15 @@ function reinitMermaid(theme) {
             el.dataset.src = tmp.textContent.trim();
         }
         el.removeAttribute('data-processed');
-        el.innerHTML = el.dataset.src;
+        // Render straight from the source STRING. Assigning innerHTML = src would re-parse
+        // the source as HTML, turning label content like <<abstract>> (classDiagram
+        // stereotypes), <T> generics, or <form>/<table> tags into phantom elements and
+        // corrupting the diagram. Passing the string to mermaid.render() lets Mermaid's own
+        // parser handle <br/>, <<...>>, <tag>, etc.
+        mermaid.render('mmd-' + Date.now() + '-' + i, el.dataset.src)
+            .then(({ svg }) => { el.innerHTML = svg; })
+            .catch(() => {});
     });
-
-    try { mermaid.run(); } catch (_) { /* diagram may not exist on this page */ }
 }
 
 /*
